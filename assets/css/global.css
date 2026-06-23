@@ -44,6 +44,7 @@
 html {
   font-size: 20px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -57,9 +58,10 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 0.75rem;
+  padding: 0 max(0.75rem, calc(50vw - 25rem));
+  overflow-wrap: break-word;
+  animation: fadeIn 0.4s ease;
+  transition: letter-spacing 0.2s ease, word-spacing 0.2s ease;
 }
 
 a {
@@ -81,19 +83,26 @@ ul {
 }
 
 .navbar {
-  padding: 1.5rem 0;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--nav-border);
   margin-bottom: 3rem;
+  width: 100vw;
+  margin-left: calc(-1 * max(0.75rem, calc(50vw - 25rem)));
+  padding-left: max(0.75rem, calc(50vw - 25rem));
+  padding-right: max(0.75rem, calc(50vw - 25rem));
   position: sticky;
   top: 0;
   z-index: 100;
   background-color: var(--bg);
+  box-sizing: border-box;
 }
 
 .navbar-main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 4rem;
 }
 
 .logo {
@@ -107,6 +116,7 @@ ul {
   width: 13.333rem;
   height: 13.333rem;
   min-width: 13.333rem;
+  max-width: 100%;
   object-fit: contain;
   filter: var(--logo-filter);
   flex-shrink: 0;
@@ -115,6 +125,22 @@ ul {
 nav {
   display: flex;
   gap: 2rem;
+}
+
+.nav-group {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links {
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-controls {
+  flex-shrink: 0;
 }
 
 .nav-link {
@@ -190,10 +216,6 @@ nav {
   flex-direction: column;
 }
 
-.card-link {
-  margin-top: auto;
-}
-
 .card-title {
   font-size: 1.3rem;
   margin-bottom: 1rem;
@@ -202,6 +224,7 @@ nav {
 
 .card-link {
   display: inline-block;
+  margin-top: auto;
   font-size: 1rem;
   color: var(--text-muted);
   transition: color 0.2s;
@@ -239,8 +262,19 @@ nav {
   to   { opacity: 1; }
 }
 
-body {
-  animation: fadeIn 0.4s ease;
+@keyframes quackFade {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-40px) scale(1.3); }
+}
+
+.quack-bubble {
+  position: fixed;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  pointer-events: none;
+  z-index: 999;
+  animation: quackFade 0.8s ease forwards;
 }
 
 html.font-alt {
@@ -250,6 +284,62 @@ html.font-alt {
 html.font-alt body {
   letter-spacing: normal;
   word-spacing: normal;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.back-link:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.post-page {
+  max-width: 720px;
+  margin: 0 auto 4rem;
+  padding: 0 1.5rem;
+}
+
+.post-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.post-page-date {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.post-page-tag {
+  font-size: 1rem;
+  color: var(--text-muted);
+  border: 1px solid var(--text-muted);
+  border-radius: var(--radius);
+  padding: 0.15rem 0.6rem;
+  text-transform: uppercase;
+}
+
+.post-page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  line-height: 1.2;
+}
+
+.post-page-content {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.post-page-content p {
+  margin-bottom: 1.2rem;
 }
 
 @media (max-width: 700px) {
@@ -273,8 +363,15 @@ html.font-alt body {
     min-width: 7.778rem;
   }
 
+  .nav-group {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   nav {
     gap: 1.2rem;
+    justify-content: center;
   }
 
   .nav-link {

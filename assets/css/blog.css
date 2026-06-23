@@ -168,7 +168,7 @@
   text-decoration: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .blog-header {
     flex-direction: column;
     align-items: center;
