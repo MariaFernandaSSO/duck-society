@@ -1,44 +1,56 @@
 # 🦆 The Duck Society
 
-Blog pessoal da Maria Fernanda — feito com HTML, CSS e JavaScript puro. Hospedado via GitHub Pages.
+*Read this in [English](README.md) • [Português](README.pt.md)*
 
-## Estrutura
+Personal blog by Maria Fernanda. Built with vanilla HTML, CSS, and JavaScript. Hosted on GitHub Pages.
+
+## About
+
+A place to write about backend development, payment systems, microservices, and whatever else I'm learning. Also ducks.
+
+## Stack
+
+- HTML + CSS + JavaScript (no frameworks, no build step)
+- GitHub Pages
+
+## Structure
 
 ```
 duck-society/
 ├── index.html
+├── 404.html
 ├── pages/
 │   ├── blog.html
 │   └── about.html
-├── assets/
-│   ├── css/
-│   │   ├── global.css
-│   │   ├── home.css
-│   │   ├── blog.css
-│   │   └── about.css
-│   ├── js/
-│   │   └── main.js
-│   ├── fonts/
-│   │   └── mariafernandafont.ttf
-│   └── images/
-│       ├── avatars/
-│       └── ...
-└── 404.html
+└── assets/
+    ├── css/
+    ├── js/
+    │   └── main.js
+    ├── fonts/
+    └── images/
 ```
 
-## Funcionalidades
+## Features
 
-- **Navbar única** injetada via JS em todas as páginas
-- **i18n** — toggle PT/EN com traduções salvas no `localStorage`
-- **Tema claro/escuro** com persistência
-- **Controle de tamanho e família da fonte**
-- **Blog** com filtros por categoria, data e ordenação
-- **Transição suave** entre páginas
+- **i18n** — PT/EN toggle with localStorage persistence
+- **Theme toggle** — dark/light mode
+- **Font controls** — size and font family
+- **Blog filters** — category, date, sort order
+
+## Local dev
+
+No build tools. Clone and open `index.html` in a browser.
+
+```bash
+git clone https://github.com/MariaFernandaSSO/duck-society.git
+cd duck-society
+# open index.html
+```
 
 ## Deploy
 
-O deploy é automático pelo GitHub Pages na branch `main`.
+Pushes to `main` are deployed via GitHub Pages.
 
-## Licença
+---
 
-MIT
+Built with ☕ and 🦆
