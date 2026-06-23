@@ -26,12 +26,20 @@
 
     <p class="welcome" data-i18n="welcome">Seja bem vindo(a)!</p>
 
-    <div class="card card--about">
-      <h2 class="card-title" data-i18n="card-about-title">Sobre mim</h2>
-      <p class="about-snippet" data-i18n="about-snippet">
-        Apenas uma desenvolvedora que ama patos e tá tentando escrever o aprendizado e compartilhar :).
-      </p>
-      <a href="pages/about.html" class="card-link" data-i18n="card-link-about">me conhecer →</a>
+    <div class="cards">
+      <div class="card card--posts" id="recentPosts">
+        <h2 class="card-title" data-i18n="card-posts-title">Últimos posts</h2>
+        <div class="post-list" id="homePostList"></div>
+        <a href="pages/blog.html" class="card-link" data-i18n="card-link-posts">ver todos →</a>
+      </div>
+
+      <div class="card card--about">
+        <h2 class="card-title" data-i18n="card-about-title">Sobre mim</h2>
+        <p class="about-snippet" data-i18n="about-snippet">
+          Dev mais focada em back, mas também mexo com front. A linguagem que eu mais curto é Java (apesar de estar criando um carinho por Go).
+        </p>
+        <a href="pages/about.html" class="card-link" data-i18n="card-link-about">me conhecer →</a>
+      </div>
     </div>
   </main>
 
@@ -39,6 +47,7 @@
     <p>©2026 &nbsp; maria fernanda</p>
   </footer>
 
+  <script src="assets/js/posts.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

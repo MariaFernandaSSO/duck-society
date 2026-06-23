@@ -92,7 +92,7 @@
   line-height: 1.6;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .hero {
     flex-direction: column;
     align-items: center;
