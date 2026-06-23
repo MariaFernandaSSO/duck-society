@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — The Duck Society</title>
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="../assets/css/blog.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <div class="blog-header">
+      <div class="blog-header-text">
+        <h1 class="page-title" data-i18n="blog-title">Blog</h1>
+      </div>
+      <div class="blog-avatar">
+        <img src="../assets/images/avatars/avatar_blog.svg" alt="Avatar" class="page-avatar" />
+      </div>
+    </div>
+
+      <div class="blog-controls">
+      <div class="blog-filters">
+        <select id="tagFilter" data-i18n-filter="all-tags">
+          <option value="all">Todas categorias</option>
+        </select>
+        <select id="dateFilter" data-i18n-filter="all-dates">
+          <option value="all">Todos os meses</option>
+        </select>
+      </div>
+      <div class="blog-sort">
+        <button class="sort-btn active" data-sort="newest" data-i18n="sort-newest">Mais recentes</button>
+        <button class="sort-btn" data-sort="oldest" data-i18n="sort-oldest">Mais antigos</button>
+      </div>
+    </div>
+
+    <section class="post-grid" id="postGrid"></section>
+  </main>
+
+  <footer class="footer">
+    <p>©2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

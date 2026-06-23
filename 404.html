@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — The Duck Society</title>
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <style>
+    .notfound {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 60vh;
+      gap: 1.5rem;
+    }
+    .notfound-duck {
+      width: clamp(120px, 25vw, 200px);
+      filter: var(--logo-filter);
+      animation: swing 3s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    .notfound-code {
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 700;
+    }
+    .notfound-msg {
+      font-size: 1.3rem;
+      color: var(--text-muted);
+    }
+    .notfound-link {
+      font-size: 1.2rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--text-muted);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+    .notfound-link:hover {
+      border-color: var(--text);
+      text-decoration: none;
+    }
+    @keyframes swing {
+      0%   { transform: rotate(-12deg); }
+      50%  { transform: rotate(12deg); }
+      100% { transform: rotate(-12deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar"></div>
+  <main>
+    <section class="notfound">
+      <img src="assets/images/duck-lost.svg" alt="Duck" class="notfound-duck" />
+      <p class="notfound-code">404</p>
+      <p class="notfound-msg" data-i18n="notfound-msg">Nada por aqui... só um pato perdido.</p>
+      <a href="index.html" class="notfound-link" data-i18n="notfound-back">voltar pro ninho →</a>
+    </section>
+  </main>
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

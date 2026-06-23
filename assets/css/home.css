@@ -1,0 +1,114 @@
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 0;
+}
+
+.hero-text {
+  flex: 1;
+}
+
+.hero-name {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.hero-sub {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.hero-avatar {
+  flex-shrink: 0;
+  width: clamp(10rem, 32vw, 16.667rem);
+}
+
+.hero-avatar img {
+  width: 100%;
+  height: auto;
+  animation: float 4s ease-in-out infinite;
+  filter: var(--logo-filter);
+}
+
+.welcome {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: var(--text-muted);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.card--posts {
+  transform: rotate(-0.5deg);
+}
+
+.card--about {
+  transform: rotate(0.4deg);
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.post-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.post-date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.post-link {
+  font-size: 1.05rem;
+  color: var(--text);
+  transition: opacity 0.2s;
+}
+
+.post-link:hover {
+  opacity: 0.7;
+  text-decoration: none;
+}
+
+.about-snippet {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-avatar {
+    width: 12.222rem;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card--posts,
+  .card--about {
+    transform: none;
+  }
+}

@@ -1,0 +1,144 @@
+.about-hero {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.about-avatar {
+  width: clamp(10rem, 28vw, 15.556rem);
+  flex-shrink: 0;
+  animation: float 4s ease-in-out infinite;
+  filter: var(--logo-filter);
+}
+
+.about-intro {
+  flex: 1;
+}
+
+.page-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.about-bio {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+}
+
+.about-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.about-link {
+  font-size: 1.1rem;
+  color: var(--text);
+  border-bottom: 2px solid var(--text-muted);
+  padding-bottom: 2px;
+  transition: border-color 0.2s;
+}
+
+.about-link:hover {
+  border-color: var(--text);
+  text-decoration: none;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.stack-content {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.stack-categories {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stack-category-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--text);
+  margin-top: 0.8rem;
+}
+
+.stack-category-title:first-of-type {
+  margin-top: 0;
+}
+
+.stack-category-items {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.stack-duck {
+  width: clamp(7.778rem, 20vw, 12.222rem);
+  height: auto;
+  flex-shrink: 0;
+  filter: var(--logo-filter);
+  transform-origin: bottom center;
+  animation: swing 3s ease-in-out infinite;
+}
+
+@keyframes swing {
+  0%   { transform: rotate(-12deg); }
+  50%  { transform: rotate(12deg); }
+  100% { transform: rotate(-12deg); }
+}
+
+.stack-list li {
+  font-size: 1rem;
+  color: var(--text-muted);
+  padding-left: 1rem;
+  position: relative;
+}
+
+.stack-list li::before {
+  content: '\2014';
+  position: absolute;
+  left: -0.5rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+  .about-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-avatar {
+    order: 2;
+  }
+
+  .about-intro {
+    order: 1;
+  }
+
+  .about-links {
+    justify-content: center;
+  }
+
+  .stack-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stack-duck {
+    width: 8.889rem;
+  }
+}
