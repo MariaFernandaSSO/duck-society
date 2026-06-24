@@ -83,8 +83,8 @@ ul {
 }
 
 .navbar {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--nav-border);
   margin-bottom: 1rem;
   width: 100vw;
@@ -109,13 +109,13 @@ ul {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  width: 8rem;
+  width: 12rem;
 }
 
 .logo-img {
-  width: 8rem;
-  height: 8rem;
-  min-width: 8rem;
+  width: 12rem;
+  height: 12rem;
+  min-width: 12rem;
   max-width: 100%;
   object-fit: contain;
   filter: var(--logo-filter);
