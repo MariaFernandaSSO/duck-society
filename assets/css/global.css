@@ -53,7 +53,7 @@ body {
   font-family: var(--font-main);
   font-size: var(--font-size-base);
   font-weight: bold;
-  letter-spacing: 0;
+  letter-spacing: 0.1em;
   word-spacing: 0;
   min-height: 100vh;
   display: flex;
@@ -145,7 +145,7 @@ nav {
 
 .nav-link {
   font-family: var(--font-main);
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   color: var(--text-muted);
   text-decoration: none;
   transition: color 0.2s;
