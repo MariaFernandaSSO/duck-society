@@ -1,7 +1,7 @@
 const FONT_STEP = 5
 const FONT_MIN = 10
-const FONT_MAX = 40
-const FONT_DEFAULT = 20
+const FONT_MAX = 80
+const FONT_DEFAULT = 40
 
 function getViewportMax() {
   return Math.max(FONT_DEFAULT, Math.min(FONT_MAX, Math.floor(window.innerWidth / 15)))
@@ -13,6 +13,11 @@ const navbarHTML = `
     <a href="index.html" class="logo">
       <img src="assets/images/duck-head.svg" alt="The Duck Society logo" class="logo-img" />
     </a>
+    <button class="hamburger" id="navToggle" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="nav-group">
       <nav class="nav-links">
         <a href="index.html" class="nav-link" data-i18n="nav-home">Home</a>
@@ -23,8 +28,8 @@ const navbarHTML = `
       <nav class="nav-controls">
         <button class="nav-link lang-toggle" id="langToggle" data-i18n="lang-btn">PT</button>
         <button class="nav-link font-toggle" id="fontFamilyToggle">Aa</button>
-        <button class="nav-link font-toggle" id="fontDec"><span class="a-lg">A</span><span class="a-sm">A</span></button>
-        <button class="nav-link font-toggle" id="fontInc"><span class="a-sm">A</span><span class="a-lg">A</span></button>
+        <button class="nav-link font-toggle" id="fontDec">A-</button>
+        <button class="nav-link font-toggle" id="fontInc">A+</button>
         <button class="nav-link theme-toggle" id="themeToggle">&#9728;</button>
       </nav>
     </div>
@@ -44,13 +49,13 @@ const translations = {
     'card-posts-title': '\u00daltimos posts',
     'card-about-title': 'Sobre mim',
     'card-link-posts': 'ver todos \u2192',
-    'card-link-about': 'me conhecer \u2192',
-    'about-snippet': 'Dev mais focada em back, mas tamb\u00e9m mexo com front. A linguagem que eu mais curto \u00e9 Java (apesar de estar criando um carinho por Go).',
+    'card-link-about': 'mais sobre mim \u2192',
+    'about-snippet': 'Desenvolvedora apaixonada por backend, mas que n\u00e3o foge do front. Aqui compartilho o que aprendo no dia a dia — c\u00f3digo, arquitetura e algumas pataquadas fora disso.',
 
     'about-title': 'Oi, eu sou a Mari!',
 
-    'about-bio-1': 'Sou desenvolvedora com mais foco em back, apesar de mexer com front tamb\u00e9m. A linguagem que eu mais curto \u00e9 Java (apesar de estar criando um carinho por Go). Aqui escrevo sobre o que aprendo no dia a dia — c\u00f3digo, arquitetura, ferramentas e os desafios de construir sistemas :), fora alguns t\u00f3picos fora disso, quem sabe.',
-    'about-bio-2': 'Fora do trabalho, gosto de criar coisa \u2014 inclusive essa fonte que voc\u00ea t\u00e1 lendo agora. \ud83e\udd86',
+    'about-bio-1': 'Desenvolvedora com foco em backend \u2014 Java \u00e9 minha linguagem principal, mas tenho experi\u00eancia com Node.js/NestJS tamb\u00e9m e n\u00e3o fujo do front quando precisa. Tenho cerca de 2 anos e meio no setor banc\u00e1rio e de pagamentos, trabalhando com microsservi\u00e7os, APIs e integra\u00e7\u00f5es financeiras, e 2 anos com projetos freelance. Por aqui escrevo sobre o que aprendo no dia a dia: c\u00f3digo, arquitetura, ferramentas e os desafios de construir sistemas. Fora alguns t\u00f3picos fora disso tamb\u00e9m, quem sabe. Fora do trabalho, gosto de criar coisa \u2014 inclusive essa fonte que voc\u00ea t\u00e1 lendo agora. \ud83e\udd86',
+    'about-bio-2': '',
     'about-bio-2-alt': 'Fora do trabalho, gosto de criar coisa \u2014 (igual a fonte que tem nesse site, mas, n\u00e3o \u00e9 essa de agora n\u00e3o) \ud83e\udd86',
     'stack-title': 'Habilidades T\u00e9cnicas',
     'why-title': 'Por que \u2018The Duck Society\u2019 ?',
@@ -77,14 +82,14 @@ const translations = {
     'card-posts-title': 'Latest posts',
     'card-about-title': 'About me',
     'card-link-posts': 'see all \u2192',
-    'card-link-about': 'know me \u2192',
-    'about-snippet': 'Dev more focused on back, but also work with front. The language I like the most is Java (although I\u2019m starting to have a soft spot for Go).',
+    'card-link-about': 'more about me \u2192',
+    'about-snippet': 'Backend enthusiast who doesn\u2019t run from frontend either. Here I share what I learn daily \u2014 code, architecture, and some ducky shenanigans along the way.',
 
     'about-title': 'Hi, I\u2019m Mari!',
 
-    'about-bio-1': 'I\u2019m a developer with more focus on backend, even though I also work with frontend. The language I like the most is Java (although I\u2019m starting to have a soft spot for Go). Here I write about what I learn day to day \u2014 code, architecture, tools, and the challenges of building systems :), and maybe some other stuff too, who knows.',
-    'about-bio-2': 'Outside work, I like to create things \u2014 including this font you\u2019re reading right now. \ud83e\udd86',
-    'about-bio-2-alt': 'Outside work, I like to create things \u2014 (same font as this site, but not this one right now) \ud83e\udd86',
+    'about-bio-1': 'Backend-focused developer \u2014 Java is my main language, but I also have experience with Node.js/NestJS and I don\u2019t run from frontend when needed. About 2.5 years in banking and payments, working with microservices, APIs and financial integrations, plus 2 years with freelance projects. Here I write about what I learn daily: code, architecture, tools and the challenges of building systems. Maybe some other topics too, who knows. Outside work, I like to create things \u2014 including this font you\u2019re reading right now. \ud83e\udd86',
+    'about-bio-2': '',
+    'about-bio-2-alt': '',
     'stack-title': 'Technical Skills',
     'why-title': 'Why \u2018The Duck Society\u2019 ?',
     'why-text': 'It\u2019s simple, I just like ducks :)',
@@ -196,6 +201,20 @@ function initNavbar() {
   try { applyLanguage(savedLang) } catch(e) {}
   try { applyTheme(savedTheme) } catch(e) {}
   try { applyFontSize(Math.min(savedFont, getViewportMax())) } catch(e) {}
+
+  var toggle = document.getElementById('navToggle')
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      document.querySelector('.navbar').classList.toggle('nav-open')
+    })
+  }
+
+  var navbar = document.querySelector('.navbar')
+  navbar.querySelectorAll('.nav-link').forEach(function(link) {
+    link.addEventListener('click', function() {
+      navbar.classList.remove('nav-open')
+    })
+  })
 
   var current = window.location.pathname
   document.querySelectorAll('.nav-link[href]').forEach(function(link) {
