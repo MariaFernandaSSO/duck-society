@@ -276,8 +276,8 @@ html.font-alt {
 }
 
 html.font-alt body {
-  letter-spacing: 0.08em;
-  word-spacing: 0.35em;
+  letter-spacing: 0;
+  word-spacing: 0;
 }
 
 .back-link {
