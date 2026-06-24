@@ -203,8 +203,6 @@ nav {
   letter-spacing: 0;
 }
 
-.a-sm { font-size: 0.7em; }
-.a-lg { font-size: 1.3em; }
 
 .card {
   background: var(--bg-card);
