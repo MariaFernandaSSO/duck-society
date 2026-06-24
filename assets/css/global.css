@@ -280,8 +280,8 @@ html.font-alt {
 }
 
 html.font-alt body {
-  letter-spacing: normal;
-  word-spacing: normal;
+  letter-spacing: 0.08em;
+  word-spacing: 0.35em;
 }
 
 .back-link {
