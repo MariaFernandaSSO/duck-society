@@ -405,6 +405,20 @@ function initBlogFilters() {
 
     grid.appendChild(card)
     cards.push(card)
+
+    ;(function(c, s, l) {
+      fetch('posts/' + s + '.html').then(function(r) { return r.text() }).then(function(html) {
+        var parser = new DOMParser()
+        var doc = parser.parseFromString(html, 'text/html')
+        var div = doc.querySelector('[data-post-lang="' + l + '"]')
+        var p = div ? div.querySelector('p') : null
+        if (p) {
+          var text = p.textContent.trim().substring(0, 200)
+          var excerptEl = c.querySelector('.post-card-excerpt')
+          if (excerptEl) excerptEl.textContent = text
+        }
+      }).catch(function() {})
+    })(card, post.slug, lang)
   })
 
   tags.sort()
