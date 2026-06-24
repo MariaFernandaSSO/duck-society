@@ -74,17 +74,9 @@ main {
 
 .cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 1.5rem;
   margin-bottom: 0;
-}
-
-.card--posts {
-  transform: rotate(-0.5deg);
-}
-
-.card--about {
-  transform: rotate(0.4deg);
 }
 
 .post-list {
@@ -137,10 +129,5 @@ main {
 
   .cards {
     grid-template-columns: 1fr;
-  }
-
-  .card--posts,
-  .card--about {
-    transform: none;
   }
 }
