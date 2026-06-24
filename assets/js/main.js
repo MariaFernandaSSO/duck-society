@@ -118,6 +118,10 @@ function applyLanguage(lang) {
     var t = translations[lang] && translations[lang][k]
     if (t) bio.textContent = t
   }
+
+  document.querySelectorAll('[data-post-lang]').forEach(function(el) {
+    el.hidden = el.getAttribute('data-post-lang') !== lang
+  })
 }
 
 function applyTheme(theme) {
@@ -255,6 +259,8 @@ function initHomePosts() {
   var list = document.getElementById('homePostList')
   if (!list || typeof postsData === 'undefined') return
 
+  var lang = document.documentElement.lang || 'pt'
+
   var sorted = postsData.slice().sort(function(a, b) {
     return b.dateFilter.localeCompare(a.dateFilter)
   })
@@ -262,11 +268,12 @@ function initHomePosts() {
   var recent = sorted.slice(0, 3)
 
   recent.forEach(function(post) {
+    var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
     var item = document.createElement('div')
     item.className = 'post-item'
     item.innerHTML =
       '<span class="post-date">' + post.date + '</span>' +
-      '<a href="pages/posts/' + post.slug + '.html" class="post-link">' + post.title + '</a>'
+      '<a href="pages/posts/' + post.slug + '.html" class="post-link">' + pTitle + '</a>'
     list.appendChild(item)
   })
 }
@@ -372,10 +379,14 @@ function initBlogFilters() {
     card.setAttribute('data-tag', post.tag || '')
     card.setAttribute('data-date', post.dateFilter || '')
 
+    var lang = document.documentElement.lang || 'pt'
+    var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
+    var pExcerpt = post.excerptEn && lang === 'en' ? post.excerptEn : post.excerpt
+
     card.innerHTML =
       '<div class="post-tag">' + (post.tag || '') + '</div>' +
-      '<h3 class="post-card-title"><a href="posts/' + post.slug + '.html">' + post.title + '</a></h3>' +
-      '<p class="post-card-excerpt">' + post.excerpt + '</p>' +
+      '<h3 class="post-card-title"><a href="posts/' + post.slug + '.html">' + pTitle + '</a></h3>' +
+      '<p class="post-card-excerpt">' + pExcerpt + '</p>' +
       '<div class="post-card-meta">' +
         '<span class="post-date">' + post.date + '</span>' +
         '<a href="posts/' + post.slug + '.html" class="read-more" data-i18n="read-more">ler \u2192</a>' +
