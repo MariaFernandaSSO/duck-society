@@ -330,10 +330,12 @@ html.font-alt body {
   font-size: 1.3rem;
   line-height: 1.8;
   color: var(--text);
+  font-weight: normal;
 }
 
 .post-page-content p {
   margin-bottom: 1.2rem;
+  font-weight: normal;
 }
 
 @media (max-width: 1024px) {
