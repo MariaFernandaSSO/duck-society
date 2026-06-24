@@ -53,6 +53,7 @@ body {
   font-family: var(--font-main);
   font-size: var(--font-size-base);
   font-weight: bold;
+  letter-spacing: 0.08em;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
