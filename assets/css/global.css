@@ -83,10 +83,10 @@ ul {
 }
 
 .navbar {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--nav-border);
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   width: 100vw;
   margin-left: calc(-1 * max(0.75rem, calc(50vw - 25rem)));
   padding-left: max(0.75rem, calc(50vw - 25rem));
@@ -102,20 +102,20 @@ ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4rem;
+  gap: 1rem;
 }
 
 .logo {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  width: 13.333rem;
+  width: 3rem;
 }
 
 .logo-img {
-  width: 13.333rem;
-  height: 13.333rem;
-  min-width: 13.333rem;
+  width: 3rem;
+  height: 3rem;
+  min-width: 3rem;
   max-width: 100%;
   object-fit: contain;
   filter: var(--logo-filter);
@@ -124,14 +124,14 @@ ul {
 
 nav {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .nav-group {
   display: flex;
   flex: 1;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .nav-links {
@@ -145,7 +145,7 @@ nav {
 
 .nav-link {
   font-family: var(--font-main);
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
   text-decoration: none;
   transition: color 0.2s;
