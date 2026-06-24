@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'MariFont';
-  src: url('../fonts/mariafernanda_newfont.ttf') format('truetype');
+  src: url('../fonts/MariaFernandaTesteFinal.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -53,8 +53,8 @@ body {
   font-family: var(--font-main);
   font-size: var(--font-size-base);
   font-weight: bold;
-  letter-spacing: -0.12em;
-  word-spacing: 0.15em;
+  letter-spacing: 0;
+  word-spacing: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
