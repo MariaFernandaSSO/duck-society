@@ -4,19 +4,30 @@ const path = require('path')
 const args = process.argv.slice(2)
 
 if (args.length >= 4) {
-  generate(args[0], args[1], args[2], args[3], args.slice(4).join(' '))
+  var content = args[4] || ''
+  var contentEn = args[5] || ''
+  generate(args[0], '', args[1], args[2], args[3], content, contentEn)
 } else {
   const readline = require('readline')
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
   const ask = (q) => new Promise((r) => rl.question(q, r))
 
   ;(async () => {
-    const title = await ask('Título (PT): ')
-    const titleEn = await ask('Title (EN): ')
-    const date = await ask('Data (ex: 23 jun 2026): ')
+    console.log('--- Digite em português os parâmetros ---')
+    const title = await ask('Título: ')
+    var date = await ask('Data (Enter para hoje): ')
+    if (!date) {
+      var d = new Date()
+      var months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
+      date = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear()
+    }
     const tag = await ask('Categoria: ')
     const slug = title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
     const filename = await ask(`Arquivo (Enter para "${slug}"): `) || slug
+
+    console.log('--- Digite em inglês ---')
+    const titleEn = await ask('Title: ')
+
     generate(title, titleEn, date, tag, filename, '', '')
     rl.close()
   })()

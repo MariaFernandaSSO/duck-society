@@ -29,4 +29,14 @@ const postsData = [
     excerpt: "Conteúdo",
     excerptEn: "Content"
   },
+  {
+    slug: "bem-vindo-ao-duck-society",
+    title: "Bem-vindo ao Duck Society",
+    titleEn: "Welcome to Duck Society",
+    date: "23 jun 2026",
+    dateFilter: "2026-06",
+    tag: "Intro",
+    excerpt: "conteúdo pt br",
+    excerptEn: "content en"
+  },
 ]

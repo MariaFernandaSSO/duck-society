@@ -216,6 +216,7 @@ function initNavbar() {
       applyLanguage(next)
       localStorage.setItem('duck-lang', next)
       try { initBlogFilters() } catch(e) {}
+      try { initHomePosts() } catch(e) {}
     })
   }
 
@@ -259,9 +260,15 @@ function initHomePosts() {
   var list = document.getElementById('homePostList')
   if (!list || typeof postsData === 'undefined') return
 
+  list.innerHTML = ''
+
   var lang = document.documentElement.lang || 'pt'
 
-  var sorted = postsData.slice().sort(function(a, b) {
+  var filtered = postsData.filter(function(p) {
+    return lang === 'pt' || p.titleEn
+  })
+
+  var sorted = filtered.slice().sort(function(a, b) {
     return b.dateFilter.localeCompare(a.dateFilter)
   })
 
@@ -363,6 +370,10 @@ function initBlogFilters() {
   }
 
   if (controls) controls.style.display = ''
+  grid.innerHTML = ''
+
+  var lang = document.documentElement.lang || 'pt'
+  var filtered = postsData.filter(function(p) { return lang === 'pt' || p.titleEn })
 
   var cards = []
   var tags = []
@@ -370,7 +381,7 @@ function initBlogFilters() {
   var dates = []
   var seenDate = {}
 
-  postsData.forEach(function(post) {
+  filtered.forEach(function(post) {
     if (post.tag && !seenTag[post.tag]) { seenTag[post.tag] = true; tags.push(post.tag) }
     if (post.dateFilter && !seenDate[post.dateFilter]) { seenDate[post.dateFilter] = true; dates.push(post.dateFilter) }
 
