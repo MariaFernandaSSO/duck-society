@@ -348,27 +348,27 @@ html.font-alt body {
   .navbar-main {
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .logo {
-    width: 7.778rem;
+    width: 7rem;
   }
 
   .logo-img {
-    width: 7.778rem;
-    height: 7.778rem;
-    min-width: 7.778rem;
+    width: 7rem;
+    height: 7rem;
+    min-width: 7rem;
   }
 
   .nav-group {
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.25rem;
   }
 
   nav {
-    gap: 1.2rem;
+    gap: 1rem;
     justify-content: center;
   }
 
