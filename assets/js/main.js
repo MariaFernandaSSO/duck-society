@@ -13,6 +13,11 @@ const navbarHTML = `
     <a href="index.html" class="logo">
       <img src="assets/images/duck-head.svg" alt="The Duck Society logo" class="logo-img" />
     </a>
+    <button class="hamburger" id="navToggle" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="nav-group">
       <nav class="nav-links">
         <a href="index.html" class="nav-link" data-i18n="nav-home">Home</a>
@@ -196,6 +201,20 @@ function initNavbar() {
   try { applyLanguage(savedLang) } catch(e) {}
   try { applyTheme(savedTheme) } catch(e) {}
   try { applyFontSize(Math.min(savedFont, getViewportMax())) } catch(e) {}
+
+  var toggle = document.getElementById('navToggle')
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      document.querySelector('.navbar').classList.toggle('nav-open')
+    })
+  }
+
+  var navbar = document.querySelector('.navbar')
+  navbar.querySelectorAll('.nav-link').forEach(function(link) {
+    link.addEventListener('click', function() {
+      navbar.classList.remove('nav-open')
+    })
+  })
 
   var current = window.location.pathname
   document.querySelectorAll('.nav-link[href]').forEach(function(link) {
