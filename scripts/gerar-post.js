@@ -49,6 +49,11 @@ function generate(title, titleEn, date, tag, filename, content, contentEn) {
   var c = content || '<p>conte\u00fado pt br</p>'
   var cEn = contentEn || '<p>content en</p>'
 
+  function firstP(html) {
+    var m = html.match(/<p[^>]*>([\s\S]*?)<\/p>/)
+    return m ? m[1].replace(/<[^>]+>/g, '').trim().substring(0, 120) : ''
+  }
+
   const template = fs.readFileSync(path.join(__dirname, 'template-post.html'), 'utf-8')
   const html = template
     .replace(/\{\{postPageDate\}\}/g, date)
@@ -67,8 +72,8 @@ const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov
     date: "${date}",
     dateFilter: "${date.split(' ').pop()}-${String(months.indexOf(date.split(' ')[1].toLowerCase()) % 12 + 1).padStart(2, '0')}",
     tag: "${tag}",
-    excerpt: "${c.replace(/<[^>]+>/g, '').substring(0, 120)}",
-    excerptEn: "${cEn.replace(/<[^>]+>/g, '').substring(0, 120)}"
+    excerpt: "${firstP(c)}",
+    excerptEn: "${firstP(cEn)}"
   },`
 
   postsJs = postsJs.replace(/\n\]/, '\n' + newEntry + '\n]')
