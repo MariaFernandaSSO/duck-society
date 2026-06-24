@@ -53,15 +53,12 @@ body {
   font-family: var(--font-main);
   font-size: var(--font-size-base);
   font-weight: bold;
-  letter-spacing: 0.1em;
-  word-spacing: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 0 max(0.75rem, calc(50vw - 25rem));
   overflow-wrap: break-word;
   animation: fadeIn 0.4s ease;
-  transition: letter-spacing 0.2s ease, word-spacing 0.2s ease;
 }
 
 a {
@@ -124,7 +121,7 @@ ul {
 
 nav {
   display: flex;
-  gap: 0.75rem;
+  gap: 1.5rem;
 }
 
 .nav-group {
@@ -146,6 +143,7 @@ nav {
 .nav-link {
   font-family: var(--font-main);
   font-size: 1.2rem;
+  letter-spacing: 0.1em;
   color: var(--text-muted);
   text-decoration: none;
   transition: color 0.2s;
@@ -199,9 +197,6 @@ nav {
   display: inline;
 }
 
-.font-toggle {
-  letter-spacing: 0;
-}
 
 
 .card {

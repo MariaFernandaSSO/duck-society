@@ -1,7 +1,7 @@
 const FONT_STEP = 5
 const FONT_MIN = 10
 const FONT_MAX = 60
-const FONT_DEFAULT = 25
+const FONT_DEFAULT = 27.5
 
 function getViewportMax() {
   return Math.max(FONT_DEFAULT, Math.min(FONT_MAX, Math.floor(window.innerWidth / 15)))
