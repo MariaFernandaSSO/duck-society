@@ -109,13 +109,13 @@ ul {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  width: 3rem;
+  width: 8rem;
 }
 
 .logo-img {
-  width: 3rem;
-  height: 3rem;
-  min-width: 3rem;
+  width: 8rem;
+  height: 8rem;
+  min-width: 8rem;
   max-width: 100%;
   object-fit: contain;
   filter: var(--logo-filter);
