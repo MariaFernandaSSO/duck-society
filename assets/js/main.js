@@ -50,7 +50,7 @@ const translations = {
     'card-about-title': 'Sobre mim',
     'card-link-posts': 'ver todos \u2192',
     'card-link-about': 'mais sobre mim \u2192',
-    'about-snippet': 'Dev mais focada em back, mas tamb\u00e9m mexo com front. A linguagem que eu mais curto \u00e9 Java (apesar de estar criando um carinho por Go).',
+    'about-snippet': 'Desenvolvedora apaixonada por backend, mas que n\u00e3o foge do front. Aqui compartilho o que aprendo no dia a dia — c\u00f3digo, arquitetura e algumas pataquadas fora disso.',
 
     'about-title': 'Oi, eu sou a Mari!',
 
@@ -83,7 +83,7 @@ const translations = {
     'card-about-title': 'About me',
     'card-link-posts': 'see all \u2192',
     'card-link-about': 'more about me \u2192',
-    'about-snippet': 'Dev more focused on back, but also work with front. The language I like the most is Java (although I\u2019m starting to have a soft spot for Go).',
+    'about-snippet': 'Backend enthusiast who doesn\u2019t run from frontend either. Here I share what I learn daily \u2014 code, architecture, and some ducky shenanigans along the way.',
 
     'about-title': 'Hi, I\u2019m Mari!',
 
