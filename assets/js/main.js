@@ -22,6 +22,7 @@ const navbarHTML = `
       </nav>
       <nav class="nav-controls">
         <button class="nav-link lang-toggle" id="langToggle" data-i18n="lang-btn">PT</button>
+        <button class="nav-link font-toggle" id="fontFamilyToggle">Aa</button>
         <button class="nav-link font-toggle" id="fontDec">A-</button>
         <button class="nav-link font-toggle" id="fontInc">A+</button>
         <button class="nav-link theme-toggle" id="themeToggle">&#9728;</button>
@@ -216,6 +217,14 @@ function initNavbar() {
       localStorage.setItem('duck-lang', next)
       try { initBlogFilters() } catch(e) {}
       try { initHomePosts() } catch(e) {}
+    })
+  }
+
+  var fontToggle = document.getElementById('fontFamilyToggle')
+  if (fontToggle) {
+    fontToggle.addEventListener('click', function() {
+      var isAlt = document.documentElement.classList.contains('font-alt')
+      applyFontFamily(!isAlt)
     })
   }
 
