@@ -380,6 +380,8 @@ function initDuckQuack() {
 function initBlogFilters() {
   var grid = document.getElementById('postGrid')
   if (!grid || typeof postsData === 'undefined') return
+  if (grid.dataset.initialized) return
+  grid.dataset.initialized = 'true'
 
   var controls = document.querySelector('.blog-controls')
 
