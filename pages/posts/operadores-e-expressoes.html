@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operadores e expressões — a matemática do código — The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../blog.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">26 jun 2026</p>
+        <p class="post-page-tag">Algoritmos</p>
+      </div>
+      <h1 class="post-page-title" data-post-lang="pt">
+        Operadores e expressões — a matemática do código
+      </h1>
+      <h1 class="post-page-title" data-post-lang="en" hidden>
+        Operators and expressions — the math of code
+      </h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+        <p>
+          Agora que você já sabe o que são variáveis e tipos de dados, precisa aprender a <strong>fazer coisas com eles</strong>. É aqui que entram os operadores.
+        </p>
+        <p>
+          Operadores são símbolos que representam operações: somar, comparar, negar, decidir. Uma <strong>expressão</strong> é qualquer combinação de variáveis, valores e operadores que produz um resultado.
+        </p>
+
+        <h2>Operadores aritméticos</h2>
+        <p>Os mesmos da calculadora, com alguns extras:</p>
+        <ul>
+          <li><code>+</code> soma</li>
+          <li><code>-</code> subtração</li>
+          <li><code>*</code> multiplicação</li>
+          <li><code>/</code> divisão</li>
+          <li><code>%</code> módulo (resto da divisão)</li>
+        </ul>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>int a = 10;
+int b = 3;
+
+int soma = a + b;          // 13
+int resto = a % b;         // 1 (10 / 3 = 3, resta 1)
+int divisao = a / b;       // 3 (divisão de inteiros TRUNCA)
+double divisaoReal = (double) a / b; // 3.333...
+
+System.out.println(soma);
+System.out.println(resto);
+System.out.println(divisao);
+System.out.println(divisaoReal);</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>a := 10
+b := 3
+
+soma := a + b             // 13
+resto := a % b            // 1
+divisao := a / b          // 3 (divisão de inteiros trunca igual)
+divisaoReal := float64(a) / float64(b) // 3.333...
+
+fmt.Println(soma)
+fmt.Println(resto)
+fmt.Println(divisao)
+fmt.Println(divisaoReal)</code></pre>
+
+        <h3>Armadilha: divisão de inteiros</h3>
+        <p>
+          Essa é uma das fontes mais comuns de bug em code review. Se você divide dois inteiros, o resultado é inteiro — a parte decimal é <strong>truncada</strong>, não arredondada. <code>10 / 3</code> dá <code>3</code>, não <code>3.333</code>. Se precisa do decimal, converta pelo menos um dos operandos pra <code>double</code> (Java) ou <code>float64</code> (Go).
+        </p>
+
+        <h2>Operadores relacionais</h2>
+        <p>Comparam dois valores e devolvem um booleano (<code>true</code> ou <code>false</code>):</p>
+        <ul>
+          <li><code>==</code> igualdade</li>
+          <li><code>!=</code> diferente</li>
+          <li><code>&gt;</code> maior que</li>
+          <li><code>&lt;</code> menor que</li>
+          <li><code>&gt;=</code> maior ou igual</li>
+          <li><code>&lt;=</code> menor ou igual</li>
+        </ul>
+
+        <pre><code>int nota = 75;
+boolean passou = nota >= 70;  // true
+boolean tirouZero = nota == 0; // false</code></pre>
+
+        <h2>Operadores lógicos</h2>
+        <p>Combinam expressões booleanas. Essenciais para decisões mais complexas:</p>
+        <ul>
+          <li><code>&&</code> (AND) — verdadeiro se <strong>os dois</strong> lados forem verdadeiros</li>
+          <li><code>||</code> (OR) — verdadeiro se <strong>pelo menos um</strong> lado for verdadeiro</li>
+          <li><code>!</code> (NOT) — inverte o valor booleano</li>
+        </ul>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>int idade = 20;
+boolean temCarteira = true;
+
+boolean podeDirigir = idade >= 18 && temCarteira;  // true && true = true
+boolean eMenor = !(idade >= 18);                    // false
+boolean podeOuNao = idade >= 18 || !temCarteira;    // true || false = true</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>idade := 20
+temCarteira := true
+
+podeDirigir := idade >= 18 && temCarteira  // true
+eMenor := !(idade >= 18)                   // false</code></pre>
+
+        <h3>Short-circuit</h3>
+        <p>
+          Tanto Java quanto Go usam <strong>avaliação de curto-circuito</strong>. No <code>&&</code>, se a primeira condição é falsa, a segunda nem é avaliada. No <code>||</code>, se a primeira é verdadeira, a segunda é ignorada. Isso não é só otimização — previne erros:
+        </p>
+        <pre><code>// Sem short-circuit, isso daria NullPointerException
+String nome = null;
+if (nome != null && nome.length() > 0) {
+    System.out.println("Válido");
+}</code></pre>
+
+        <h2>Precedência de operadores</h2>
+        <p>
+          Nem toda expressão é lida da esquerda pra direita. Cada operador tem uma <strong>prioridade</strong>. A boa notícia é que você não precisa decorar a tabela inteira: <strong>use parênteses</strong> :D
+        </p>
+
+        <pre><code>int resultado = 5 + 3 * 2;        // 11 (multiplicação primeiro)
+int comParenteses = (5 + 3) * 2;  // 16 (parênteses primeiro)
+
+boolean confuso = 5 > 3 && 2 < 4 || 1 == 1;
+boolean claro = (5 > 3) && ((2 < 4) || (1 == 1));</code></pre>
+        <p>
+          Qual é mais fácil de entender? Exato. Parênteses não custam nada e evitam suposições.
+        </p>
+
+        <h2>Exemplo real: validando uma compra</h2>
+        <pre><code>double saldo = 1500.00;
+double valorCompra = 1200.00;
+boolean clienteVip = true;
+
+boolean podeComprar = (saldo >= valorCompra) && clienteVip;
+boolean precisaParcelar = (saldo < valorCompra) && clienteVip;
+
+System.out.println("Pode comprar? " + podeComprar);
+System.out.println("Precisa parcelar? " + precisaParcelar);</code></pre>
+
+        <h2>Resumo</h2>
+        <ul>
+          <li>Aritméticos: <code>+ - * / %</code> — cuidado com divisão de inteiros</li>
+          <li>Relacionais: <code>== != &gt; &lt; &gt;= &lt;=</code> — resultado é booleano</li>
+          <li>Lógicos: <code>&& || !</code> — combinam condições</li>
+          <li>Precedência: parênteses são seus amigos</li>
+        </ul>
+
+        <p>
+          No <a href="condicionais-if-else-switch.html">próximo post</a>, vamos usar essas expressões para tomar decisões no código :D
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+          Now that you know what variables and data types are, you need to learn how to <strong>do things with them</strong>. That's where operators come in.
+        </p>
+        <p>
+          [English version coming soon]
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

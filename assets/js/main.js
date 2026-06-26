@@ -288,7 +288,7 @@ function initHomePosts() {
   var lang = document.documentElement.lang || 'pt'
 
   var filtered = postsData.filter(function(p) {
-    return lang === 'pt' || p.titleEn
+    return (lang === 'pt' || p.titleEn) && p.tag !== 'Duck To Basics'
   })
 
   var sorted = filtered.slice().sort(function(a, b) {
@@ -299,11 +299,13 @@ function initHomePosts() {
 
   recent.forEach(function(post) {
     var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
+    var pLink = post.link ? ('pages/' + post.link) : ('pages/posts/' + post.slug + '.html')
+    var tagLabel = post.tag === 'Duck To Basics' ? '<span class="post-series">Série — Duck To Basics</span>' : ''
     var item = document.createElement('div')
     item.className = 'post-item'
     item.innerHTML =
       '<span class="post-date">' + post.date + '</span>' +
-      '<a href="pages/posts/' + post.slug + '.html" class="post-link">' + pTitle + '</a>'
+      '<a href="' + pLink + '" class="post-link">' + pTitle + '</a>' + tagLabel
     list.appendChild(item)
   })
 }
@@ -381,6 +383,82 @@ function initDuckQuack() {
   })
 }
 
+var POSTS_PER_PAGE = 6
+var currentPage = 1
+var allFilteredCards = []
+
+function renderPagination() {
+  var pagination = document.getElementById('pagination')
+  if (!pagination) return
+
+  var totalPages = Math.max(1, Math.ceil(allFilteredCards.length / POSTS_PER_PAGE))
+  currentPage = Math.min(currentPage, totalPages)
+
+  pagination.innerHTML = ''
+
+  if (allFilteredCards.length <= POSTS_PER_PAGE) return
+
+  var prevBtn = document.createElement('button')
+  prevBtn.className = 'page-btn'
+  prevBtn.textContent = '\u2190'
+  prevBtn.disabled = currentPage === 1
+  prevBtn.style.opacity = currentPage === 1 ? '0.4' : '1'
+  prevBtn.addEventListener('click', function() {
+    if (currentPage > 1) { currentPage--; applyPage() }
+  })
+  pagination.appendChild(prevBtn)
+
+  var pages = []
+  if (totalPages <= 7) {
+    for (var i = 1; i <= totalPages; i++) pages.push(i)
+  } else {
+    pages.push(1)
+    if (currentPage > 3) pages.push('...')
+    var start = Math.max(2, currentPage - 1)
+    var end = Math.min(totalPages - 1, currentPage + 1)
+    for (var i = start; i <= end; i++) pages.push(i)
+    if (currentPage < totalPages - 2) pages.push('...')
+    pages.push(totalPages)
+  }
+
+  pages.forEach(function(p) {
+    if (p === '...') {
+      var span = document.createElement('span')
+      span.className = 'page-btn ellipsis'
+      span.textContent = '...'
+      pagination.appendChild(span)
+    } else {
+      var btn = document.createElement('button')
+      btn.className = 'page-btn'
+      btn.textContent = p
+      if (p === currentPage) btn.classList.add('active')
+      btn.addEventListener('click', function() { currentPage = p; applyPage() })
+      pagination.appendChild(btn)
+    }
+  })
+
+  var nextBtn = document.createElement('button')
+  nextBtn.className = 'page-btn'
+  nextBtn.textContent = '\u2192'
+  nextBtn.disabled = currentPage === totalPages
+  nextBtn.style.opacity = currentPage === totalPages ? '0.4' : '1'
+  nextBtn.addEventListener('click', function() {
+    if (currentPage < totalPages) { currentPage++; applyPage() }
+  })
+  pagination.appendChild(nextBtn)
+}
+
+function applyPage() {
+  var start = (currentPage - 1) * POSTS_PER_PAGE
+  var end = start + POSTS_PER_PAGE
+  var pageCards = allFilteredCards.slice(start, end)
+
+  allFilteredCards.forEach(function(c) { c.style.display = 'none' })
+  pageCards.forEach(function(c) { c.style.display = 'flex' })
+
+  renderPagination()
+}
+
 function initBlogFilters() {
   var grid = document.getElementById('postGrid')
   if (!grid || typeof postsData === 'undefined') return
@@ -396,9 +474,10 @@ function initBlogFilters() {
 
   if (controls) controls.style.display = ''
   grid.innerHTML = ''
+  currentPage = 1
 
   var lang = document.documentElement.lang || 'pt'
-  var filtered = postsData.filter(function(p) { return lang === 'pt' || p.titleEn })
+  var filtered = postsData.filter(function(p) { return (lang === 'pt' || p.titleEn) && p.tag !== 'Duck To Basics' })
 
   var cards = []
   var tags = []
@@ -418,14 +497,15 @@ function initBlogFilters() {
     var lang = document.documentElement.lang || 'pt'
     var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
     var pExcerpt = post.excerptEn && lang === 'en' ? post.excerptEn : post.excerpt
+    var pLink = post.link || ('posts/' + post.slug + '.html')
 
     card.innerHTML =
       '<div class="post-tag">' + (post.tag || '') + '</div>' +
-      '<h3 class="post-card-title"><a href="posts/' + post.slug + '.html">' + pTitle + '</a></h3>' +
+      '<h3 class="post-card-title"><a href="' + pLink + '">' + pTitle + '</a></h3>' +
       '<p class="post-card-excerpt">' + pExcerpt + '</p>' +
       '<div class="post-card-meta">' +
         '<span class="post-date">' + post.date + '</span>' +
-        '<a href="posts/' + post.slug + '.html" class="read-more" data-i18n="read-more">ler \u2192</a>' +
+        '<a href="' + pLink + '" class="read-more" data-i18n="read-more">ler \u2192</a>' +
       '</div>'
 
     grid.appendChild(card)
@@ -448,7 +528,12 @@ function initBlogFilters() {
 
   tags.sort()
 
-  dates.sort().reverse()
+  var monthSet = {}
+  dates.forEach(function(d) {
+    var month = d.substring(0, 7)
+    monthSet[month] = true
+  })
+  dates = Object.keys(monthSet).sort().reverse()
 
   var lang = document.documentElement.lang || 'pt'
 
@@ -494,21 +579,25 @@ function initBlogFilters() {
     var activeBtn = document.querySelector('.sort-btn.active')
     var sortOrder = activeBtn ? activeBtn.getAttribute('data-sort') : 'newest'
 
-    var filtered = cards.filter(function(c) {
+    allFilteredCards = cards.filter(function(c) {
       var tagMatch = selectedTag === 'all' || c.getAttribute('data-tag') === selectedTag
-      var dateMatch = selectedDate === 'all' || c.getAttribute('data-date') === selectedDate
+      var cardDate = c.getAttribute('data-date')
+      var dateMatch = selectedDate === 'all' || (cardDate && cardDate.indexOf(selectedDate) === 0)
       return tagMatch && dateMatch
     })
 
-    filtered.sort(function(a, b) {
+    allFilteredCards.sort(function(a, b) {
       var dA = a.getAttribute('data-date'), dB = b.getAttribute('data-date')
       return sortOrder === 'newest' ? dB.localeCompare(dA) : dA.localeCompare(dB)
     })
 
-    filtered.forEach(function(c) { grid.appendChild(c); c.style.display = 'flex' })
+    allFilteredCards.forEach(function(c) { grid.appendChild(c) })
     cards.forEach(function(c) {
-      if (filtered.indexOf(c) === -1) c.style.display = 'none'
+      if (allFilteredCards.indexOf(c) === -1) c.style.display = 'none'
     })
+
+    currentPage = 1
+    applyPage()
   }
 
   if (tagFilter) tagFilter.addEventListener('change', filterAndSort)
@@ -525,6 +614,46 @@ function initBlogFilters() {
   filterAndSort()
 }
 
+function initSeriesPage() {
+  var list = document.getElementById('seriesList')
+  if (!list || typeof postsData === 'undefined') return
+
+  var lang = document.documentElement.lang || 'pt'
+  var series = postsData.filter(function(p) { return p.tag === 'Duck To Basics' })
+  if (series.length === 0) { document.getElementById('seriesListEmpty').style.display = 'block'; return }
+
+  series.sort(function(a, b) { return a.dateFilter.localeCompare(b.dateFilter) })
+
+  series.forEach(function(post, i) {
+    var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
+
+    var lesson = document.createElement('a')
+    lesson.className = 'series-lesson'
+    lesson.href = 'posts/' + post.slug + '.html'
+
+    var num = document.createElement('div')
+    num.className = 'series-lesson-num'
+    num.textContent = (i + 1).toString().padStart(2, '0')
+
+    var info = document.createElement('div')
+    info.className = 'series-lesson-info'
+
+    var title = document.createElement('div')
+    title.className = 'series-lesson-title'
+    title.textContent = pTitle
+
+    var date = document.createElement('div')
+    date.className = 'series-lesson-date'
+    date.textContent = post.date
+
+    info.appendChild(title)
+    info.appendChild(date)
+    lesson.appendChild(num)
+    lesson.appendChild(info)
+    list.appendChild(lesson)
+  })
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   try { injectNavbar() } catch(e) {}
   try { injectFavicon() } catch(e) {}
@@ -532,4 +661,5 @@ document.addEventListener('DOMContentLoaded', function() {
   try { initBlogFilters() } catch(e) {}
   try { initHomePosts() } catch(e) {}
   try { initDuckQuack() } catch(e) {}
+  try { initSeriesPage() } catch(e) {}
 })

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Funções — organizando o código para não surtar — The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../blog.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">26 jun 2026</p>
+        <p class="post-page-tag">Algoritmos</p>
+      </div>
+      <h1 class="post-page-title" data-post-lang="pt">
+        Funções — organizando o código para não surtar
+      </h1>
+      <h1 class="post-page-title" data-post-lang="en" hidden>
+        Functions — organizing code so you don't lose your mind
+      </h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+        <p>
+          Até agora escrevemos tudo dentro do <code>main</code>. Funciona, mas conforme o programa cresce, vira uma sopa de letras. É aí que entram as <strong>funções</strong> (ou métodos, em Java).
+        </p>
+        <p>
+          Uma função é um <strong>bloco de código nomeado</strong> que você pode chamar de vários lugares. Ela recebe valores (parâmetros), faz alguma coisa e pode devolver um resultado (retorno).
+        </p>
+
+        <h2>Por que usar funções?</h2>
+        <ul>
+          <li><strong>Reuso:</strong> escreve uma vez, usa em vários lugares</li>
+          <li><strong>Organização:</strong> cada função faz uma coisa específica</li>
+          <li><strong>Testabilidade:</strong> é muito mais fácil testar uma função isolada do que um <code>main</code> gigante</li>
+          <li><strong>Legibilidade:</strong> <code>calcularMedia(notas)</code> é mais fácil de entender que 10 linhas de soma e divisão</li>
+        </ul>
+
+        <h2>Sintaxe básica</h2>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>// Declaração: [modificador] [tipo retorno] [nome](parâmetros) { corpo }
+public static int somar(int a, int b) {
+    return a + b;
+}
+
+// Chamando
+int resultado = somar(5, 3);
+System.out.println(resultado); // 8</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>// Declaração: func [nome](parâmetros) [tipo retorno] { corpo }
+func somar(a int, b int) int {
+    return a + b
+}
+
+// Chamando
+resultado := somar(5, 3)
+fmt.Println(resultado) // 8</code></pre>
+
+        <h2>Parâmetros e retorno</h2>
+        <p>
+          Uma função pode receber zero ou mais parâmetros e retornar zero ou mais valores.
+        </p>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>// Sem parâmetro, sem retorno
+public static void dizerOla() {
+    System.out.println("Olá!");
+}
+
+// Com parâmetro, sem retorno
+public static void saudar(String nome) {
+    System.out.println("Olá, " + nome + "!");
+}
+
+// Com parâmetro, com retorno
+public static double calcularMedia(double n1, double n2) {
+    return (n1 + n2) / 2;
+}
+
+// Sobrecarga: mesmo nome, parâmetros diferentes
+public static double calcularMedia(double n1, double n2, double n3) {
+    return (n1 + n2 + n3) / 3;
+}</code></pre>
+
+        <p><strong>Go permite múltiplos retornos (isso é raro em outras linguagens):</strong></p>
+        <pre><code>// Múltiplos retornos
+func dividir(a, b int) (int, int) {
+    quociente := a / b
+    resto := a % b
+    return quociente, resto
+}
+
+// Chamando
+q, r := dividir(10, 3)
+fmt.Println(q, r) // 3 1</code></pre>
+
+        <h2>Escopo de variáveis</h2>
+        <p>
+          Uma variável declarada <strong>dentro</strong> de uma função só existe <strong>dentro</strong> dela. Isso se chama <strong>escopo local</strong>. Isso é bom: previne que uma função bagunce as variáveis da outra.
+        </p>
+
+        <pre><code>public static void main(String[] args) {
+    int x = 10;
+    funcao();
+    // System.out.println(y); // ERRO: y não existe aqui
+}
+
+public static void funcao() {
+    int y = 20;
+    // System.out.println(x); // ERRO: x não existe aqui
+}</code></pre>
+
+        <h2>O princípio mais importante: faça uma coisa só</h2>
+        <p>
+          A maior lição sobre funções é: <strong>uma função deve fazer exatamente uma coisa</strong>. Se sua função está "validar e salvar e enviar email", ela está fazendo três coisas. Quebre em três funções.
+        </p>
+        <p>
+          Um bom sinal é o nome: se você precisa de "e" no nome (<code>validarESalvar</code>), provavelmente são duas funções :D
+        </p>
+
+        <h2>Exemplo: sistema de notas (sem funções vs com funções)</h2>
+
+        <p><strong>Sem funções (tudo no main):</strong></p>
+        <pre><code>public static void main(String[] args) {
+    double[] notas = {8.5, 7.0, 9.2, 6.8, 10.0};
+
+    // Calculando média
+    double soma = 0;
+    for (double nota : notas) {
+        soma += nota;
+    }
+    double media = soma / notas.length;
+    System.out.println("Média: " + media);
+
+    // Verificando aprovação
+    if (media >= 7.0) {
+        System.out.println("Aprovado");
+    } else if (media >= 5.0) {
+        System.out.println("Recuperação");
+    } else {
+        System.out.println("Reprovado");
+    }
+
+    // Encontrando a maior nota
+    double maior = notas[0];
+    for (double nota : notas) {
+        if (nota > maior) maior = nota;
+    }
+    System.out.println("Maior nota: " + maior);
+}</code></pre>
+
+        <p><strong>Com funções:</strong></p>
+        <pre><code>public static double calcularMedia(double[] notas) {
+    double soma = 0;
+    for (double nota : notas) {
+        soma += nota;
+    }
+    return soma / notas.length;
+}
+
+public static String verificarSituacao(double media) {
+    if (media >= 7.0) return "Aprovado";
+    if (media >= 5.0) return "Recuperação";
+    return "Reprovado";
+}
+
+public static double encontrarMaior(double[] notas) {
+    double maior = notas[0];
+    for (double nota : notas) {
+        if (nota > maior) maior = nota;
+    }
+    return maior;
+}
+
+public static void main(String[] args) {
+    double[] notas = {8.5, 7.0, 9.2, 6.8, 10.0};
+
+    double media = calcularMedia(notas);
+    System.out.println("Média: " + media);
+    System.out.println("Situação: " + verificarSituacao(media));
+    System.out.println("Maior nota: " + encontrarMaior(notas));
+}</code></pre>
+
+        <p>
+          Qual dos dois é mais fácil de ler, testar e dar manutenção? O segundo, claramente. Cada função tem um nome que diz exatamente o que ela faz.
+        </p>
+
+        <h2>Resumo</h2>
+        <ul>
+          <li>Função = bloco nomeado que pode receber parâmetros e retornar um valor</li>
+          <li>Use funções para organizar, reutilizar e dar nomes significativos ao código</li>
+          <li>Cada função deve fazer <strong>uma coisa só</strong></li>
+          <li>Variáveis locais não vazam pra fora da função</li>
+          <li>Java tem sobrecarga (mesmo nome, parâmetros diferentes); Go tem múltiplos retornos</li>
+        </ul>
+
+        <p>
+          No <a href="construindo-algoritmo-do-zero.html">próximo e último post</a> dessa série, vamos juntar TUDO que vimos até aqui para construir um algoritmo completo do zero.
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+          So far we've written everything inside <code>main</code>. It works, but as the program grows, it becomes a mess. That's where <strong>functions</strong> come in.
+        </p>
+        <p>
+          [English version coming soon]
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

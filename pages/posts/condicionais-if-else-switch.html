@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Condicionais: if, else e switch — seu código tomando decisões — The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../blog.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">26 jun 2026</p>
+        <p class="post-page-tag">Algoritmos</p>
+      </div>
+      <h1 class="post-page-title" data-post-lang="pt">
+        Condicionais: if, else e switch — seu código tomando decisões
+      </h1>
+      <h1 class="post-page-title" data-post-lang="en" hidden>
+        Conditionals: if, else and switch — your code making decisions
+      </h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+        <p>
+          Até agora nossos exemplos eram lineares: faz uma coisa, depois outra, depois acaba. Mas a vida real não é linear. "Se chover, levo guarda-chuva. Se não, óculos de sol." No código, isso se chama <strong>condicional</strong>.
+        </p>
+
+        <h2>if / else if / else</h2>
+        <p>
+          A estrutura mais básica de decisão. O computador avalia uma expressão booleana e executa um bloco ou outro.
+        </p>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>int temperatura = 30;
+
+if (temperatura > 35) {
+    System.out.println("Muito quente, fique em casa");
+} else if (temperatura > 25) {
+    System.out.println("Clima agradável");
+} else if (temperatura > 15) {
+    System.out.println("Fresco, leve um casaco");
+} else {
+    System.out.println("Frio!");
+}</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>temperatura := 30
+
+if temperatura > 35 {
+    fmt.Println("Muito quente, fique em casa")
+} else if temperatura > 25 {
+    fmt.Println("Clima agradável")
+} else if temperatura > 15 {
+    fmt.Println("Fresco, leve um casaco")
+} else {
+    fmt.Println("Frio!")
+}</code></pre>
+
+        <h3>Armadilhas comuns</h3>
+        <ul>
+          <li>
+            <strong>Usar = em vez de == em Java:</strong> <code>if (idade = 18)</code> não compila em Java (diferente de C, que aceita). Mas em Go, <code>if idade = 18</code> também não compila. Seguro :D
+          </li>
+          <li>
+            <strong>Esquecer o else quando precisa:</strong> às vezes você quer um comportamento padrão. Se não tem else, e nenhum if entra, simplesmente nada acontece — e pode ser um bug silencioso.
+          </li>
+          <li>
+            <strong>Condição muito complexa:</strong> <code>if (a && b || !c && d)</code> é impossível de ler. Extraia pra variáveis com nomes.
+          </li>
+        </ul>
+
+        <h2>Exemplo real: validação de CPF (simplificado)</h2>
+        <pre><code>String cpf = "12345678909";
+
+// Primeiro: validar tamanho
+if (cpf == null || cpf.length() != 11) {
+    System.out.println("CPF inválido: deve ter 11 dígitos");
+} else if (cpf.matches("(\\d)\\1{10}")) {
+    System.out.println("CPF inválido: todos dígitos iguais");
+} else {
+    System.out.println("CPF válido (ignorando dígitos verificadores por enquanto)");
+}</code></pre>
+
+        <h2>Exemplo real: status de pedido</h2>
+        <pre><code>String status = "ENVIADO";
+
+if (status.equals("PENDENTE")) {
+    System.out.println("Aguardando pagamento");
+} else if (status.equals("PAGO")) {
+    System.out.println("Preparando para envio");
+} else if (status.equals("ENVIADO")) {
+    System.out.println("Pedido a caminho");
+} else if (status.equals("ENTREGUE")) {
+    System.out.println("Pedido finalizado");
+} else {
+    System.out.println("Status desconhecido");
+}</code></pre>
+        <p>
+          Repare como <code>equals()</code> em Java é usado pra comparar strings, não <code>==</code>. Isso porque <code>==</code> compara <strong>referência</strong>, não conteúdo.
+        </p>
+
+        <h2>switch — quando if vira bagunça</h2>
+        <p>
+          Quando você tem muitas condições em cima da <strong>mesma variável</strong>, <code>if</code> vira uma escada feia. <code>switch</code> foi feito pra isso.
+        </p>
+
+        <p><strong>Java (switch tradicional):</strong></p>
+        <pre><code>int diaSemana = 3;
+String nomeDia;
+
+switch (diaSemana) {
+    case 1:
+        nomeDia = "Domingo";
+        break;
+    case 2:
+        nomeDia = "Segunda";
+        break;
+    case 3:
+        nomeDia = "Terça";
+        break;
+    case 4:
+        nomeDia = "Quarta";
+        break;
+    case 5:
+        nomeDia = "Quinta";
+        break;
+    case 6:
+        nomeDia = "Sexta";
+        break;
+    case 7:
+        nomeDia = "Sábado";
+        break;
+    default:
+        nomeDia = "Inválido";
+}
+
+System.out.println(nomeDia);</code></pre>
+
+        <p><strong>Java (switch moderno — Java 14+):</strong></p>
+        <pre><code>int diaSemana = 3;
+String nomeDia = switch (diaSemana) {
+    case 1 -> "Domingo";
+    case 2 -> "Segunda";
+    case 3 -> "Terça";
+    case 4 -> "Quarta";
+    case 5 -> "Quinta";
+    case 6 -> "Sexta";
+    case 7 -> "Sábado";
+    default -> "Inválido";
+};
+
+System.out.println(nomeDia);</code></pre>
+
+        <p><strong>Go (switch é mais simples e não precisa de break):</strong></p>
+        <pre><code>diaSemana := 3
+var nomeDia string
+
+switch diaSemana {
+case 1:
+    nomeDia = "Domingo"
+case 2:
+    nomeDia = "Segunda"
+case 3:
+    nomeDia = "Terça"
+case 4:
+    nomeDia = "Quarta"
+case 5:
+    nomeDia = "Quinta"
+case 6:
+    nomeDia = "Sexta"
+case 7:
+    nomeDia = "Sábado"
+default:
+    nomeDia = "Inválido"
+}
+
+fmt.Println(nomeDia)</code></pre>
+
+        <h3>Armadilha: fallthrough</h3>
+        <p>
+          Em Java (tradicional), se você esquece o <code>break</code>, o switch "cai" pro próximo caso — isso se chama <strong>fallthrough</strong>. Muitas vezes é um bug. Por isso Java moderno introduziu a sintaxe com <code>-&gt;</code> (que não tem fallthrough), e Go já nasceu sem fallthrough automático.
+        </p>
+
+        <h2>Comparativo if vs switch</h2>
+        <ul>
+          <li><strong>if:</strong> melhor para condições complexas (intervalos, combinações de variáveis)</li>
+          <li><strong>switch:</strong> melhor para uma variável com muitos valores conhecidos</li>
+          <li>Nenhum é "superior"; cada um tem seu lugar</li>
+        </ul>
+
+        <h2>Resumo</h2>
+        <ul>
+          <li><code>if / else if / else</code> é a base de toda decisão no código</li>
+          <li><code>switch</code> organiza múltiplos casos da mesma variável</li>
+          <li>Cuidado com fallthrough em Java tradicional (não esqueça o <code>break</code>)</li>
+          <li>Extraia condições complexas pra variáveis com nomes legíveis</li>
+        </ul>
+
+        <p>
+          No <a href="loops-for-while-do-while.html">próximo post</a>, vamos ver como repetir operações sem escrever o mesmo código 500 vezes :D
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+          So far our examples have been linear: do one thing, then another, then finish. But real life is not linear. "If it rains, take an umbrella. If not, sunglasses." In code, this is called a <strong>conditional</strong>.
+        </p>
+        <p>
+          [English version coming soon]
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

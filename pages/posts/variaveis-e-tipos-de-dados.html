@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Variáveis e tipos de dados — a memória do computador — The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../blog.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">26 jun 2026</p>
+        <p class="post-page-tag">Algoritmos</p>
+      </div>
+      <h1 class="post-page-title" data-post-lang="pt">
+        Variáveis e tipos de dados — a memória do computador
+      </h1>
+      <h1 class="post-page-title" data-post-lang="en" hidden>
+        Variables and data types — the computer's memory
+      </h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+        <p>
+          No post anterior, vimos que um algoritmo é uma sequência de passos. Mas esses passos precisam manipular informação. E informação, dentro de um computador, mora na <strong>memória</strong>.
+        </p>
+        <p>
+          Uma variável é basicamente um <strong>espaço na memória com um nome</strong>. Em vez de dizer "guarda esse valor no endereço 0x7FF23", você dá um nome: <code>idade</code>, <code>nome</code>, <code>preco</code>. O computador resolve o endereço pra você.
+        </p>
+
+        <h2>Tipos primitivos vs tipos referência</h2>
+        <p>
+          Essa é a divisão mais importante quando se aprende uma linguagem como Java ou Go. Ela define <strong>onde</strong> e <strong>como</strong> o valor é guardado.
+        </p>
+
+        <h3>Tipos primitivos</h3>
+        <p>
+          Guardam o <strong>valor diretamente</strong> na variável. Quando você declara <code>int idade = 25</code>, a caixinha chamada <code>idade</code> contém o número 25. Ponto.
+        </p>
+        <p>Em Java, os primitivos são:</p>
+        <ul>
+          <li><code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code> — números inteiros</li>
+          <li><code>float</code>, <code>double</code> — números decimais</li>
+          <li><code>char</code> — um caractere</li>
+          <li><code>boolean</code> — verdadeiro ou falso</li>
+        </ul>
+
+        <h3>Tipos referência</h3>
+        <p>
+          Guardam um <strong>endereço</strong> que aponta pra um objeto na memória (heap). A variável não contém o objeto, contém "aonde ele está".
+        </p>
+        <p>
+          Em Java: <code>String</code>, arrays, classes que você cria. Em Go: slices, maps, ponteiros.
+        </p>
+
+        <h3>Na prática</h3>
+        <p><strong>Java:</strong></p>
+        <pre><code>int idade = 25;          // primitivo: idade TEM 25
+String nome = "Mari";    // referência: nome APONTA pra "Mari"
+
+// Cuidado com isso:
+int a = 10;
+int b = a;
+b = 20;
+System.out.println(a);   // 10 (primitivo copia o valor)
+
+String s1 = "Oi";
+String s2 = s1;
+s2 = "Tchau";
+System.out.println(s1);  // "Oi" (String é imutável, s2 aponta pra outro lugar)</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>package main
+
+import "fmt"
+
+func main() {
+    idade := 25           // int
+    nome := "Mari"         // string
+
+    a := 10
+    b := a
+    b = 20
+    fmt.Println(a)         // 10 (mesma lógica)
+
+    // Em Go, string também é imutável
+    s1 := "Oi"
+    s2 := s1
+    s2 = "Tchau"
+    fmt.Println(s1)        // "Oi"
+}</code></pre>
+
+        <h2>Tipagem estática vs dinâmica</h2>
+        <p>
+          Outra divisão importante. Diz <strong>quando</strong> o tipo é verificado.
+        </p>
+        <ul>
+          <li><strong>Estática (Java, Go):</strong> o tipo é definido na declaração e não muda. O compilador te avisa se você tentar colocar texto onde vai número.</li>
+          <li><strong>Dinâmica (Python, JavaScript):</strong> a mesma variável pode guardar um número agora e um texto depois. A verificação acontece em tempo de execução.</li>
+        </ul>
+
+        <p><strong>Java (estática):</strong></p>
+        <pre><code>int numero = 42;
+numero = "texto"; // ERRO de compilação</code></pre>
+
+        <p><strong>Pseudo-dinâmica pra comparar (Python):</strong></p>
+        <pre><code>numero = 42
+numero = "texto"  # funciona, sem erro</code></pre>
+
+        <p>
+          Não existe "certo" ou "errado". Tipagem estática pega erros mais cedo; dinâmica dá mais flexibilidade. Java e Go escolheram estática.
+        </p>
+
+        <h2>O que acontece na memória?</h2>
+        <p>
+          Quando você declara <code>int x = 10</code> em Java, o computador reserva 4 bytes na stack e escreve "10" neles. Quando você declara <code>String s = "pato"</code>, ele reserva 8 bytes (endereço) na stack e cria o objeto <code>"pato"</code> no heap.
+        </p>
+        <p>
+          Essa diferença parece teórica, mas ela explica bugs clássicos como modificar um objeto em duas partes do código sem querer — porque ambas as partes tinham o <strong>endereço</strong> do mesmo objeto.
+        </p>
+
+        <h2>Resumo</h2>
+        <ul>
+          <li>Variável = nome + espaço na memória</li>
+          <li>Primitivo = valor guardado diretamente</li>
+          <li>Referência = endereço pra um objeto no heap</li>
+          <li>Java e Go são estaticamente tipadas: tipo definido na declaração</li>
+        </ul>
+
+        <p>
+          No <a href="operadores-e-expressoes.html">próximo post</a>, vamos ver como manipular esses valores com operadores e expressões :D
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+          In the previous post we saw that an algorithm is a sequence of steps. But those steps need to manipulate information. And inside a computer, information lives in <strong>memory</strong>.
+        </p>
+        <p>
+          [English version coming soon]
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

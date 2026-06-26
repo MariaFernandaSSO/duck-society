@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O que é um algoritmo (e por que você já usa sem saber) — The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../blog.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">26 jun 2026</p>
+        <p class="post-page-tag">Algoritmos</p>
+      </div>
+      <h1 class="post-page-title" data-post-lang="pt">
+        O que é um algoritmo (e por que você já usa sem saber)
+      </h1>
+      <h1 class="post-page-title" data-post-lang="en" hidden>
+        What is an algorithm (and why you already use one without knowing)
+      </h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+        <p>
+          Se você nunca escreveu uma linha de código na vida e ouviu a palavra "algoritmo", provavelmente pensou em coisa de gênio da computação, fórmulas complexas ou algo que só pessoas com óculos fundo de garrafa entendem. A verdade é bem mais simples: <strong>você segue algoritmos o tempo todo</strong>.
+        </p>
+
+        <h2>O que é um algoritmo, afinal?</h2>
+        <p>
+          Um algoritmo é uma <strong>sequência finita de passos</strong> que resolve um problema. Só isso. Não precisa de computador, não precisa de código, não precisa de nada além de uma cabeça funcionando.
+        </p>
+        <p>
+          Vou te mostrar três exemplos que você vive sem perceber:
+        </p>
+
+        <h3>1. Receita de bolo</h3>
+        <p>
+          Pegar ingredientes → misturar → colocar no forno → esperar → servir. Se você seguir os passos na ordem certa, o bolo sai. Se pular etapas (colocar no forno antes de misturar?), o bolo não sai.
+        </p>
+
+        <h3>2. GPS traçando rota</h3>
+        <p>
+          Ponto A → ponto B. O GPS testa várias rotas, calcula o tempo de cada uma, escolhe a mais rápida. Isso é um algoritmo de busca executado milhares de vezes por segundo.
+        </p>
+
+        <h3>3. Fila do banco</h3>
+        <p>
+          Chegar → pegar senha → esperar → ser chamado → ser atendido → sair. É uma fila (estrutura que vamos estudar mais pra frente) com regras claras de quem vem depois de quem.
+        </p>
+
+        <h2>O algoritmo mais famoso do mundo</h2>
+        <p>
+          Você já fez "para cada item da lista, compare com o que estou procurando". Parabéns :D você usou <strong>busca linear</strong>. Se já abriu o meio de um livro e decidiu pra que lado ir baseado na página, usou <strong>busca binária</strong>.
+        </p>
+        <p>
+          A diferença entre um algoritmo e "só fazer as coisas" é que um algoritmo é <strong>exato, finito e determinístico</strong>. Dada a mesma entrada, ele sempre produz a mesma saída.
+        </p>
+
+        <h2>Como representamos algoritmos?</h2>
+        <p>
+          Tem duas formas principais antes de chegar no código:
+        </p>
+        <ul>
+          <li><strong>Fluxograma:</strong> desenhar quadrados e setas. Ótimo pra visualizar, péssimo pra compartilhar.</li>
+          <li><strong>Pseudocódigo:</strong> uma linguagem intermediária, parece código mas não é. É o que mais usamos pra planejar.</li>
+        </ul>
+        <p>
+          Exemplo de pseudocódigo pra somar dois números:
+        </p>
+        <pre><code>INICIO
+  LER numero1
+  LER numero2
+  resultado = numero1 + numero2
+  MOSTRAR resultado
+FIM</code></pre>
+
+        <h2>Mesmo algoritmo, duas linguagens</h2>
+        <p>
+          Uma das coisas mais legais de algoritmo é que ele <strong>independe da linguagem</strong>. A lógica é a mesma; muda só a sintaxe. Veja como implementar um algoritmo que verifica se um número é par em Java e em Go:
+        </p>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>public class ParOuImpar {
+    public static void main(String[] args) {
+        int numero = 7;
+
+        if (numero % 2 == 0) {
+            System.out.println("Par");
+        } else {
+            System.out.println("Ímpar");
+        }
+    }
+}</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>package main
+
+import "fmt"
+
+func main() {
+    numero := 7
+
+    if numero % 2 == 0 {
+        fmt.Println("Par")
+    } else {
+        fmt.Println("Ímpar")
+    }
+}</code></pre>
+
+        <p>
+          Percebeu? A <strong>lógica</strong> é idêntica: pegar um número, testar se o resto da divisão por 2 é zero, decidir o que mostrar. A única coisa que muda é o jeito de escrever.
+        </p>
+
+        <h2>Por que isso importa?</h2>
+        <p>
+          Porque entender que algoritmo é <strong>sobre lógica, não sobre linguagem</strong> muda completamente como você aprende programação. Você não precisa aprender 15 linguagens; você precisa aprender a pensar em algoritmos. Depois, é só traduzir pra sintaxe que o cliente pediu :D
+        </p>
+
+        <h2>O que vem por aí</h2>
+        <p>
+          Esse post é o primeiro de uma série sobre fundamentos de algoritmos. No <a href="variaveis-e-tipos-de-dados.html">próximo post</a>, vamos entender como o computador guarda informação: variáveis e tipos de dados.
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+          If you've never written a line of code and heard the word "algorithm", you probably thought of computer genius stuff, complex formulas, or something only people with thick glasses understand. The truth is much simpler: <strong>you follow algorithms all the time</strong>.
+        </p>
+        <p>
+          [English version coming soon]
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

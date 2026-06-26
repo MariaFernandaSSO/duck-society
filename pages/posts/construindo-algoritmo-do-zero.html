@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juntando tudo: construindo um algoritmo do zero — The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../blog.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">26 jun 2026</p>
+        <p class="post-page-tag">Algoritmos</p>
+      </div>
+      <h1 class="post-page-title" data-post-lang="pt">
+        Juntando tudo: construindo um algoritmo do zero
+      </h1>
+      <h1 class="post-page-title" data-post-lang="en" hidden>
+        Putting it all together: building an algorithm from scratch
+      </h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+        <p>
+          Nos últimos 6 posts, vimos cada peça separadamente. Agora vamos <strong>construir algo completo</strong> do início ao fim, usando tudo: variáveis, operadores, condicionais, loops e funções.
+        </p>
+        <p>
+          O problema: <strong>sistema de gerenciamento de tarefas</strong> (Todo List) via terminal. Nada de frameworks, nada de banco de dados — só lógica pura.
+        </p>
+
+        <h2>O que o sistema vai fazer</h2>
+        <ul>
+          <li>Adicionar tarefas</li>
+          <li>Listar tarefas</li>
+          <li>Marcar tarefa como concluída</li>
+          <li>Remover tarefas</li>
+          <li>Sair do programa</li>
+        </ul>
+        <p>Tudo via menu interativo no terminal.</p>
+
+        <h2>Passo 1: pseudocódigo (planejar antes de codar)</h2>
+        <pre><code>INICIO
+  CRIAR lista vazia de tarefas
+  REPETIR para sempre:
+    MOSTRAR menu (1-adicionar, 2-listar, 3-concluir, 4-remover, 5-sair)
+    LER opcao do usuario
+    
+    SE opcao == 1:
+      LER descricao da tarefa
+      ADICIONAR na lista
+    SENAO SE opcao == 2:
+      PARA CADA tarefa na lista:
+        MOSTRAR indice, descricao e status
+    SENAO SE opcao == 3:
+      LER indice da tarefa
+      MARCAR como concluida
+    SENAO SE opcao == 4:
+      LER indice da tarefa
+      REMOVER da lista
+    SENAO SE opcao == 5:
+      SAIR do loop
+    SENAO:
+      MOSTRAR "Opcao invalida"
+FIM</code></pre>
+
+        <h2>Passo 2: implementação em Java</h2>
+        <pre><code>import java.util.ArrayList;
+import java.util.Scanner;
+
+public class TodoList {
+
+    public static void main(String[] args) {
+        ArrayList<String> tarefas = new ArrayList<>();
+        ArrayList<Boolean> concluidas = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        int opcao;
+
+        do {
+            exibirMenu();
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // limpa o buffer
+
+            switch (opcao) {
+                case 1:
+                    adicionarTarefa(tarefas, concluidas, scanner);
+                    break;
+                case 2:
+                    listarTarefas(tarefas, concluidas);
+                    break;
+                case 3:
+                    concluirTarefa(tarefas, concluidas, scanner);
+                    break;
+                case 4:
+                    removerTarefa(tarefas, concluidas, scanner);
+                    break;
+                case 5:
+                    System.out.println("Até logo!");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        } while (opcao != 5);
+
+        scanner.close();
+    }
+
+    public static void exibirMenu() {
+        System.out.println("\n===== TODO LIST =====");
+        System.out.println("1 - Adicionar tarefa");
+        System.out.println("2 - Listar tarefas");
+        System.out.println("3 - Concluir tarefa");
+        System.out.println("4 - Remover tarefa");
+        System.out.println("5 - Sair");
+        System.out.print("Escolha: ");
+    }
+
+    public static void adicionarTarefa(
+            ArrayList<String> tarefas,
+            ArrayList<Boolean> concluidas,
+            Scanner scanner) {
+
+        System.out.print("Descrição da tarefa: ");
+        String descricao = scanner.nextLine();
+        tarefas.add(descricao);
+        concluidas.add(false);
+        System.out.println("Tarefa adicionada!");
+    }
+
+    public static void listarTarefas(
+            ArrayList<String> tarefas,
+            ArrayList<Boolean> concluidas) {
+
+        if (tarefas.isEmpty()) {
+            System.out.println("Nenhuma tarefa cadastrada.");
+            return;
+        }
+
+        System.out.println("\n--- Suas tarefas ---");
+        for (int i = 0; i < tarefas.size(); i++) {
+            String status = concluidas.get(i) ? "[OK]" : "[ ]";
+            System.out.println((i + 1) + ". " + status + " " + tarefas.get(i));
+        }
+    }
+
+    public static void concluirTarefa(
+            ArrayList<String> tarefas,
+            ArrayList<Boolean> concluidas,
+            Scanner scanner) {
+
+        listarTarefas(tarefas, concluidas);
+
+        if (tarefas.isEmpty()) return;
+
+        System.out.print("Número da tarefa para concluir: ");
+        int indice = scanner.nextInt() - 1;
+
+        if (indice >= 0 && indice < tarefas.size()) {
+            concluidas.set(indice, true);
+            System.out.println("Tarefa concluída!");
+        } else {
+            System.out.println("Índice inválido!");
+        }
+    }
+
+    public static void removerTarefa(
+            ArrayList<String> tarefas,
+            ArrayList<Boolean> concluidas,
+            Scanner scanner) {
+
+        listarTarefas(tarefas, concluidas);
+
+        if (tarefas.isEmpty()) return;
+
+        System.out.print("Número da tarefa para remover: ");
+        int indice = scanner.nextInt() - 1;
+
+        if (indice >= 0 && indice < tarefas.size()) {
+            tarefas.remove(indice);
+            concluidas.remove(indice);
+            System.out.println("Tarefa removida!");
+        } else {
+            System.out.println("Índice inválido!");
+        }
+    }
+}</code></pre>
+
+        <h2>Passo 3: implementação em Go</h2>
+        <pre><code>package main
+
+import (
+    "bufio"
+    "fmt"
+    "os"
+    "strconv"
+    "strings"
+)
+
+func main() {
+    tarefas := []string{}
+    concluidas := []bool{}
+    reader := bufio.NewReader(os.Stdin)
+
+    for {
+        opcao := exibirMenu(reader)
+
+        switch opcao {
+        case 1:
+            adicionarTarefa(&tarefas, &concluidas, reader)
+        case 2:
+            listarTarefas(tarefas, concluidas)
+        case 3:
+            concluirTarefa(&tarefas, &concluidas, reader)
+        case 4:
+            removerTarefa(&tarefas, &concluidas, reader)
+        case 5:
+            fmt.Println("Até logo!")
+            return
+        default:
+            fmt.Println("Opção inválida!")
+        }
+    }
+}
+
+func exibirMenu(reader *bufio.Reader) int {
+    fmt.Println("\n===== TODO LIST =====")
+    fmt.Println("1 - Adicionar tarefa")
+    fmt.Println("2 - Listar tarefas")
+    fmt.Println("3 - Concluir tarefa")
+    fmt.Println("4 - Remover tarefa")
+    fmt.Println("5 - Sair")
+    fmt.Print("Escolha: ")
+
+    entrada, _ := reader.ReadString('\n')
+    entrada = strings.TrimSpace(entrada)
+    opcao, _ := strconv.Atoi(entrada)
+    return opcao
+}
+
+func adicionarTarefa(tarefas *[]string, concluidas *[]bool, reader *bufio.Reader) {
+    fmt.Print("Descrição da tarefa: ")
+    descricao, _ := reader.ReadString('\n')
+    descricao = strings.TrimSpace(descricao)
+
+    *tarefas = append(*tarefas, descricao)
+    *concluidas = append(*concluidas, false)
+    fmt.Println("Tarefa adicionada!")
+}
+
+func listarTarefas(tarefas []string, concluidas []bool) {
+    if len(tarefas) == 0 {
+        fmt.Println("Nenhuma tarefa cadastrada.")
+        return
+    }
+
+    fmt.Println("\n--- Suas tarefas ---")
+    for i := 0; i < len(tarefas); i++ {
+        status := "[ ]"
+        if concluidas[i] {
+            status = "[OK]"
+        }
+        fmt.Printf("%d. %s %s\n", i+1, status, tarefas[i])
+    }
+}
+
+func concluirTarefa(tarefas *[]string, concluidas *[]bool, reader *bufio.Reader) {
+    listarTarefas(*tarefas, *concluidas)
+
+    if len(*tarefas) == 0 {
+        return
+    }
+
+    fmt.Print("Número da tarefa para concluir: ")
+    entrada, _ := reader.ReadString('\n')
+    entrada = strings.TrimSpace(entrada)
+    indice, _ := strconv.Atoi(entrada)
+    indice--
+
+    if indice >= 0 && indice < len(*tarefas) {
+        (*concluidas)[indice] = true
+        fmt.Println("Tarefa concluída!")
+    } else {
+        fmt.Println("Índice inválido!")
+    }
+}
+
+func removerTarefa(tarefas *[]string, concluidas *[]bool, reader *bufio.Reader) {
+    listarTarefas(*tarefas, *concluidas)
+
+    if len(*tarefas) == 0 {
+        return
+    }
+
+    fmt.Print("Número da tarefa para remover: ")
+    entrada, _ := reader.ReadString('\n')
+    entrada = strings.TrimSpace(entrada)
+    indice, _ := strconv.Atoi(entrada)
+    indice--
+
+    if indice >= 0 && indice < len(*tarefas) {
+        *tarefas = append((*tarefas)[:indice], (*tarefas)[indice+1:]...)
+        *concluidas = append((*concluidas)[:indice], (*concluidas)[indice+1:]...)
+        fmt.Println("Tarefa removida!")
+    } else {
+        fmt.Println("Índice inválido!")
+    }
+}</code></pre>
+
+        <h2>O que cada parte usa dos posts anteriores</h2>
+        <ul>
+          <li><strong>Variáveis e tipos:</strong> <code>String</code>, <code>int</code>, <code>boolean</code>, <code>ArrayList</code></li>
+          <li><strong>Operadores:</strong> <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&&</code></li>
+          <li><strong>Condicionais:</strong> <code>if/else</code> (validando índices), <code>switch</code> (menu)</li>
+          <li><strong>Loops:</strong> <code>do-while</code> (loop principal), <code>for</code> (listar tarefas)</li>
+          <li><strong>Funções:</strong> cada operação é uma função separada</li>
+        </ul>
+
+        <h2>Pra você praticar</h2>
+        <p>
+          O sistema está funcional, mas dá pra melhorar. Tente implementar:
+        </p>
+        <ul>
+          <li><strong>Editar</strong> descrição de uma tarefa</li>
+          <li><strong>Prioridade</strong> (alta, média, baixa) com filtro por prioridade</li>
+          <li><strong>Data de vencimento</strong> e ordenar por data</li>
+          <li><strong>Salvar</strong> as tarefas em arquivo e carregar na inicialização</li>
+        </ul>
+
+        <h2>O que aprendemos nessa série?</h2>
+        <p>
+          Ao longo de 7 posts, passamos do "o que é um algoritmo" até a construção de um sistema funcional em duas linguagens. O mais importante não é a sintaxe de Java ou Go — é a <strong>lógica</strong> que usamos em cada decisão.
+        </p>
+        <p>
+          Saber estruturar o raciocínio antes de codar, dividir problemas grandes em funções pequenas e escolher a estrutura de repetição certa são habilidades que valem mais que decorar APIs.
+        </p>
+        <p>
+          Nos próximos posts vamos entrar em <strong>estruturas de dados</strong> — pilhas, filas, listas encadeadas, hash maps e árvores. Tudo implementado na mão em Java. Até lá! :D
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+          Over the last 6 posts, we saw each piece separately. Now let's <strong>build something complete</strong> from start to finish, using everything: variables, operators, conditionals, loops and functions.
+        </p>
+        <p>
+          [English version coming soon]
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
