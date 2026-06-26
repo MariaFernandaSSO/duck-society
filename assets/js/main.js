@@ -206,6 +206,8 @@ function initNavbar() {
   if (toggle) {
     toggle.addEventListener('click', function() {
       document.querySelector('.navbar').classList.toggle('nav-open')
+      document.documentElement.classList.toggle('nav-open')
+      document.body.classList.toggle('nav-open')
     })
   }
 
@@ -213,6 +215,8 @@ function initNavbar() {
   navbar.querySelectorAll('.nav-link').forEach(function(link) {
     link.addEventListener('click', function() {
       navbar.classList.remove('nav-open')
+      document.documentElement.classList.remove('nav-open')
+      document.body.classList.remove('nav-open')
     })
   })
 
