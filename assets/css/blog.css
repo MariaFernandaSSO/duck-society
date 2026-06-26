@@ -175,6 +175,24 @@
     width: 11.111rem;
   }
 
+  .blog-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .blog-filters {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .blog-filters select {
+    width: 100%;
+  }
+
+  .blog-sort {
+    justify-content: center;
+  }
+
   .post-grid {
     grid-template-columns: 1fr;
   }
