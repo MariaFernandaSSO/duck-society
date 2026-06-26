@@ -1,10 +1,10 @@
-const FONT_STEP = 5
-const FONT_MIN = 10
-const FONT_MAX = 80
-const FONT_DEFAULT = 40
+const FONT_STEP = 2
+const FONT_MIN = 14
+const FONT_MAX = 32
+const FONT_DEFAULT = 20
 
 function getViewportMax() {
-  return Math.max(FONT_DEFAULT, Math.min(FONT_MAX, Math.floor(window.innerWidth / 15)))
+  return Math.max(FONT_DEFAULT, Math.min(FONT_MAX, Math.floor(window.innerWidth / 20)))
 }
 
 const navbarHTML = `
