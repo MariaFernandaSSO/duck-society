@@ -371,7 +371,7 @@ html.font-alt body {
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   font-size: 1em;
   line-height: 1.5;
-  white-space: pre;
+  word-break: break-all;
 }
 
 .post-page-content pre code {
@@ -379,6 +379,74 @@ html.font-alt body {
   border: none;
   padding: 0;
   margin: 0;
+  white-space: pre;
+  word-break: normal;
+}
+
+.post-page-content .post-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: var(--radius);
+}
+
+.post-page-content details.exercises-block {
+  border: 2px solid var(--accent);
+  margin: 2rem 0;
+  padding: 0;
+  background: var(--bg);
+}
+
+.post-page-content details.exercises-block {
+  border: 2px solid var(--accent);
+  margin: 2rem 0;
+  padding: 0;
+}
+
+.post-page-content details.exercises-block summary {
+  padding: 1rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--bg-card);
+}
+
+.post-page-content details.exercises-block[open] {
+  padding: 0 1.5rem 1rem;
+}
+
+.post-page-content details.exercises-block[open] summary {
+  border-bottom: 2px solid var(--accent);
+  margin: 0 -1.5rem 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--bg);
+}
+
+.post-page-content .solution-toggle {
+  background: var(--bg-card);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+}
+
+.post-page-content .solution-toggle summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.post-page-content .solution-toggle[open] summary {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--nav-border);
+}
+
+.post-page-content .solution-toggle .solution {
+  font-weight: normal;
+  line-height: 1.6;
 }
 
 @media (max-width: 1024px) {

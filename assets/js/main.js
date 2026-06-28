@@ -624,34 +624,67 @@ function initSeriesPage() {
 
   series.sort(function(a, b) { return a.dateFilter.localeCompare(b.dateFilter) })
 
-  series.forEach(function(post, i) {
-    var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
-
-    var lesson = document.createElement('a')
-    lesson.className = 'series-lesson'
-    lesson.href = 'posts/' + post.slug + '.html'
-
-    var num = document.createElement('div')
-    num.className = 'series-lesson-num'
-    num.textContent = (i + 1).toString().padStart(2, '0')
-
-    var info = document.createElement('div')
-    info.className = 'series-lesson-info'
-
-    var title = document.createElement('div')
-    title.className = 'series-lesson-title'
-    title.textContent = pTitle
-
-    var date = document.createElement('div')
-    date.className = 'series-lesson-date'
-    date.textContent = post.date
-
-    info.appendChild(title)
-    info.appendChild(date)
-    lesson.appendChild(num)
-    lesson.appendChild(info)
-    list.appendChild(lesson)
+  var modules = []
+  var seen = {}
+  series.forEach(function(p) {
+    if (p.module && !seen[p.module]) { seen[p.module] = true; modules.push(p.module) }
   })
+  modules.sort()
+
+  var filterSelect = document.getElementById('moduleFilter')
+
+  function renderSeries() {
+    list.innerHTML = ''
+    var val = filterSelect ? filterSelect.value : 'all'
+    var filtered = val === 'all' ? series : series.filter(function(p) { return p.module === parseInt(val, 10) })
+    filtered.forEach(function(post, i) {
+      var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
+
+      var lesson = document.createElement('a')
+      lesson.className = 'series-lesson'
+      lesson.href = 'posts/' + post.slug + '.html'
+
+      var num = document.createElement('div')
+      num.className = 'series-lesson-num'
+      num.textContent = (i + 1).toString().padStart(2, '0')
+
+      var info = document.createElement('div')
+      info.className = 'series-lesson-info'
+
+      var title = document.createElement('div')
+      title.className = 'series-lesson-title'
+      title.textContent = pTitle
+
+      var date = document.createElement('div')
+      date.className = 'series-lesson-date'
+      date.textContent = post.date
+
+      info.appendChild(title)
+      info.appendChild(date)
+      lesson.appendChild(num)
+      lesson.appendChild(info)
+      list.appendChild(lesson)
+    })
+  }
+
+  if (filterSelect && modules.length >= 1) {
+    var allOpt = document.createElement('option')
+    allOpt.value = 'all'
+    allOpt.textContent = 'Todos os módulos'
+    filterSelect.appendChild(allOpt)
+
+    var moduleNames = { 1: 'Algoritmos' }
+    modules.forEach(function(m) {
+      var opt = document.createElement('option')
+      opt.value = m
+      opt.textContent = moduleNames[m] ? ('Módulo ' + m + ' — ' + moduleNames[m]) : 'Módulo ' + m
+      filterSelect.appendChild(opt)
+    })
+
+    filterSelect.addEventListener('change', renderSeries)
+  }
+
+  renderSeries()
 }
 
 document.addEventListener('DOMContentLoaded', function() {

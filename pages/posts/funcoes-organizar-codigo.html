@@ -200,9 +200,98 @@ public static void main(String[] args) {
           <li>Java tem sobrecarga (mesmo nome, parâmetros diferentes); Go tem múltiplos retornos</li>
         </ul>
 
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Função fatorial</h3>
+        <p>
+          Crie uma função <code>fatorial(int n)</code> que retorne o fatorial de n (n!). Lembre-se: 0! = 1, e n! = n × (n-1) × ... × 1.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>public static long fatorial(int n) {
+    if (n &lt; 0) return -1;  // inválido
+    long resultado = 1;
+    for (int i = 2; i &lt;= n; i++) {
+        resultado *= i;
+    }
+    return resultado;
+}
+
+// Teste
+System.out.println(fatorial(5)); // 120</code></pre>
+            <p>Use <code>long</code> porque o fatorial cresce rápido (12! = 479001600 já estoura <code>int</code> em Java).</p>
+          </div>
+        </details>
+
+        <h3>2. Palíndromo</h3>
+        <p>
+          Crie uma função <code>boolean ehPalindromo(String s)</code> que retorne <code>true</code> se a string for um palíndromo (se lê igual de trás pra frente). Ex: "arara", "radar", "ama".
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>public static boolean ehPalindromo(String s) {
+    int esq = 0, dir = s.length() - 1;
+
+    while (esq &lt; dir) {
+        if (s.charAt(esq) != s.charAt(dir)) {
+            return false;
+        }
+        esq++;
+        dir--;
+    }
+    return true;
+}
+
+System.out.println(ehPalindromo("arara")); // true
+System.out.println(ehPalindromo("casa"));  // false</code></pre>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Conversor de números romanos</h3>
+        <p>
+          Crie uma função <code>int romanoParaInteiro(String s)</code> que converta um número romano (como "XIV") para inteiro (14). Regras: I=1, V=5, X=10, L=50, C=100, D=500, M=1000. Se um símbolo menor vem antes de um maior, ele é subtraído (ex: IV = 4).
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>public static int romanoParaInteiro(String s) {
+    java.util.Map&lt;Character, Integer&gt; valores = new java.util.HashMap&lt;&gt;();
+    valores.put('I', 1);
+    valores.put('V', 5);
+    valores.put('X', 10);
+    valores.put('L', 50);
+    valores.put('C', 100);
+    valores.put('D', 500);
+    valores.put('M', 1000);
+
+    int total = 0;
+    int anterior = 0;
+
+    for (int i = s.length() - 1; i &gt;= 0; i--) {
+        int atual = valores.get(s.charAt(i));
+        if (atual &lt; anterior) {
+            total -= atual;
+        } else {
+            total += atual;
+        }
+        anterior = atual;
+    }
+    return total;
+}
+
+System.out.println(romanoParaInteiro("XIV"));  // 14
+System.out.println(romanoParaInteiro("MCM")); // 1900</code></pre>
+            <p>A técnica de percorrer de trás pra frente simplifica a lógica de subtração.</p>
+          </div>
+        </details>
+
         <p>
           No <a href="construindo-algoritmo-do-zero.html">próximo e último post</a> dessa série, vamos juntar TUDO que vimos até aqui para construir um algoritmo completo do zero.
         </p>
+        </details>
 
       </div>
 

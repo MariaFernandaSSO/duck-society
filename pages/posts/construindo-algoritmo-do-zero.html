@@ -329,6 +329,111 @@ func removerTarefa(tarefas *[]string, concluidas *[]bool, reader *bufio.Reader) 
           <li><strong>Salvar</strong> as tarefas em arquivo e carregar na inicialização</li>
         </ul>
 
+        <details class="exercises-block">
+        <summary><strong>Exercícios finais</strong></summary>
+
+        <h3>1. Validar entrada de notas</h3>
+        <p>
+          No sistema de notas que construímos no post sobre funções, a função que calcula a média não valida se as notas estão entre 0 e 10. Adicione essa validação: se alguma nota for inválida, exiba uma mensagem de erro e não calcule a média.
+        </p>
+        <details>
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>public static double calcularMedia(double[] notas) {
+    for (double n : notas) {
+        if (n &lt; 0 || n &gt; 10) {
+            System.out.println("Nota inválida: " + n);
+            return -1;
+        }
+    }
+    double soma = 0;
+    for (double n : notas) soma += n;
+    return soma / notas.length;
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Mediana</h3>
+        <p>
+          Adicione uma função <code>calcularMediana</code> ao sistema de notas. A mediana é o valor do meio quando as notas estão ordenadas. Se a quantidade for par, é a média dos dois valores centrais.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>public static double calcularMediana(double[] notas) {
+    double[] ordenadas = notas.clone();
+    java.util.Arrays.sort(ordenadas);
+    int n = ordenadas.length;
+
+    if (n % 2 == 1) {
+        return ordenadas[n / 2];
+    } else {
+        return (ordenadas[n / 2 - 1] + ordenadas[n / 2]) / 2;
+    }
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>3. (Desafio final) Sistema de notas como classe</h3>
+        <p>
+          Transforme o sistema de notas em uma <strong>classe</strong> <code>Boletim</code> em Java, com atributos <code>aluno</code> (String) e <code>notas</code> (double[]), e métodos <code>calcularMedia()</code>, <code>calcularMediana()</code>, <code>maiorNota()</code>, <code>menorNota()</code> e <code>exibirBoletim()</code>.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>public class Boletim {
+    String aluno;
+    double[] notas;
+
+    public Boletim(String aluno, double[] notas) {
+        this.aluno = aluno;
+        this.notas = notas;
+    }
+
+    public double calcularMedia() {
+        double soma = 0;
+        for (double n : notas) soma += n;
+        return soma / notas.length;
+    }
+
+    public double calcularMediana() {
+        double[] ord = notas.clone();
+        java.util.Arrays.sort(ord);
+        if (ord.length % 2 == 1) return ord[ord.length / 2];
+        return (ord[ord.length / 2 - 1] + ord[ord.length / 2]) / 2;
+    }
+
+    public double maiorNota() {
+        double max = notas[0];
+        for (double n : notas) if (n &gt; max) max = n;
+        return max;
+    }
+
+    public double menorNota() {
+        double min = notas[0];
+        for (double n : notas) if (n &lt; min) min = n;
+        return min;
+    }
+
+    public void exibirBoletim() {
+        System.out.println("Aluno: " + aluno);
+        System.out.println("Média: " + calcularMedia());
+        System.out.println("Mediana: " + calcularMediana());
+        System.out.println("Maior nota: " + maiorNota());
+        System.out.println("Menor nota: " + menorNota());
+    }
+
+    public static void main(String[] args) {
+        double[] notas = {7.5, 8.0, 6.5, 9.0, 5.5};
+        Boletim b = new Boletim("Maria", notas);
+        b.exibirBoletim();
+    }
+}</code></pre>
+          </div>
+        </details>
+
+        </details>
+
         <h2>O que aprendemos nessa série?</h2>
         <p>
           Ao longo de 7 posts, passamos do "o que é um algoritmo" até a construção de um sistema funcional em duas linguagens. O mais importante não é a sintaxe de Java ou Go — é a <strong>lógica</strong> que usamos em cada decisão.

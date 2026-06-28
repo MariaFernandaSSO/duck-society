@@ -30,12 +30,60 @@
   line-height: 1.5;
 }
 
+.series-module {
+  font-size: 0.95rem;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 0.35rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: -1rem;
+  margin-bottom: 0.5rem;
+}
+
 .series-divider {
   width: 3rem;
   height: 2px;
   background: var(--text-muted);
   margin: 0.5rem auto 2rem;
   border-radius: 2px;
+}
+
+.series-filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.series-filter-select {
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: var(--bg-card);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 0.4rem 2rem 0.4rem 0.75rem;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  min-width: 12rem;
+}
+
+.series-filter-select:hover,
+.series-filter-select:focus {
+  border-color: var(--text);
+  outline: none;
+}
+
+.series-filter-select option {
+  background: var(--bg-card);
+  color: var(--text);
 }
 
 .series-list {

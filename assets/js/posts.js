@@ -17,7 +17,7 @@ const postsData = [
     dateFilter: "2026-06-26",
     tag: "Série",
     link: "duck-to-basics.html",
-    excerpt: "Dos fundamentos da computação à construção de algoritmos completos. Uma série pra quem quer aprender a lógica por trás do código.",
+    excerpt: "Dos fundamentos da computação à construção de sistemas completos. Uma série pra quem quer aprender a lógica por trás do código.",
     excerptEn: "From computing fundamentals to building complete algorithms. A series for those who want to learn the logic behind code."
   },
   {
@@ -27,6 +27,7 @@ const postsData = [
     date: "26 jun 2026",
     dateFilter: "2026-06-26",
     tag: "Duck To Basics",
+    module: 1,
     excerpt: "Antes de escrever uma linha de código, você precisa entender o que é um algoritmo. Spoiler: você já usa um toda manhã.",
     excerptEn: "Before writing a single line of code, you need to understand what an algorithm is. Spoiler: you already use one every morning."
   },
@@ -37,6 +38,7 @@ const postsData = [
     date: "26 jun 2026",
     dateFilter: "2026-06-26",
     tag: "Duck To Basics",
+    module: 1,
     excerpt: "O que acontece dentro do computador quando você declara uma variável? Tipos primitivos vs referência, estática vs dinâmica.",
     excerptEn: "What happens inside the computer when you declare a variable? Primitive vs reference types, static vs dynamic typing."
   },
@@ -47,6 +49,7 @@ const postsData = [
     date: "26 jun 2026",
     dateFilter: "2026-06-26",
     tag: "Duck To Basics",
+    module: 1,
     excerpt: "Aritméticos, relacionais, lógicos — como o computador interpreta contas e comparações que você escreve.",
     excerptEn: "Arithmetic, relational, logical — how the computer interprets the math and comparisons you write."
   },
@@ -57,6 +60,7 @@ const postsData = [
     date: "26 jun 2026",
     dateFilter: "2026-06-26",
     tag: "Duck To Basics",
+    module: 1,
     excerpt: "Nem tudo é linear. Às vezes seu código precisa decidir entre dois caminhos. É aí que entram if, else e switch.",
     excerptEn: "Not everything is linear. Sometimes your code needs to decide between two paths. That's where if, else and switch come in."
   },
@@ -67,6 +71,7 @@ const postsData = [
     date: "26 jun 2026",
     dateFilter: "2026-06-26",
     tag: "Duck To Basics",
+    module: 1,
     excerpt: "Repetir a mesma operação várias vezes é uma das tarefas mais comuns da programação. Cada tipo de loop tem seu lugar.",
     excerptEn: "Repeating the same operation multiple times is one of the most common tasks in programming. Each loop type has its place."
   },
@@ -77,6 +82,7 @@ const postsData = [
     date: "26 jun 2026",
     dateFilter: "2026-06-26",
     tag: "Duck To Basics",
+    module: 1,
     excerpt: "Código bagunçado vira pesadelo rápido. Funções são o primeiro passo para organizar o caos.",
     excerptEn: "Messy code quickly becomes a nightmare. Functions are the first step to organizing the chaos."
   },
@@ -87,6 +93,7 @@ const postsData = [
     date: "26 jun 2026",
     dateFilter: "2026-06-26",
     tag: "Duck To Basics",
+    module: 1,
     excerpt: "Chegou a hora de usar tudo que vimos nos posts anteriores para construir algo concreto do início ao fim.",
     excerptEn: "Time to use everything we've seen in previous posts to build something concrete from start to finish."
   }

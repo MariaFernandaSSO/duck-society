@@ -200,9 +200,89 @@ fmt.Println(nomeDia)</code></pre>
           <li>Extraia condições complexas pra variáveis com nomes legíveis</li>
         </ul>
 
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Classificador de notas</h3>
+        <p>
+          Leia uma nota de 0 a 10 e exiba o conceito: <strong>A</strong> (≥ 9), <strong>B</strong> (≥ 7), <strong>C</strong> (≥ 5), <strong>D</strong> (&lt; 5). Considere também a mensagem "Nota inválida" se for menor que 0 ou maior que 10.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>double nota = 7.5;
+
+if (nota &lt; 0 || nota &gt; 10) {
+    System.out.println("Nota inválida");
+} else if (nota &gt;= 9) {
+    System.out.println("Conceito: A");
+} else if (nota &gt;= 7) {
+    System.out.println("Conceito: B");
+} else if (nota &gt;= 5) {
+    System.out.println("Conceito: C");
+} else {
+    System.out.println("Conceito: D");
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Dias do mês (switch)</h3>
+        <p>
+          Use <code>switch</code> para exibir quantos dias tem um mês (1 a 12). Considere janeiro=31, fevereiro=28, março=31, etc. Para fevereiro, exiba "28 ou 29" já que não estamos validando ano bissexto.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int mes = 2;
+
+switch (mes) {
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+        System.out.println("31 dias");
+        break;
+    case 4: case 6: case 9: case 11:
+        System.out.println("30 dias");
+        break;
+    case 2:
+        System.out.println("28 ou 29 dias");
+        break;
+    default:
+        System.out.println("Mês inválido");
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Caixa eletrônico</h3>
+        <p>
+          Simule um caixa eletrônico: leia um valor inteiro (ex: 287) e determine a <strong>menor quantidade de notas</strong> de 100, 50, 20, 10, 5 e 2 para pagar esse valor. Dica: use divisão e resto sucessivos.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int valor = 287;
+int original = valor;
+
+int n100 = valor / 100;  valor %= 100;
+int n50  = valor / 50;   valor %= 50;
+int n20  = valor / 20;   valor %= 20;
+int n10  = valor / 10;   valor %= 10;
+int n5   = valor / 5;    valor %= 5;
+int n2   = valor / 2;    valor %= 2;
+
+System.out.println("Valor: R$ " + original);
+System.out.println("Notas de 100: " + n100);
+System.out.println("Notas de 50:  " + n50);
+System.out.println("Notas de 20:  " + n20);
+System.out.println("Notas de 10:  " + n10);
+System.out.println("Notas de 5:   " + n5);
+System.out.println("Notas de 2:   " + n2);
+if (valor != 0) System.out.println("Resto (moedas): " + valor);</code></pre>
+          </div>
+        </details>
+
         <p>
           No <a href="loops-for-while-do-while.html">próximo post</a>, vamos ver como repetir operações sem escrever o mesmo código 500 vezes :D
         </p>
+        </details>
 
       </div>
 

@@ -94,6 +94,8 @@ func main() {
     fmt.Println(s1)        // "Oi"
 }</code></pre>
 
+        <img class="post-img" src="../../assets/images/duck-basics/variables-box-1.svg" alt="Caixas representando variáveis com labels de tipo e nome">
+
         <h2>Tipagem estática vs dinâmica</h2>
         <p>
           Outra divisão importante. Diz <strong>quando</strong> o tipo é verificado.
@@ -123,6 +125,9 @@ numero = "texto"  # funciona, sem erro</code></pre>
           Essa diferença parece teórica, mas ela explica bugs clássicos como modificar um objeto em duas partes do código sem querer — porque ambas as partes tinham o <strong>endereço</strong> do mesmo objeto.
         </p>
 
+        <img class="post-img" src="../../assets/images/duck-basics/pilha-pt-br.svg" alt="Ilustração da pilha (stack) na memória">
+        <img class="post-img" src="../../assets/images/duck-basics/heap-pt-br.svg" alt="Ilustração do heap na memória">
+
         <h2>Resumo</h2>
         <ul>
           <li>Variável = nome + espaço na memória</li>
@@ -131,9 +136,61 @@ numero = "texto"  # funciona, sem erro</code></pre>
           <li>Java e Go são estaticamente tipadas: tipo definido na declaração</li>
         </ul>
 
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Declaração e impressão</h3>
+        <p>
+          Declare as variáveis <code>nome</code> (String), <code>idade</code> (int) e <code>altura</code> (double). Atribua valores a elas e imprima: <em>"Fulano tem 25 anos e 1.75m de altura."</em>
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <p><strong>Java:</strong></p>
+            <pre><code>String nome = "Fulano";
+int idade = 25;
+double altura = 1.75;
+System.out.println(nome + " tem " + idade + " anos e " + altura + "m de altura.");</code></pre>
+            <p><strong>Go:</strong></p>
+            <pre><code>nome := "Fulano"
+idade := 25
+altura := 1.75
+fmt.Printf("%s tem %d anos e %.2fm de altura.\n", nome, idade, altura)</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Troca de valores</h3>
+        <p>
+          Declare duas variáveis <code>a = 10</code> e <code>b = 20</code>. Troque os valores delas <strong>sem usar uma terceira variável</strong>.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <p><strong>Java/Go:</strong></p>
+            <pre><code>a = a + b; // a = 30, b = 20
+b = a - b; // a = 30, b = 10
+a = a - b; // a = 20, b = 10</code></pre>
+            <p>Funciona apenas com números. Depois que aprender mais, vai ver que cada linguagem tem seu jeito — Go tem <code>a, b = b, a</code>.</p>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Integer vs int</h3>
+        <p>
+          Em Java, por que <code>Integer a = 100; Integer b = 100; System.out.println(a == b);</code> imprime <code>true</code>, mas com <code>1000</code> imprime <code>false</code>?
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <p><code>Integer</code> é uma classe wrapper (referência), enquanto <code>int</code> é primitivo. O operador <code>==</code> compara <strong>referências</strong>, não valores.</p>
+            <p>O Java faz <strong>autoboxing</strong> e mantém um cache de <code>Integer</code> para valores entre -128 e 127. Para 100, ambas as variáveis apontam pro <strong>mesmo objeto</strong> do cache. Para 1000, são objetos diferentes.</p>
+            <p>Para comparar Integers, use <code>equals()</code>: <code>a.equals(b)</code>.</p>
+          </div>
+        </details>
+
         <p>
           No <a href="operadores-e-expressoes.html">próximo post</a>, vamos ver como manipular esses valores com operadores e expressões :D
         </p>
+        </details>
 
       </div>
 

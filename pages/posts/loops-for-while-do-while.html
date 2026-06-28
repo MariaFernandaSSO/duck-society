@@ -34,7 +34,7 @@
 
         <h2>for — quando você sabe quantas vezes repetir</h2>
         <p>
-          O <code>for</code> é o loop mais comum. Você define uma variável de controle, uma condição de parada e como a variável muda a cada volta.
+          O <code>for</code> é o loop mais comum. Você define uma variável de controle, uma condição de parada (a condição que, quando falsa, faz o loop parar de repetir) e como a variável muda a cada volta.
         </p>
 
         <p><strong>Java:</strong></p>
@@ -143,7 +143,7 @@ fmt.Println("Acesso liberado!")</code></pre>
 
         <h2>Como evitar loop infinito</h2>
         <p>
-          Loop infinito é quando a condição de parada <strong>nunca</strong> se torna falsa. Seu programa trava, o navegador congela, você força o reboot. Causas comuns:
+          Loop infinito é quando a condição de parada (a condição que diz "pode continuar") <strong>nunca</strong> se torna falsa. Seu programa trava, o navegador congela, você força o reboot. Causas comuns:
         </p>
         <ul>
           <li>Esquecer de incrementar a variável de controle: <code>for (int i = 0; i < 10; )</code></li>
@@ -175,13 +175,81 @@ System.out.println("Média (com for-each): " + media);</code></pre>
           <li><code>for</code>: quando você sabe o número de repetições (ou tem um índice)</li>
           <li><code>while</code>: quando repete enquanto uma condição for verdadeira</li>
           <li><code>do-while</code>: igual ao while, mas roda pelo menos uma vez (não existe em Go)</li>
-          <li>Sempre garanta que a condição de parada vai ser alcançada</li>
+          <li>Sempre garanta que a condição de parada (a hora de parar) vai ser alcançada — senão seu loop roda pra sempre</li>
           <li>Prefira <code>for-each</code> (Java) ou <code>range</code> (Go) para percorrer coleções</li>
         </ul>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. FizzBuzz</h3>
+        <p>
+          Imprima os números de 1 a 30. Mas: se o número for múltiplo de 3, imprima <strong>"Fizz"</strong>; se for múltiplo de 5, <strong>"Buzz"</strong>; se for múltiplo de ambos (3 e 5), <strong>"FizzBuzz"</strong>.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>for (int i = 1; i &lt;= 30; i++) {
+    if (i % 3 == 0 && i % 5 == 0) {
+        System.out.println("FizzBuzz");
+    } else if (i % 3 == 0) {
+        System.out.println("Fizz");
+    } else if (i % 5 == 0) {
+        System.out.println("Buzz");
+    } else {
+        System.out.println(i);
+    }
+}</code></pre>
+            <p>Teste clássico de entrevistas! Verifica se você pensa na ordem das condições.</p>
+          </div>
+        </details>
+
+        <h3>2. Soma dos dígitos</h3>
+        <p>
+          Dado um número inteiro positivo (ex: 1234), calcule a <strong>soma dos seus dígitos</strong> (1 + 2 + 3 + 4 = 10) usando um loop <code>while</code>.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int num = 1234;
+int soma = 0;
+
+while (num &gt; 0) {
+    soma += num % 10;   // pega o último dígito
+    num /= 10;           // remove o último dígito
+}
+
+System.out.println("Soma dos dígitos: " + soma);</code></pre>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Números primos</h3>
+        <p>
+          Imprima todos os <strong>números primos</strong> entre 1 e 100. Um número primo é divisível apenas por 1 e por ele mesmo. Dica: use um loop dentro de outro (aninhado).
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>for (int num = 2; num &lt;= 100; num++) {
+    boolean primo = true;
+
+    for (int i = 2; i &lt;= Math.sqrt(num); i++) {
+        if (num % i == 0) {
+            primo = false;
+            break;
+        }
+    }
+
+    if (primo) System.out.println(num);
+}</code></pre>
+            <p>Usar <code>Math.sqrt(num)</code> como limite é uma otimização — não precisa testar divisores além da raiz quadrada.</p>
+          </div>
+        </details>
 
         <p>
           No <a href="funcoes-organizar-codigo.html">próximo post</a>, vamos organizar todo esse código em funções — porque ninguém merece um <code>main</code> de 500 linhas :D
         </p>
+        </details>
 
       </div>
 

@@ -156,9 +156,57 @@ System.out.println("Precisa parcelar? " + precisaParcelar);</code></pre>
           <li>Precedência: parênteses são seus amigos</li>
         </ul>
 
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Média aritmética</h3>
+        <p>
+          Dados três números <code>7.5</code>, <code>8.0</code> e <code>9.2</code>, calcule e exiba a média aritmética. O resultado deve ser <code>8.23...</code>.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>double n1 = 7.5, n2 = 8.0, n3 = 9.2;
+double media = (n1 + n2 + n3) / 3;
+System.out.println("Média: " + media);</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Ano bissexto</h3>
+        <p>
+          Escreva uma expressão que determine se um ano é bissexto. Regras: é bissexto se for <strong>divisível por 400</strong>, ou se for <strong>divisível por 4</strong> e <strong>não por 100</strong>. Teste com 1900, 2000, 2024 e 2025.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int ano = 2000;
+boolean bissexto = (ano % 400 == 0) || (ano % 4 == 0 && ano % 100 != 0);
+System.out.println(ano + " é bissexto? " + bissexto);</code></pre>
+            <p>Resultados: 1900 → false, 2000 → true, 2024 → true, 2025 → false.</p>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Inverter um número de 3 dígitos</h3>
+        <p>
+          Dado um número inteiro de 3 dígitos (ex: 487), use <strong>apenas operadores aritméticos</strong> (<code>/</code> e <code>%</code>) para inverter os dígitos (487 → 784).
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int num = 487;
+int centena = num / 100;        // 4
+int dezena = (num / 10) % 10;   // 8
+int unidade = num % 10;          // 7
+
+int invertido = unidade * 100 + dezena * 10 + centena;
+System.out.println(invertido); // 784</code></pre>
+          </div>
+        </details>
+
         <p>
           No <a href="condicionais-if-else-switch.html">próximo post</a>, vamos usar essas expressões para tomar decisões no código :D
         </p>
+        </details>
 
       </div>
 
