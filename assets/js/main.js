@@ -673,7 +673,7 @@ function initSeriesPage() {
     allOpt.textContent = 'Todos os módulos'
     filterSelect.appendChild(allOpt)
 
-    var moduleNames = { 1: 'Algoritmos' }
+    var moduleNames = { 1: 'Lógica de Programação' }
     modules.forEach(function(m) {
       var opt = document.createElement('option')
       opt.value = m
