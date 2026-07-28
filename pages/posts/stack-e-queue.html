@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stack e Queue: a base de muita coisa - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">Stack e Queue: a base de muita coisa que você já usa</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <p>
+          Vimos que a LinkedList pode ser usada como fila. Mas o que exatamente são pilhas (stacks) e filas (queues)? São duas estruturas de dados tão simples quanto poderosas, e você usa ambas diariamente sem perceber.
+        </p>
+
+        <h2>Stack (Pilha) - LIFO</h2>
+
+        <p>
+          <strong>LIFO</strong> = Last In, First Out. O último que entra é o primeiro que sai.
+        </p>
+        <p>
+          Pense numa pilha de pratos: você coloca um em cima do outro, e quando vai tirar, tira o de cima primeiro.
+        </p>
+
+        <pre><code>// Operações principais:
+// push(item)  - coloca no topo
+// pop()       - remove do topo e retorna
+// peek()      - olha o topo sem remover
+// empty()     - verifica se está vazia
+
+Stack&lt;String&gt; pilha = new Stack&lt;&gt;();
+pilha.push("A");
+pilha.push("B");
+pilha.push("C");
+
+System.out.println(pilha.pop());  // C
+System.out.println(pilha.peek()); // B
+System.out.println(pilha.pop());  // B
+System.out.println(pilha.pop());  // A</code></pre>
+
+        <h3>Onde stacks aparecem</h3>
+        <ul>
+          <li><strong>Botão "voltar" do navegador:</strong> cada página que você visita é empilhada. O "voltar" desempilha.</li>
+          <li><strong>Ctrl+Z (undo):</strong> cada ação é empilhada. Desfazer = desempilhar.</li>
+          <li><strong>Call stack da sua linguagem:</strong> quando uma função chama outra, o contexto é empilhado.</li>
+          <li><strong>Editor de código:</strong> validação de chaves { } usa stack - abre empilha, fecha desempilha.</li>
+        </ul>
+
+        <h3>Validando parênteses com Stack</h3>
+
+        <pre><code>boolean ehValido(String s) {
+    Stack&lt;Character&gt; pilha = new Stack&lt;&gt;();
+    for (char c : s.toCharArray()) {
+        if (c == '(' || c == '[' || c == '{') {
+            pilha.push(c);
+        } else {
+            if (pilha.isEmpty()) return false;
+            char topo = pilha.pop();
+            if ((c == ')' && topo != '(') ||
+                (c == ']' && topo != '[') ||
+                (c == '}' && topo != '{')) {
+                return false;
+            }
+        }
+    }
+    return pilha.isEmpty();
+}
+
+System.out.println(ehValido("({[]})")); // true
+System.out.println(ehValido("({[})"));  // false</code></pre>
+
+        <h2>Queue (Fila) - FIFO</h2>
+
+        <p>
+          <strong>FIFO</strong> = First In, First Out. O primeiro que entra é o primeiro que sai.
+        </p>
+        <p>
+          Pense numa fila de banco: quem chega primeiro é atendido primeiro.
+        </p>
+
+        <pre><code>// Operações principais:
+// offer(item)  - adiciona no fim
+// poll()       - remove do início e retorna
+// peek()       - olha o início sem remover
+
+Queue&lt;String&gt; fila = new LinkedList&lt;&gt;();
+fila.offer("A");
+fila.offer("B");
+fila.offer("C");
+
+System.out.println(fila.poll());  // A
+System.out.println(fila.peek()); // B
+System.out.println(fila.poll());  // B
+System.out.println(fila.poll());  // C</code></pre>
+
+        <h3>Onde queues aparecem</h3>
+        <ul>
+          <li><strong>Filas de impressão:</strong> documentos são impressos na ordem de chegada.</li>
+          <li><strong>Message brokers:</strong> RabbitMQ, Kafka, SQS - filas são a base da comunicação assíncrona.</li>
+          <li><strong>Thread pools:</strong> tarefas aguardam numa fila até serem executadas.</li>
+          <li><strong>BFS (Breadth-First Search):</strong> o algoritmo de busca em largura usa uma fila.</li>
+        </ul>
+
+        <h2>Stack vs Queue - resumo</h2>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Característica</th>
+              <th>Stack</th>
+              <th>Queue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Princípio</td>
+              <td>LIFO (último a entrar, primeiro a sair)</td>
+              <td>FIFO (primeiro a entrar, primeiro a sair)</td>
+            </tr>
+            <tr>
+              <td>Inserção</td>
+              <td>push() - no topo</td>
+              <td>offer() - no fim</td>
+            </tr>
+            <tr>
+              <td>Remoção</td>
+              <td>pop() - do topo</td>
+              <td>poll() - do início</td>
+            </tr>
+            <tr>
+              <td>Uso típico</td>
+              <td>Undo, call stack, validação de sintaxe</td>
+              <td>Filas de processamento, BFS, buffers</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Fila com duas stacks</h3>
+        <p>
+          Implemente uma fila usando duas stacks. A ideia é clássica em entrevistas: uma stack para enfileirar, outra para desenfileirar.
+        </p>
+
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>class FilaComStacks&lt;T&gt; {
+    Stack&lt;T&gt; entrada = new Stack&lt;&gt;();
+    Stack&lt;T&gt; saida = new Stack&lt;&gt;();
+
+    void enfileirar(T item) { entrada.push(item); }
+
+    T desenfileirar() {
+        if (saida.isEmpty()) {
+            while (!entrada.isEmpty()) {
+                saida.push(entrada.pop());
+            }
+        }
+        return saida.pop();
+    }
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Palíndromo com Stack</h3>
+        <p>
+          Use uma stack para verificar se uma palavra é um palíndromo (lê-se igual de trás pra frente).
+        </p>
+
+        <h3>3. (Desafio) Fila circular</h3>
+        <p>
+          Implemente uma fila circular com capacidade fixa usando um array. Quando o fim do array é atingido, volta ao início.
+        </p>
+        </details>
+
+        <p>
+          Stack e Queue são estruturas simples, mas a base de algoritmos muito mais complexos. Dominar elas é essencial.
+        </p>
+
+        <p>
+          No <a href="hashmap.html">próximo post</a>, vamos mergulhar no HashMap - a estrutura de dados mais usada do Java. 🦆
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+  We saw that LinkedList can be used as a queue. But what exactly are stacks and queues? They are two data structures as simple as they are powerful, and you use both daily without realizing it.
+</p>
+
+<h2>Stack - LIFO</h2>
+
+<p>
+  <strong>LIFO</strong> = Last In, First Out. The last one in is the first one out.
+</p>
+<p>
+  Think of a stack of plates: you put one on top of another, and when you take one, you take the top one first.
+</p>
+
+<pre><code>// Main operations:
+// push(item)  - puts on top
+// pop()       - removes from top and returns
+// peek()      - looks at the top without removing
+// empty()     - checks if empty
+
+Stack&lt;String&gt; stack = new Stack&lt;&gt;();
+stack.push("A");
+stack.push("B");
+stack.push("C");
+
+System.out.println(stack.pop());  // C
+System.out.println(stack.peek()); // B
+System.out.println(stack.pop());  // B
+System.out.println(stack.pop());  // A</code></pre>
+
+<h3>Where stacks appear</h3>
+<ul>
+  <li><strong>Browser back button:</strong> each page you visit is stacked. The "back" button pops.</li>
+  <li><strong>Ctrl+Z (undo):</strong> each action is stacked. Undo = pop.</li>
+  <li><strong>Call stack:</strong> when a function calls another, the context is stacked.</li>
+  <li><strong>Code editor:</strong> brace validation { } uses a stack - open pushes, close pops.</li>
+</ul>
+
+<h3>Validating parentheses with Stack</h3>
+
+<pre><code>boolean isValid(String s) {
+    Stack&lt;Character&gt; stack = new Stack&lt;&gt;();
+    for (char c : s.toCharArray()) {
+        if (c == '(' || c == '[' || c == '{') {
+            stack.push(c);
+        } else {
+            if (stack.isEmpty()) return false;
+            char top = stack.pop();
+            if ((c == ')' && top != '(') ||
+                (c == ']' && top != '[') ||
+                (c == '}' && top != '{')) {
+                return false;
+            }
+        }
+    }
+    return stack.isEmpty();
+}
+
+System.out.println(isValid("({[]})")); // true
+System.out.println(isValid("({[})"));  // false</code></pre>
+
+<h2>Queue - FIFO</h2>
+
+<p>
+  <strong>FIFO</strong> = First In, First Out. The first one in is the first one out.
+</p>
+<p>
+  Think of a bank queue: whoever arrives first gets served first.
+</p>
+
+<pre><code>// Main operations:
+// offer(item)  - adds at the end
+// poll()       - removes from the front and returns
+// peek()       - looks at the front without removing
+
+Queue&lt;String&gt; queue = new LinkedList&lt;&gt;();
+queue.offer("A");
+queue.offer("B");
+queue.offer("C");
+
+System.out.println(queue.poll());  // A
+System.out.println(queue.peek()); // B
+System.out.println(queue.poll());  // B
+System.out.println(queue.poll());  // C</code></pre>
+
+<h3>Where queues appear</h3>
+<ul>
+  <li><strong>Print queues:</strong> documents are printed in order of arrival.</li>
+  <li><strong>Message brokers:</strong> RabbitMQ, Kafka, SQS - queues are the foundation of async communication.</li>
+  <li><strong>Thread pools:</strong> tasks wait in a queue until executed.</li>
+  <li><strong>BFS (Breadth-First Search):</strong> the graph traversal algorithm uses a queue.</li>
+</ul>
+
+<h2>Stack vs Queue - summary</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Stack</th>
+      <th>Queue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Principle</td>
+      <td>LIFO (last in, first out)</td>
+      <td>FIFO (first in, first out)</td>
+    </tr>
+    <tr>
+      <td>Insertion</td>
+      <td>push() - on top</td>
+      <td>offer() - at the end</td>
+    </tr>
+    <tr>
+      <td>Removal</td>
+      <td>pop() - from the top</td>
+      <td>poll() - from the front</td>
+    </tr>
+    <tr>
+      <td>Typical use</td>
+      <td>Undo, call stack, syntax validation</td>
+      <td>Processing queues, BFS, buffers</td>
+    </tr>
+  </tbody>
+</table>
+
+<details class="exercises-block">
+<summary><strong>Exercises</strong></summary>
+
+<h3>1. Queue with two stacks</h3>
+<p>
+  Implement a queue using two stacks. This is a classic interview problem: one stack for enqueueing, another for dequeueing.
+</p>
+
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>class QueueWithStacks&lt;T&gt; {
+    Stack&lt;T&gt; input = new Stack&lt;&gt;();
+    Stack&lt;T&gt; output = new Stack&lt;&gt;();
+
+    void enqueue(T item) { input.push(item); }
+
+    T dequeue() {
+        if (output.isEmpty()) {
+            while (!input.isEmpty()) {
+                output.push(input.pop());
+            }
+        }
+        return output.pop();
+    }
+}</code></pre>
+  </div>
+</details>
+
+<h3>2. Palindrome with Stack</h3>
+<p>
+  Use a stack to check if a word is a palindrome (reads the same backwards).
+</p>
+
+<h3>3. (Challenge) Circular queue</h3>
+<p>
+  Implement a circular queue with fixed capacity using an array. When the end of the array is reached, it wraps around to the beginning.
+</p>
+</details>
+
+<p>
+  Stack and Queue are simple structures, but they are the foundation of much more complex algorithms. Mastering them is essential.
+</p>
+
+<p>
+  In the <a href="hashmap.html">next post</a>, we will dive into HashMap - the most used data structure in Java. 🦆
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

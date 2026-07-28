@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedList: quando faz sentido usar - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">LinkedList: quando faz sentido usar (e quando não faz)</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <h2>O problema</h2>
+
+        <p>
+          Imagine que você tem uma lista de convidados para uma festa:
+        </p>
+
+        <pre><code>ArrayList&lt;String&gt; convidados = new ArrayList&lt;&gt;();
+convidados.add("Alice");
+convidados.add("Bob");
+convidados.add("Carlos");
+convidados.add("Daniela");</code></pre>
+
+        <p>
+          Agora imagine que Bob liga falando que vai levar a namorada, e você precisa <strong>inserir "Elena" depois do "Bob"</strong>. Com ArrayList, você faz:
+        </p>
+
+        <pre><code>convidados.add(2, "Elena");
+// Resultado: [Alice, Bob, Elena, Carlos, Daniela]</code></pre>
+
+        <p>
+          O que o ArrayList faz por baixo dos panos nessa hora:
+        </p>
+
+        <pre><code>// 1. Array interno: [Alice, Bob, Carlos, Daniela, null]
+// 2. Abre espaço no índice 2:
+//    [Alice, Bob, null, Carlos, Daniela]
+//               ↑ deslocou Carlos e Daniela pra direita
+// 3. Insere Elena no índice 2:
+//    [Alice, Bob, Elena, Carlos, Daniela]</code></pre>
+
+        <p>
+          Esse <strong>deslocamento</strong> custa caro. Quanto mais elementos, mais lentidão. Se você tiver 10 mil convidados e inserir alguém no começo da lista, todos os 10 mil precisam ser deslocados.
+        </p>
+
+        <p>
+          A <strong>LinkedList</strong> resolve esse problema de um jeito completamente diferente.
+        </p>
+
+        <h2>Como a LinkedList funciona</h2>
+
+        <p>
+          Em vez de armazenar os elementos lado a lado num array, a LinkedList cria <strong>nós (nodes)</strong> espalhados pela memória. Cada nó guarda duas coisas:
+        </p>
+
+        <ul>
+          <li>O <strong>valor</strong> do elemento</li>
+          <li>Uma <strong>seta</strong> apontando para o próximo nó da lista</li>
+        </ul>
+
+        <pre><code>// Visualmente, a lista [Alice, Bob, Carlos] é assim:
+//
+//  [ Alice | → ]  →  [ Bob | → ]  →  [ Carlos | null ]
+//      ↑                ↑                  ↑
+//   nó 1             nó 2               nó 3 (fim)
+//
+// O último nó aponta para null - não tem ninguém depois.</code></pre>
+
+        <p>
+          Para inserir "Elena" entre Bob e Carlos:
+        </p>
+
+        <pre><code>// Antes:  [ Alice | → ]  →  [ Bob | → ]  →  [ Carlos | null ]
+//
+// 1. Cria um novo nó para Elena
+// 2. Faz o Bob apontar para Elena
+// 3. Faz a Elena apontar para Carlos
+//
+// Depois: [ Alice | → ]  →  [ Bob | → ]  →  [ Elena | → ]  →  [ Carlos | null ]</code></pre>
+
+        <p>
+          Ninguém foi deslocado. Só mudamos duas setas. Não importa se a lista tem 10 ou 10 mil elementos - a operação é igualmente rápida.
+        </p>
+
+        <h2>O preço que se paga</h2>
+
+        <p>
+          Se inserir é tão fácil, por que não usamos LinkedList sempre? Porque tem um lado negativo: <strong>encontrar um elemento pelo índice é lento</strong>.
+        </p>
+
+        <p>
+          No ArrayList, <code>lista.get(3)</code> vai direto no índice 3 do array - instantâneo.
+        </p>
+
+        <p>
+          Na LinkedList, <code>lista.get(3)</code> precisa <strong>percorrer nó por nó</strong> a partir do primeiro, contando até chegar no 3:
+        </p>
+
+        <pre><code>// lista.get(3):
+// [ Alice | → ]  →  [ Bob | → ]  →  [ Elena | → ]  →  [ Carlos | → ]  →  [ Daniela | null ]
+//    ↓ (0)            ↓ (1)             ↓ (2)             ↓ (3) ← achou!
+//  começa aqui      conta 1           conta 2          conta 3</code></pre>
+
+        <p>
+          Quanto maior a lista, mais passos. Se você fizer <code>get(5000)</code> numa lista de 10 mil, a LinkedList vai percorrer 5 mil nós até chegar lá.
+        </p>
+
+        <h2>LinkedList vs ArrayList</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Operação</th>
+              <th>ArrayList</th>
+              <th>LinkedList</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Acessar pelo índice</td>
+              <td>O(1) - acesso direto</td>
+              <td>O(n) - precisa percorrer</td>
+            </tr>
+            <tr>
+              <td>Inserir no fim</td>
+              <td>O(1)* - na maioria das vezes</td>
+              <td>O(1) - direto</td>
+            </tr>
+            <tr>
+              <td>Inserir no meio</td>
+              <td>O(n) - desloca elementos</td>
+              <td>O(1)** - só reconecta ponteiros</td>
+            </tr>
+            <tr>
+              <td>Remover do meio</td>
+              <td>O(n) - desloca elementos</td>
+              <td>O(1)** - só reconecta ponteiros</td>
+            </tr>
+            <tr>
+              <td>Memória extra</td>
+              <td>Nenhuma</td>
+              <td>2 ponteiros por elemento</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="post-page-note">
+          * O ArrayList ocasionalmente precisa redimensionar o array interno (criar um maior e copiar tudo). Aí fica O(n), mas é raro.<br>
+          ** A LinkedList só consegue inserir no meio em O(1) se você <strong>já estiver na posição</strong> (ex: usando um Iterator). Se você passar o índice, ela gasta O(n) percorrendo até lá.
+        </p>
+
+        <h2>Regra de bolso</h2>
+
+        <p>Pense na sua lista de convidados:</p>
+
+        <ul>
+          <li>
+            <strong>Use ArrayList quando:</strong> você só adiciona no fim, consulta muito pelo índice, ou percorre a lista do começo ao fim.
+            <br><em>Ex: lista de alunos de uma turma, cardápio do dia, histórico de transações.</em>
+          </li>
+          <li>
+            <strong>Use LinkedList quando:</strong> você vive inserindo ou removendo no começo/meio da lista, e raramente precisa saber "qual é o elemento na posição X".
+            <br><em>Ex: fila de atendimento, playlist com músicas sendo adicionadas e removidas do meio, histórico de navegação.</em>
+          </li>
+        </ul>
+
+        <pre><code>// Exemplo: fila do banco (insere no fim, atende do começo)
+// LinkedList é perfeita para isso
+Queue&lt;String&gt; fila = new LinkedList&lt;&gt;();
+
+fila.offer("Cliente 1");  // chegou
+fila.offer("Cliente 2");  // chegou
+fila.offer("Cliente 3");  // chegou
+
+System.out.println(fila.poll()); // atende Cliente 1
+System.out.println(fila.poll()); // atende Cliente 2
+// Remover do começo é instantâneo na LinkedList</code></pre>
+
+        <h2>Construindo sua própria LinkedList</h2>
+
+        <p>
+          A melhor forma de fixar é implementar. Vamos criar uma LinkedList simples, só com encadeamento pra frente e sem usar genéricos para facilitar:
+        </p>
+
+        <pre><code>// 1. O nó: guarda um valor e uma seta pro próximo
+class No {
+    String valor;
+    No proximo;
+
+    No(String valor) {
+        this.valor = valor;
+        this.proximo = null; // ainda não aponta pra ninguém
+    }
+}
+
+// 2. A lista encadeada
+class ListaConvidados {
+    private No primeiro;
+
+    // Adicionar no fim
+    void adicionar(String nome) {
+        No novo = new No(nome);
+
+        if (primeiro == null) {
+            primeiro = novo; // lista vazia, é o primeiro
+            return;
+        }
+
+        // Percorre até o último nó
+        No atual = primeiro;
+        while (atual.proximo != null) {
+            atual = atual.proximo;
+        }
+        atual.proximo = novo; // último nó agora aponta pro novo
+    }
+
+    // Exibir a lista inteira
+    void exibir() {
+        No atual = primeiro;
+        while (atual != null) {
+            System.out.print(atual.valor + " → ");
+            atual = atual.proximo;
+        }
+        System.out.println("null");
+    }
+
+    // Buscar um elemento (precisa percorrer)
+    boolean contem(String nome) {
+        No atual = primeiro;
+        while (atual != null) {
+            if (atual.valor.equals(nome)) return true;
+            atual = atual.proximo;
+        }
+        return false;
+    }
+}
+
+// Testando
+ListaConvidados lista = new ListaConvidados();
+lista.adicionar("Alice");
+lista.adicionar("Bob");
+lista.adicionar("Carlos");
+lista.exibir(); // Alice → Bob → Carlos → null
+
+System.out.println(lista.contem("Bob"));   // true
+System.out.println(lista.contem("Zeca"));  // false</code></pre>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Remover o primeiro</h3>
+        <p>
+          Adicione um método <code>removerPrimeiro()</code> na classe <code>ListaConvidados</code> que remove e retorna o primeiro elemento. Lembre-se: o segundo elemento vira o novo primeiro.
+        </p>
+
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>String removerPrimeiro() {
+    if (primeiro == null) return null;
+    String nome = primeiro.valor;
+    primeiro = primeiro.proximo; // o segundo vira o primeiro
+    return nome;
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Tamanho dinâmico</h3>
+        <p>
+          Adicione um método <code>tamanho()</code> que percorre a lista e conta quantos elementos existem.
+        </p>
+
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int tamanho() {
+    int count = 0;
+    No atual = primeiro;
+    while (atual != null) {
+        count++;
+        atual = atual.proximo;
+    }
+    return count;
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Inverter a lista</h3>
+        <p>
+          Implemente um método que inverta a ordem dos nós. O último vira o primeiro e vice-versa, sem usar arrays ou outras listas auxiliares.
+        </p>
+
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>void inverter() {
+    No anterior = null;
+    No atual = primeiro;
+    while (atual != null) {
+        No proximo = atual.proximo; // guarda o próximo
+        atual.proximo = anterior;    // inverte a seta
+        anterior = atual;            // avança
+        atual = proximo;
+    }
+    primeiro = anterior;
+}</code></pre>
+          </div>
+        </details>
+
+        </details>
+
+        <p>
+          LinkedList é uma estrutura simples no conceito, mas poderosa. A diferença é que você precisa entender o trade-off: <strong>inserir e remover é barato, mas achar um elemento pelo índice é caro</strong>. O ArrayList é o oposto. Saber escolher entre os dois é o que importa.
+        </p>
+
+        <p>
+          No <a href="stack-e-queue.html">próximo post</a>, vamos ver duas estruturas que usam esse mesmo princípio de encadeamento: pilhas (Stack) e filas (Queue). 🦆
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <h2>The problem</h2>
+
+<p>
+  Imagine you have a guest list for a party:
+</p>
+
+<pre><code>ArrayList&lt;String&gt; guests = new ArrayList&lt;&gt;();
+guests.add("Alice");
+guests.add("Bob");
+guests.add("Carlos");
+guests.add("Daniela");</code></pre>
+
+<p>
+  Now imagine Bob calls saying he is bringing his girlfriend, and you need to <strong>insert "Elena" after "Bob"</strong>. With ArrayList, you do:
+</p>
+
+<pre><code>guests.add(2, "Elena");
+// Result: [Alice, Bob, Elena, Carlos, Daniela]</code></pre>
+
+<p>
+  What ArrayList does under the hood:
+</p>
+
+<pre><code>// 1. Internal array: [Alice, Bob, Carlos, Daniela, null]
+// 2. Opens space at index 2:
+//    [Alice, Bob, null, Carlos, Daniela]
+//               ^ shifted Carlos and Daniela to the right
+// 3. Inserts Elena at index 2:
+//    [Alice, Bob, Elena, Carlos, Daniela]</code></pre>
+
+<p>
+  This <strong>shifting</strong> is expensive. The more elements, the slower it gets. If you have 10,000 guests and insert someone at the beginning, all 10,000 need to be shifted.
+</p>
+
+<p>
+  <strong>LinkedList</strong> solves this problem in a completely different way.
+</p>
+
+<h2>How LinkedList works</h2>
+
+<p>
+  Instead of storing elements side by side in an array, LinkedList creates <strong>nodes</strong> scattered throughout memory. Each node holds two things:
+</p>
+
+<ul>
+  <li>The element <strong>value</strong></li>
+  <li>A <strong>pointer</strong> to the next node in the list</li>
+</ul>
+
+<pre><code>// Visually, the list [Alice, Bob, Carlos] looks like:
+//
+//  [ Alice | -> ]  ->  [ Bob | -> ]  ->  [ Carlos | null ]
+//      ^                  ^                    ^
+//    node 1            node 2               node 3 (end)
+//
+// The last node points to null - nothing after it.</code></pre>
+
+<p>
+  To insert "Elena" between Bob and Carlos:
+</p>
+
+<pre><code>// Before:  [ Alice | -> ]  ->  [ Bob | -> ]  ->  [ Carlos | null ]
+//
+// 1. Creates a new node for Elena
+// 2. Makes Bob point to Elena
+// 3. Makes Elena point to Carlos
+//
+// After: [ Alice | -> ]  ->  [ Bob | -> ]  ->  [ Elena | -> ]  ->  [ Carlos | null ]</code></pre>
+
+<p>
+  Nothing was shifted. We only changed two pointers. It does not matter if the list has 10 or 10,000 elements - the operation is equally fast.
+</p>
+
+<h2>The price you pay</h2>
+
+<p>
+  If inserting is so easy, why not use LinkedList all the time? Because there is a downside: <strong>finding an element by index is slow</strong>.
+</p>
+
+<p>
+  With ArrayList, <code>list.get(3)</code> goes directly to index 3 of the array - instant.
+</p>
+
+<p>
+  With LinkedList, <code>list.get(3)</code> has to <strong>traverse node by node</strong> from the first one, counting until it reaches index 3:
+</p>
+
+<pre><code>// list.get(3):
+// [ Alice | -> ]  ->  [ Bob | -> ]  ->  [ Elena | -> ]  ->  [ Carlos | -> ]  ->  [ Daniela | null ]
+//    | (0)              | (1)               | (2)               | (3) <- found!
+//  starts here        count 1             count 2            count 3</code></pre>
+
+<p>
+  The bigger the list, the more steps. If you call <code>get(5000)</code> on a list of 10,000, LinkedList traverses 5,000 nodes.
+</p>
+
+<h2>LinkedList vs ArrayList</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Operation</th>
+      <th>ArrayList</th>
+      <th>LinkedList</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Access by index</td>
+      <td>O(1) - direct access</td>
+      <td>O(n) - must traverse</td>
+    </tr>
+    <tr>
+      <td>Insert at end</td>
+      <td>O(1)* - most of the time</td>
+      <td>O(1) - direct</td>
+    </tr>
+    <tr>
+      <td>Insert in middle</td>
+      <td>O(n) - shifts elements</td>
+      <td>O(1)** - just reconnects pointers</td>
+    </tr>
+    <tr>
+      <td>Remove from middle</td>
+      <td>O(n) - shifts elements</td>
+      <td>O(1)** - just reconnects pointers</td>
+    </tr>
+    <tr>
+      <td>Extra memory</td>
+      <td>None</td>
+      <td>2 pointers per element</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="post-page-note">
+  * ArrayList occasionally needs to resize the internal array (create a bigger one and copy everything). That is O(n), but rare.<br>
+  ** LinkedList can only insert in the middle in O(1) if you are <strong>already at the position</strong> (e.g., using an Iterator). If you pass an index and make LinkedList traverse there, it costs O(n).
+</p>
+
+<h2>Rule of thumb</h2>
+
+<p>Think about your guest list:</p>
+
+<ul>
+  <li>
+    <strong>Use ArrayList when:</strong> you only add at the end, access by index often, or traverse the list from start to end.
+    <br><em>Ex: class roster, daily menu, transaction history.</em>
+  </li>
+  <li>
+    <strong>Use LinkedList when:</strong> you frequently insert or remove at the beginning/middle, and rarely need to know "what is at position X."
+    <br><em>Ex: service queue, playlist with songs being added and removed from the middle, browsing history.</em>
+  </li>
+</ul>
+
+<pre><code>// Example: bank queue (insert at end, serve from start)
+// LinkedList is perfect for this
+Queue&lt;String&gt; queue = new LinkedList&lt;&gt;();
+
+queue.offer("Customer 1");  // arrived
+queue.offer("Customer 2");  // arrived
+queue.offer("Customer 3");  // arrived
+
+System.out.println(queue.poll()); // serve Customer 1
+System.out.println(queue.poll()); // serve Customer 2
+// Removing from the beginning is instant with LinkedList</code></pre>
+
+<h2>Building your own LinkedList</h2>
+
+<p>
+  The best way to learn is to implement it. Let us create a simple LinkedList, forward-only and without generics for simplicity:
+</p>
+
+<pre><code>// 1. The node: holds a value and a pointer to the next
+class Node {
+    String value;
+    Node next;
+
+    Node(String value) {
+        this.value = value;
+        this.next = null; // does not point to anything yet
+    }
+}
+
+// 2. The linked list
+class GuestList {
+    private Node first;
+
+    // Add at the end
+    void add(String name) {
+        Node newNode = new Node(name);
+
+        if (first == null) {
+            first = newNode; // empty list, this is the first
+            return;
+        }
+
+        // Traverse to the last node
+        Node current = first;
+        while (current.next != null) {
+            current = current.next;
+        }
+        current.next = newNode; // last node now points to the new one
+    }
+
+    // Display the entire list
+    void display() {
+        Node current = first;
+        while (current != null) {
+            System.out.print(current.value + " -> ");
+            current = current.next;
+        }
+        System.out.println("null");
+    }
+
+    // Search for an element (must traverse)
+    boolean contains(String name) {
+        Node current = first;
+        while (current != null) {
+            if (current.value.equals(name)) return true;
+            current = current.next;
+        }
+        return false;
+    }
+}
+
+// Testing
+GuestList list = new GuestList();
+list.add("Alice");
+list.add("Bob");
+list.add("Carlos");
+list.display(); // Alice -> Bob -> Carlos -> null
+
+System.out.println(list.contains("Bob"));   // true
+System.out.println(list.contains("Zack"));  // false</code></pre>
+
+<details class="exercises-block">
+<summary><strong>Exercises</strong></summary>
+
+<h3>1. Remove the first</h3>
+<p>
+  Add a method <code>removeFirst()</code> to the <code>GuestList</code> class that removes and returns the first element. Remember: the second element becomes the new first.
+</p>
+
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>String removeFirst() {
+    if (first == null) return null;
+    String name = first.value;
+    first = first.next; // the second becomes the first
+    return name;
+}</code></pre>
+  </div>
+</details>
+
+<h3>2. Dynamic size</h3>
+<p>
+  Add a <code>size()</code> method that traverses the list and counts how many elements exist.
+</p>
+
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>int size() {
+    int count = 0;
+    Node current = first;
+    while (current != null) {
+        count++;
+        current = current.next;
+    }
+    return count;
+}</code></pre>
+  </div>
+</details>
+
+<h3>3. (Challenge) Reverse the list</h3>
+<p>
+  Implement a method that reverses the order of nodes. The last becomes the first and vice versa, without using arrays or other auxiliary lists.
+</p>
+
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>void reverse() {
+    Node previous = null;
+    Node current = first;
+    while (current != null) {
+        Node next = current.next; // save the next
+        current.next = previous;  // reverse the pointer
+        previous = current;       // advance
+        current = next;
+    }
+    first = previous;
+}</code></pre>
+  </div>
+</details>
+
+</details>
+
+<p>
+  LinkedList is simple in concept but powerful. The key is understanding the trade-off: <strong>inserting and removing is cheap, but finding an element by index is expensive</strong>. ArrayList is the opposite. Knowing how to choose between them is what matters.
+</p>
+
+<p>
+  In the <a href="stack-e-queue.html">next post</a>, we will cover two structures that use this same chaining principle: stacks and queues. 🦆
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

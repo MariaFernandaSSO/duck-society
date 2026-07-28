@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HashMap por dentro - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">HashMap por dentro: como funciona de verdade</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <p>
+          Se existe uma estrutura de dados onipresente no Java, é o <strong>HashMap</strong>. Você usa todo dia, mas já parou pra pensar no que acontece quando chama <code>put("chave", valor)</code>?
+        </p>
+
+        <h2>O problema que o HashMap resolve</h2>
+
+        <p>
+          Com arrays e listas, para encontrar um elemento você precisa percorrer tudo (O(n)) ou saber o índice exato. O HashMap resolve isso com <strong>chaves</strong> em vez de índices - e encontra qualquer elemento em <strong>O(1)</strong> na média.
+        </p>
+
+        <pre><code>// Sem HashMap: percorrer a lista pra achar um aluno
+for (Aluno a : lista) {
+    if (a.getMatricula().equals("2024001")) {
+        return a;
+    }
+}
+
+// Com HashMap: busca direta pela chave
+HashMap&lt;String, Aluno&gt; map = new HashMap&lt;&gt;();
+map.put("2024001", new Aluno("Maria"));
+Aluno a = map.get("2024001"); // O(1) - instantâneo</code></pre>
+
+        <h2>Como funciona por dentro</h2>
+
+        <h3>1. O hash code</h3>
+        <p>
+          Tudo começa com o método <code>hashCode()</code>. Quando você chama <code>put(chave, valor)</code>, o HashMap calcula o hash da chave para decidir onde armazená-la.
+        </p>
+
+        <pre><code>// Passo a passo do put():
+// 1. chave.hashCode()  →  um número inteiro (ex: 123456)
+// 2. Aplica uma função de dispersão para mapear esse número a um índice do array interno
+// 3. Armazena o par (chave, valor) nesse índice
+
+int hash = chave.hashCode();       // ex: 123456
+int indice = hash &amp; (tabela.length - 1); // equivalente a hash % tamanho</code></pre>
+
+        <h3>2. Colisões</h3>
+        <p>
+          Se duas chaves diferentes gerarem o mesmo índice, acontece uma <strong>colisão</strong>. O HashMap lida com isso usando <strong>listas encadeadas</strong> (ou <strong>árvores</strong> quando a lista fica muito grande).
+        </p>
+
+        <pre><code>// Visualmente (simplificado):
+// tabela[0] = null
+// tabela[1] = ("chaveA", valorA) -> ("chaveX", valorX)  ← colisão!
+// tabela[2] = ("chaveB", valorB)
+// tabela[3] = null
+
+// Para buscar "chaveX":
+// 1. Calcula o hash de "chaveX" → índice 1
+// 2. Percorre a lista encadeada no índice 1
+// 3. Compara cada chave com equals() até achar "chaveX"</code></pre>
+
+        <h3>3. Rehash e redimensionamento</h3>
+        <p>
+          Conforme o mapa fica cheio, a performance degrada. Quando o <strong>fator de carga</strong> (default 0.75) é excedido, o HashMap dobra de tamanho e <strong>reorganiza todos os elementos</strong> (rehash). É uma operação cara, mas necessária.
+        </p>
+
+        <h2>Implementação visual</h2>
+
+        <pre><code>// Se quiséssemos implementar um HashMap simples:
+class MeuHashMap&lt;K, V&gt; {
+    private static class Entry&lt;K, V&gt; {
+        K chave;
+        V valor;
+        Entry&lt;K, V&gt; proximo;
+        Entry(K chave, V valor) {
+            this.chave = chave;
+            this.valor = valor;
+        }
+    }
+
+    private Entry&lt;K, V&gt;[] tabela;
+    private static final int TAMANHO = 16;
+
+    MeuHashMap() { tabela = new Entry[TAMANHO]; }
+
+    private int indice(K chave) {
+        return Math.abs(chave.hashCode()) % TAMANHO;
+    }
+
+    void put(K chave, V valor) {
+        int i = indice(chave);
+        if (tabela[i] == null) {
+            tabela[i] = new Entry&lt;&gt;(chave, valor);
+        } else {
+            Entry&lt;K, V&gt; atual = tabela[i];
+            while (atual != null) {
+                if (atual.chave.equals(chave)) {
+                    atual.valor = valor; // atualiza se já existe
+                    return;
+                }
+                if (atual.proximo == null) break;
+                atual = atual.proximo;
+            }
+            atual.proximo = new Entry&lt;&gt;(chave, valor);
+        }
+    }
+
+    V get(K chave) {
+        int i = indice(chave);
+        Entry&lt;K, V&gt; atual = tabela[i];
+        while (atual != null) {
+            if (atual.chave.equals(chave)) return atual.valor;
+            atual = atual.proximo;
+        }
+        return null;
+    }
+}</code></pre>
+
+        <h2>HashMap no Java 8+</h2>
+
+        <p>
+          Desde o Java 8, quando uma lista encadeada em um bucket ultrapassa <strong>8 elementos</strong>, ela é convertida em uma <strong>árvore rubro-negra (TreeMap)</strong>. Isso melhora a busca de O(n) para O(log n) em casos de muitas colisões.
+        </p>
+
+        <h2>Boas práticas</h2>
+
+        <ul>
+          <li>Sempre implemente <code>hashCode()</code> e <code>equals()</code> juntos - contratos do Java.</li>
+          <li>Use chaves <strong>imutáveis</strong> (String, Integer, etc.). Se a chave muda, o hash muda e o objeto "some" do mapa.</li>
+          <li>Defina a capacidade inicial se souber o tamanho aproximado: <code>new HashMap&lt;&gt;(tamanhoEsperado)</code>.</li>
+          <li>Não use HashMap em cenários concorrentes sem sincronização - use <code>ConcurrentHashMap</code>.</li>
+        </ul>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Contador de palavras</h3>
+        <p>
+          Dado um texto, use um HashMap para contar quantas vezes cada palavra aparece.
+        </p>
+
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>Map&lt;String, Integer&gt; contagem = new HashMap&lt;&gt;();
+for (String palavra : texto.split(" ")) {
+    contagem.put(palavra, contagem.getOrDefault(palavra, 0) + 1);
+}
+System.out.println(contagem);</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Cache simples</h3>
+        <p>
+          Implemente um cache que armazena resultados de uma função cara. Use HashMap como armazenamento.
+        </p>
+
+        <h3>3. (Desafio) LinkedHashMap</h3>
+        <p>
+          O LinkedHashMap mantém a ordem de inserção. Pesquise como ele funciona por baixo dos panos e implemente uma versão simplificada.
+        </p>
+        </details>
+
+        <p>
+          O HashMap parece mágica, mas é só uma combinação inteligente de arrays + listas encadeadas + funções hash. Uma das estruturas mais elegantes da computação.
+        </p>
+
+        <p>
+          No <a href="arvores.html">próximo post</a>, vamos subir um nível de complexidade com árvores. 🦆
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+  If there is one ubiquitous data structure in Java, it is the <strong>HashMap</strong>. You use it every day, but have you ever stopped to think about what happens when you call <code>put("key", value)</code>?
+</p>
+
+<h2>The problem HashMap solves</h2>
+
+<p>
+  With arrays and lists, to find an element you need to traverse everything (O(n)) or know the exact index. HashMap solves this with <strong>keys</strong> instead of indices - and finds any element in <strong>O(1)</strong> on average.
+</p>
+
+<pre><code>// Without HashMap: traverse the list to find a student
+for (Student s : list) {
+    if (s.getId().equals("2024001")) {
+        return s;
+    }
+}
+
+// With HashMap: direct lookup by key
+HashMap&lt;String, Student&gt; map = new HashMap&lt;&gt;();
+map.put("2024001", new Student("Maria"));
+Student s = map.get("2024001"); // O(1) - instant</code></pre>
+
+<h2>How it works under the hood</h2>
+
+<h3>1. Hash code</h3>
+<p>
+  Everything starts with the <code>hashCode()</code> method. When you call <code>put(key, value)</code>, HashMap calculates the key's hash to decide where to store it.
+</p>
+
+<pre><code>// Step by step of put():
+// 1. key.hashCode()  ->  an integer (ex: 123456)
+// 2. Applies a dispersion function to map that number to an internal array index
+// 3. Stores the (key, value) pair at that index
+
+int hash = key.hashCode();       // ex: 123456
+int index = hash &amp; (table.length - 1); // equivalent to hash % size</code></pre>
+
+<h3>2. Collisions</h3>
+<p>
+  If two different keys generate the same index, a <strong>collision</strong> happens. HashMap handles this with <strong>linked lists</strong> (or <strong>trees</strong> when the list gets too long).
+</p>
+
+<pre><code>// Visually (simplified):
+// table[0] = null
+// table[1] = ("keyA", valueA) -> ("keyX", valueX)  <- collision!
+// table[2] = ("keyB", valueB)
+// table[3] = null
+
+// To find "keyX":
+// 1. Calculate hash of "keyX" -> index 1
+// 2. Traverse the linked list at index 1
+// 3. Compare each key with equals() until finding "keyX"</code></pre>
+
+<h3>3. Rehash and resizing</h3>
+<p>
+  As the map gets full, performance degrades. When the <strong>load factor</strong> (default 0.75) is exceeded, HashMap doubles in size and <strong>reorganizes all elements</strong> (rehash). This is an expensive but necessary operation.
+</p>
+
+<h2>Visual implementation</h2>
+
+<pre><code>// If we wanted to implement a simple HashMap:
+class MyHashMap&lt;K, V&gt; {
+    private static class Entry&lt;K, V&gt; {
+        K key;
+        V value;
+        Entry&lt;K, V&gt; next;
+        Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    private Entry&lt;K, V&gt;[] table;
+    private static final int SIZE = 16;
+
+    MyHashMap() { table = new Entry[SIZE]; }
+
+    private int index(K key) {
+        return Math.abs(key.hashCode()) % SIZE;
+    }
+
+    void put(K key, V value) {
+        int i = index(key);
+        if (table[i] == null) {
+            table[i] = new Entry&lt;&gt;(key, value);
+        } else {
+            Entry&lt;K, V&gt; current = table[i];
+            while (current != null) {
+                if (current.key.equals(key)) {
+                    current.value = value; // update if exists
+                    return;
+                }
+                if (current.next == null) break;
+                current = current.next;
+            }
+            current.next = new Entry&lt;&gt;(key, value);
+        }
+    }
+
+    V get(K key) {
+        int i = index(key);
+        Entry&lt;K, V&gt; current = table[i];
+        while (current != null) {
+            if (current.key.equals(key)) return current.value;
+            current = current.next;
+        }
+        return null;
+    }
+}</code></pre>
+
+<h2>HashMap in Java 8+</h2>
+
+<p>
+  Since Java 8, when a linked list in a bucket exceeds <strong>8 elements</strong>, it is converted to a <strong>red-black tree (TreeMap)</strong>. This improves lookup from O(n) to O(log n) in high-collision cases.
+</p>
+
+<h2>Best practices</h2>
+
+<ul>
+  <li>Always implement <code>hashCode()</code> and <code>equals()</code> together - Java contract.</li>
+  <li>Use <strong>immutable</strong> keys (String, Integer, etc.). If the key changes, the hash changes and the object "disappears" from the map.</li>
+  <li>Set the initial capacity if you know the approximate size: <code>new HashMap&lt;&gt;(expectedSize)</code>.</li>
+  <li>Do not use HashMap in concurrent scenarios without synchronization - use <code>ConcurrentHashMap</code>.</li>
+</ul>
+
+<details class="exercises-block">
+<summary><strong>Exercises</strong></summary>
+
+<h3>1. Word counter</h3>
+<p>
+  Given a text, use a HashMap to count how many times each word appears.
+</p>
+
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>Map&lt;String, Integer&gt; count = new HashMap&lt;&gt;();
+for (String word : text.split(" ")) {
+    count.put(word, count.getOrDefault(word, 0) + 1);
+}
+System.out.println(count);</code></pre>
+  </div>
+</details>
+
+<h3>2. Simple cache</h3>
+<p>
+  Implement a cache that stores results of an expensive function. Use HashMap as storage.
+</p>
+
+<h3>3. (Challenge) LinkedHashMap</h3>
+<p>
+  LinkedHashMap maintains insertion order. Research how it works under the hood and implement a simplified version.
+</p>
+</details>
+
+<p>
+  HashMap seems like magic, but it is just a clever combination of arrays + linked lists + hash functions. One of the most elegant structures in computing.
+</p>
+
+<p>
+  In the <a href="arvores.html">next post</a>, we will level up with trees. 🦆
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heap e filas de prioridade - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">Heap e filas de prioridade: quando a ordem importa</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <p>
+          Vimos que uma fila comum segue FIFO. Mas e se a ordem não for "quem chegou primeiro", e sim "quem é mais urgente"? É aí que entram as <strong>filas de prioridade</strong>, implementadas com uma estrutura chamada <strong>Heap</strong>.
+        </p>
+
+        <h2>O que é um Heap?</h2>
+
+        <p>
+          Um heap é uma <strong>árvore binária especial</strong> que obedece a uma regra:
+        </p>
+
+        <ul>
+          <li><strong>Max-Heap:</strong> cada nó pai é <strong>maior ou igual</strong> aos seus filhos. O maior valor está sempre na raiz.</li>
+          <li><strong>Min-Heap:</strong> cada nó pai é <strong>menor ou igual</strong> aos seus filhos. O menor valor está sempre na raiz.</li>
+        </ul>
+
+        <pre><code>// Min-Heap visual:
+//        5
+//      /   \
+//     10    15
+//    /  \  /
+//   20  25 30
+//
+// Max-Heap visual:
+//        30
+//      /    \
+//     25     20
+//    /  \   /
+//   15  10 5</code></pre>
+
+        <h2>PriorityQueue no Java</h2>
+
+        <p>
+          O Java implementa fila de prioridade com um <strong>min-heap</strong> (o menor elemento sai primeiro).
+        </p>
+
+        <pre><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+
+pq.offer(30);
+pq.offer(10);
+pq.offer(20);
+pq.offer(5);
+
+System.out.println(pq.poll()); // 5 (menor)
+System.out.println(pq.poll()); // 10
+System.out.println(pq.poll()); // 20
+System.out.println(pq.poll()); // 30</code></pre>
+
+        <p>
+          Para inverter a ordem (max-heap), use um Comparator:
+        </p>
+
+        <pre><code>PriorityQueue&lt;Integer&gt; maxPq = new PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+
+maxPq.offer(10);
+maxPq.offer(30);
+maxPq.offer(20);
+
+System.out.println(maxPq.poll()); // 30 (maior)</code></pre>
+
+        <h2>Como o heap funciona por dentro</h2>
+
+        <p>
+          Diferente de uma árvore comum, o heap é geralmente implementado com um <strong>array</strong>. Para um elemento no índice <code>i</code>:
+        </p>
+
+        <ul>
+          <li>Filho esquerdo: <code>2 * i + 1</code></li>
+          <li>Filho direito: <code>2 * i + 2</code></li>
+          <li>Pai: <code>(i - 1) / 2</code></li>
+        </ul>
+
+        <pre><code>// Array: [5, 10, 15, 20, 25, 30]
+//                  5 (i=0)
+//                /   \
+//           10 (i=1) 15 (i=2)
+//           /    \    /
+//     20 (i=3) 25(i=4) 30(i=5)
+
+// O heap nunca está totalmente ordenado, mas a raiz sempre é a menor/maior.</code></pre>
+
+        <h3>Inserção (offer)</h3>
+
+        <p>
+          Adiciona no fim do array e "sobe" o elemento trocando com o pai até a regra do heap ser satisfeita. <strong>O(log n)</strong>.
+        </p>
+
+        <h3>Remoção (poll)</h3>
+
+        <p>
+          Remove a raiz (primeiro elemento), coloca o último elemento na raiz e "desce" trocando com o menor filho (min-heap). <strong>O(log n)</strong>.
+        </p>
+
+        <h2>Onde filas de prioridade aparecem</h2>
+
+        <ul>
+          <li><strong>Escalonamento de processos:</strong> o sistema operacional decide qual processo executar primeiro com base na prioridade.</li>
+          <li><strong>Dijkstra (menor caminho):</strong> usa uma fila de prioridade para sempre expandir o nó mais próximo.</li>
+          <li><strong>Merge de K listas ordenadas:</strong> insere o primeiro elemento de cada lista e sempre extrai o menor.</li>
+          <li><strong>Top K elementos:</strong> encontrar os K maiores/menores elementos de uma coleção enorme.</li>
+          <li><strong>Hospitais/emergências:</strong> pacientes são triados por gravidade, não por ordem de chegada.</li>
+        </ul>
+
+        <h2>Exemplo: Top K maiores elementos</h2>
+
+        <pre><code>// Encontrar os 3 maiores números de um array
+int[] numeros = {3, 7, 1, 9, 4, 8, 2, 6, 5};
+int k = 3;
+
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+for (int n : numeros) {
+    minHeap.offer(n);
+    if (minHeap.size() &gt; k) {
+        minHeap.poll(); // remove o menor, mantém os K maiores
+    }
+}
+
+System.out.println(minHeap); // [7, 8, 9] (os 3 maiores)</code></pre>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Késimo menor elemento</h3>
+        <p>
+          Dado um array, encontre o K-ésimo menor elemento usando um max-heap.
+        </p>
+
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int kEsimoMenor(int[] nums, int k) {
+    PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+    for (int n : nums) {
+        maxHeap.offer(n);
+        if (maxHeap.size() &gt; k) maxHeap.poll();
+    }
+    return maxHeap.peek();
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Mediana dinâmica</h3>
+        <p>
+          Implemente uma estrutura que recebe números um por um e consegue retornar a mediana a qualquer momento. Dica: use dois heaps (um max e um min).
+        </p>
+
+        <h3>3. (Desafio) Quase-ordenado</h3>
+        <p>
+          Um array está "quase ordenado": cada elemento está a no máximo K posições de sua posição correta. Ordene-o eficientemente usando um heap.
+        </p>
+        </details>
+
+        <p>
+          O heap é uma das estruturas mais engenhosas: combina a simplicidade do array com a lógica da árvore para resolver problemas de prioridade de forma elegante.
+        </p>
+
+        <p>
+          No <a href="big-o-na-pratica.html">próximo post</a>, vamos fechar o Módulo 2 com Big O - a ferramenta que compara a eficiência de todas essas estruturas. 🦆
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+  We saw that a regular queue follows FIFO. But what if the order is not "who arrived first", but "who is most urgent"? That is where <strong>priority queues</strong> come in, implemented with a structure called a <strong>Heap</strong>.
+</p>
+
+<h2>What is a Heap?</h2>
+
+<p>
+  A heap is a <strong>special binary tree</strong> that follows a rule:
+</p>
+
+<ul>
+  <li><strong>Max-Heap:</strong> each parent node is <strong>greater than or equal to</strong> its children. The largest value is always at the root.</li>
+  <li><strong>Min-Heap:</strong> each parent node is <strong>less than or equal to</strong> its children. The smallest value is always at the root.</li>
+</ul>
+
+<pre><code>// Min-Heap visual:
+//        5
+//      /   //     10    15
+//    /  \  /
+//   20  25 30
+//
+// Max-Heap visual:
+//        30
+//      /    //     25     20
+//    /  \   /
+//   15  10 5</code></pre>
+
+<h2>PriorityQueue in Java</h2>
+
+<p>
+  Java implements priority queue with a <strong>min-heap</strong> (smallest element comes out first).
+</p>
+
+<pre><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+
+pq.offer(30);
+pq.offer(10);
+pq.offer(20);
+pq.offer(5);
+
+System.out.println(pq.poll()); // 5 (smallest)
+System.out.println(pq.poll()); // 10
+System.out.println(pq.poll()); // 20
+System.out.println(pq.poll()); // 30</code></pre>
+
+<p>
+  To reverse the order (max-heap), use a Comparator:
+</p>
+
+<pre><code>PriorityQueue&lt;Integer&gt; maxPq = new PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+
+maxPq.offer(10);
+maxPq.offer(30);
+maxPq.offer(20);
+
+System.out.println(maxPq.poll()); // 30 (largest)</code></pre>
+
+<h2>How heap works under the hood</h2>
+
+<p>
+  Unlike a regular tree, a heap is usually implemented with an <strong>array</strong>. For an element at index <code>i</code>:
+</p>
+
+<ul>
+  <li>Left child: <code>2 * i + 1</code></li>
+  <li>Right child: <code>2 * i + 2</code></li>
+  <li>Parent: <code>(i - 1) / 2</code></li>
+</ul>
+
+<pre><code>// Array: [5, 10, 15, 20, 25, 30]
+//                  5 (i=0)
+//                /   //           10 (i=1) 15 (i=2)
+//           /    \    /
+//     20 (i=3) 25(i=4) 30(i=5)
+
+// The heap is never fully sorted, but the root is always the smallest/largest.</code></pre>
+
+<h3>Insertion (offer)</h3>
+
+<p>
+  Adds at the end of the array and "bubbles up" by swapping with the parent until the heap rule is satisfied. <strong>O(log n)</strong>.
+</p>
+
+<h3>Removal (poll)</h3>
+
+<p>
+  Removes the root (first element), puts the last element at the root, and "bubbles down" by swapping with the smallest child (min-heap). <strong>O(log n)</strong>.
+</p>
+
+<h2>Where priority queues appear</h2>
+
+<ul>
+  <li><strong>Process scheduling:</strong> the OS decides which process runs next based on priority.</li>
+  <li><strong>Dijkstra (shortest path):</strong> uses a priority queue to always expand the closest node.</li>
+  <li><strong>Merge K sorted lists:</strong> inserts the first element of each list and always extracts the smallest.</li>
+  <li><strong>Top K elements:</strong> finding the K largest/smallest elements from a huge collection.</li>
+  <li><strong>Hospitals/emergency rooms:</strong> patients are triaged by severity, not arrival order.</li>
+</ul>
+
+<h2>Example: Top K largest elements</h2>
+
+<pre><code>// Find the 3 largest numbers from an array
+int[] numbers = {3, 7, 1, 9, 4, 8, 2, 6, 5};
+int k = 3;
+
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+for (int n : numbers) {
+    minHeap.offer(n);
+    if (minHeap.size() &gt; k) {
+        minHeap.poll(); // removes the smallest, keeps the K largest
+    }
+}
+
+System.out.println(minHeap); // [7, 8, 9] (the 3 largest)</code></pre>
+
+<details class="exercises-block">
+<summary><strong>Exercises</strong></summary>
+
+<h3>1. Kth smallest element</h3>
+<p>
+  Given an array, find the Kth smallest element using a max-heap.
+</p>
+
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>int kthSmallest(int[] nums, int k) {
+    PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+    for (int n : nums) {
+        maxHeap.offer(n);
+        if (maxHeap.size() &gt; k) maxHeap.poll();
+    }
+    return maxHeap.peek();
+}</code></pre>
+  </div>
+</details>
+
+<h3>2. Dynamic median</h3>
+<p>
+  Implement a structure that receives numbers one by one and can return the median at any time. Hint: use two heaps (one max, one min).
+</p>
+
+<h3>3. (Challenge) Nearly sorted</h3>
+<p>
+  An array is "nearly sorted": each element is at most K positions away from its correct position. Sort it efficiently using a heap.
+</p>
+</details>
+
+<p>
+  The heap is one of the most ingenious structures: it combines the simplicity of an array with the logic of a tree to solve priority problems elegantly.
+</p>
+
+<p>
+  In the <a href="big-o-na-pratica.html">next post</a>, we will close Module 2 with Big O - the tool that compares the efficiency of all these structures. 🦆
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

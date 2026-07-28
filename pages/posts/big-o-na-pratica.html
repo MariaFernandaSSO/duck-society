@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Big O na prática - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">Big O na prática: como isso afeta seu código</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <p>
+          Ao longo deste módulo, vimos várias estruturas de dados e falamos sobre O(1), O(n), O(log n). Mas o que isso significa <strong>na prática</strong>, no dia a dia?
+        </p>
+
+        <h2>O que é Big O?</h2>
+
+        <p>
+          <strong>Big O Notation</strong> é a forma que usamos para descrever <strong>como o tempo de execução (ou uso de memória) de um algoritmo cresce conforme a entrada aumenta</strong>.
+        </p>
+        <p>
+          Não é sobre velocidade absoluta (segundos), mas sobre <strong>escalabilidade</strong>.
+        </p>
+
+        <h2>As complexidades mais comuns</h2>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Notação</th>
+              <th>Nome</th>
+              <th>Exemplo</th>
+              <th>Crescimento (n=100)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>O(1)</td>
+              <td>Constante</td>
+              <td>Acessar array[i], HashMap.get()</td>
+              <td>1 operação</td>
+            </tr>
+            <tr>
+              <td>O(log n)</td>
+              <td>Logarítmica</td>
+              <td>Busca binária, BST balanceada</td>
+              <td>~7 operações</td>
+            </tr>
+            <tr>
+              <td>O(n)</td>
+              <td>Linear</td>
+              <td>Percorrer um array, busca em lista</td>
+              <td>100 operações</td>
+            </tr>
+            <tr>
+              <td>O(n log n)</td>
+              <td>Linearítmica</td>
+              <td>Merge Sort, Quick Sort</td>
+              <td>~664 operações</td>
+            </tr>
+            <tr>
+              <td>O(n²)</td>
+              <td>Quadrática</td>
+              <td>Loop aninhado, Bubble Sort</td>
+              <td>10.000 operações</td>
+            </tr>
+            <tr>
+              <td>O(2ⁿ)</td>
+              <td>Exponencial</td>
+              <td>Fibonacci recursivo ingênuo</td>
+              <td>~1.27e³⁰ (impossível)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Exemplo prático: busca em listas</h2>
+
+        <pre><code>// O(n) - Busca em ArrayList (precisa percorrer)
+int buscarLinear(List&lt;Integer&gt; lista, int alvo) {
+    for (int i = 0; i &lt; lista.size(); i++) {
+        if (lista.get(i) == alvo) return i;
+    }
+    return -1;
+}
+// Se a lista tem 1.000.000 elementos: até 1.000.000 de passos
+
+// O(1) - Busca em HashMap (direto pela chave)
+Map&lt;Integer, Integer&gt; mapa = new HashMap&lt;&gt;();
+// ... popular o mapa ...
+mapa.get(alvo); // instantâneo, não importa o tamanho</code></pre>
+
+        <h2>Exemplo prático: loops aninhados</h2>
+
+        <pre><code>// O(n²) - perigoso com dados grandes!
+void bubbleSort(int[] arr) {
+    for (int i = 0; i &lt; arr.length; i++) {
+        for (int j = 0; j &lt; arr.length - 1; j++) {
+            if (arr[j] &gt; arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+// 10 elementos → 100 passos
+// 1.000 elementos → 1.000.000 passos
+// 100.000 elementos → 10.000.000.000 passos (congela!)
+
+// O(n log n) - muito melhor!
+Arrays.sort(arr); // TimSort (Java) = O(n log n)
+// 100.000 elementos → ~1.660.000 passos (ok!)</code></pre>
+
+        <h2>Regras práticas</h2>
+
+        <ol>
+          <li><strong>Remova constantes:</strong> O(2n) vira O(n). O que importa é a tendência.</li>
+          <li><strong>Mantenha o termo dominante:</strong> O(n² + n) vira O(n²). O n² domina.</li>
+          <li><strong>Sempre pense no pior caso:</strong> a busca numa LinkedList pode ser O(1) no começo, mas O(n) no pior caso.</li>
+          <li><strong>Espaço também importa:</strong> Big O também vale para memória. Um algoritmo O(n) em espaço dobra a memória com a entrada.</li>
+        </ol>
+
+        <h2>Tabela comparativa das estruturas que vimos</h2>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Estrutura</th>
+              <th>Busca</th>
+              <th>Inserção</th>
+              <th>Remoção</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Array (ArrayList)</td>
+              <td>O(1) por índice / O(n) por valor</td>
+              <td>O(1)* no fim / O(n) no meio</td>
+              <td>O(n)</td>
+            </tr>
+            <tr>
+              <td>LinkedList</td>
+              <td>O(n)</td>
+              <td>O(1)**</td>
+              <td>O(1)**</td>
+            </tr>
+            <tr>
+              <td>Stack / Queue</td>
+              <td>- (só topo/início)</td>
+              <td>O(1)</td>
+              <td>O(1)</td>
+            </tr>
+            <tr>
+              <td>HashMap</td>
+              <td>O(1)***</td>
+              <td>O(1)***</td>
+              <td>O(1)***</td>
+            </tr>
+            <tr>
+              <td>BST balanceada</td>
+              <td>O(log n)</td>
+              <td>O(log n)</td>
+              <td>O(log n)</td>
+            </tr>
+            <tr>
+              <td>Heap (PriorityQueue)</td>
+              <td>O(1) só na raiz</td>
+              <td>O(log n)</td>
+              <td>O(log n)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="post-page-note">
+          * ArrayList: O(1) na inserção no fim na maioria das vezes, mas O(n) quando precisa redimensionar.<br>
+          ** LinkedList O(1) assume que você já está na posição. Chegar lá pode ser O(n).<br>
+          *** HashMap O(1) é caso médio. No pior caso (muitas colisões) pode ser O(n) ou O(log n) no Java 8+.
+        </p>
+
+        <h2>Como o Big O impacta seu código real</h2>
+
+        <ul>
+          <li><strong>APIs:</strong> um endpoint O(n²) pode funcionar com 100 usuários, mas matar o servidor com 10.000.</li>
+          <li><strong>Processamento em lote:</strong> processar 1 milhão de registros com O(n log n) leva segundos. Com O(n²), pode levar horas.</li>
+          <li><strong>Mobile:</strong> um algoritmo O(2ⁿ) descarrega a bateria em segundos.</li>
+          <li><strong>Bancos de dados:</strong> índices existem justamente para transformar buscas O(n) em O(log n).</li>
+        </ul>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Identificar complexidade</h3>
+        <p>
+          Qual a complexidade do código abaixo?
+        </p>
+
+        <pre><code>for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; n; j++) {
+        System.out.println(i * j);
+    }
+}</code></pre>
+
+        <details class="solution-toggle">
+          <summary>Resposta</summary>
+          <div class="solution">
+            <p>O(n²) - loop dentro de loop, ambos até n.</p>
+          </div>
+        </details>
+
+        <h3>2. Otimizar</h3>
+        <p>
+          O código abaixo roda em O(n²). Como otimizá-lo para O(n)?
+        </p>
+
+        <pre><code>boolean temDuplicata(int[] nums) {
+    for (int i = 0; i &lt; nums.length; i++) {
+        for (int j = i + 1; j &lt; nums.length; j++) {
+            if (nums[i] == nums[j]) return true;
+        }
+    }
+    return false;
+}</code></pre>
+
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>boolean temDuplicata(int[] nums) {
+    Set&lt;Integer&gt; vistos = new HashSet&lt;&gt;();
+    for (int n : nums) {
+        if (vistos.contains(n)) return true;
+        vistos.add(n);
+    }
+    return false;
+}
+// O(n) - percorre uma vez, HashSet é O(1)</code></pre>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Três somas</h3>
+        <p>
+          Dado um array, encontre todos os trios (i, j, k) cuja soma seja zero. Tente fazer melhor que O(n³).
+        </p>
+        </details>
+
+        <p>
+          Isso encerra o <strong>Módulo 2 - Estruturas de Dados</strong> do Duck To Basics! Vimos desde arrays, passando por listas, pilhas, filas, mapas, árvores, heaps, até Big O.
+        </p>
+
+        <p>
+          A compreensão de Big O é o que separa um código que funciona de um código que funciona <strong>bem</strong>. Use esse conhecimento para escolher a estrutura certa para cada problema. 🦆
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+  Throughout this module, we have seen various data structures and talked about O(1), O(n), O(log n). But what do these mean <strong>in practice</strong>, in daily coding?
+</p>
+
+<h2>What is Big O?</h2>
+
+<p>
+  <strong>Big O Notation</strong> is how we describe <strong>how the execution time (or memory usage) of an algorithm grows as the input grows</strong>.
+</p>
+<p>
+  It is not about absolute speed (seconds), but about <strong>scalability</strong>.
+</p>
+
+<h2>The most common complexities</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Notation</th>
+      <th>Name</th>
+      <th>Example</th>
+      <th>Growth (n=100)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>O(1)</td>
+      <td>Constant</td>
+      <td>array access, HashMap.get()</td>
+      <td>1 operation</td>
+    </tr>
+    <tr>
+      <td>O(log n)</td>
+      <td>Logarithmic</td>
+      <td>Binary search, balanced BST</td>
+      <td>~7 operations</td>
+    </tr>
+    <tr>
+      <td>O(n)</td>
+      <td>Linear</td>
+      <td>Traverse an array, search in a list</td>
+      <td>100 operations</td>
+    </tr>
+    <tr>
+      <td>O(n log n)</td>
+      <td>Linearithmic</td>
+      <td>Merge Sort, Quick Sort</td>
+      <td>~664 operations</td>
+    </tr>
+    <tr>
+      <td>O(n²)</td>
+      <td>Quadratic</td>
+      <td>Nested loop, Bubble Sort</td>
+      <td>10,000 operations</td>
+    </tr>
+    <tr>
+      <td>O(2ⁿ)</td>
+      <td>Exponential</td>
+      <td>Naive recursive Fibonacci</td>
+      <td>~1.27e³⁰ (impossible)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Practical example: searching in lists</h2>
+
+<pre><code>// O(n) - Search in ArrayList (must traverse)
+int linearSearch(List&lt;Integer&gt; list, int target) {
+    for (int i = 0; i &lt; list.size(); i++) {
+        if (list.get(i) == target) return i;
+    }
+    return -1;
+}
+// If the list has 1,000,000 elements: up to 1,000,000 steps
+
+// O(1) - Search in HashMap (direct by key)
+Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+// ... populate the map ...
+map.get(target); // instant, no matter the size</code></pre>
+
+<h2>Practical example: nested loops</h2>
+
+<pre><code>// O(n²) - dangerous with large data!
+void bubbleSort(int[] arr) {
+    for (int i = 0; i &lt; arr.length; i++) {
+        for (int j = 0; j &lt; arr.length - 1; j++) {
+            if (arr[j] &gt; arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+// 10 elements -> 100 steps
+// 1,000 elements -> 1,000,000 steps
+// 100,000 elements -> 10,000,000,000 steps (freezes!)
+
+// O(n log n) - much better!
+Arrays.sort(arr); // TimSort (Java) = O(n log n)
+// 100,000 elements -> ~1,660,000 steps (ok!)</code></pre>
+
+<h2>Practical rules</h2>
+
+<ol>
+  <li><strong>Drop constants:</strong> O(2n) becomes O(n). What matters is the trend.</li>
+  <li><strong>Keep the dominant term:</strong> O(n² + n) becomes O(n²). The n² dominates.</li>
+  <li><strong>Always think about the worst case:</strong> a search in LinkedList might be O(1) at the start, but O(n) in the worst case.</li>
+  <li><strong>Space also matters:</strong> Big O also applies to memory. An O(n) space algorithm doubles memory with the input.</li>
+</ol>
+
+<h2>Comparison table of structures we covered</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Structure</th>
+      <th>Search</th>
+      <th>Insertion</th>
+      <th>Removal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Array (ArrayList)</td>
+      <td>O(1) by index / O(n) by value</td>
+      <td>O(1)* at end / O(n) in middle</td>
+      <td>O(n)</td>
+    </tr>
+    <tr>
+      <td>LinkedList</td>
+      <td>O(n)</td>
+      <td>O(1)**</td>
+      <td>O(1)**</td>
+    </tr>
+    <tr>
+      <td>Stack / Queue</td>
+      <td>- (only top/front)</td>
+      <td>O(1)</td>
+      <td>O(1)</td>
+    </tr>
+    <tr>
+      <td>HashMap</td>
+      <td>O(1)***</td>
+      <td>O(1)***</td>
+      <td>O(1)***</td>
+    </tr>
+    <tr>
+      <td>Balanced BST</td>
+      <td>O(log n)</td>
+      <td>O(log n)</td>
+      <td>O(log n)</td>
+    </tr>
+    <tr>
+      <td>Heap (PriorityQueue)</td>
+      <td>O(1) only at root</td>
+      <td>O(log n)</td>
+      <td>O(log n)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="post-page-note">
+  * ArrayList: O(1) at the end most of the time, but O(n) when it needs to resize.<br>
+  ** LinkedList O(1) assumes you are already at the position. Getting there can be O(n).<br>
+  *** HashMap O(1) is average case. In the worst case (many collisions) it can be O(n) or O(log n) in Java 8+.
+</p>
+
+<h2>How Big O affects real code</h2>
+
+<ul>
+  <li><strong>APIs:</strong> an O(n²) endpoint might work with 100 users, but kill the server with 10,000.</li>
+  <li><strong>Batch processing:</strong> processing 1 million records with O(n log n) takes seconds. With O(n²), it could take hours.</li>
+  <li><strong>Mobile:</strong> an O(2ⁿ) algorithm drains the battery in seconds.</li>
+  <li><strong>Databases:</strong> indexes exist precisely to turn O(n) searches into O(log n).</li>
+</ul>
+
+<details class="exercises-block">
+<summary><strong>Exercises</strong></summary>
+
+<h3>1. Identify complexity</h3>
+<p>
+  What is the complexity of the code below?
+</p>
+
+<pre><code>for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; n; j++) {
+        System.out.println(i * j);
+    }
+}</code></pre>
+
+<details class="solution-toggle">
+  <summary>Answer</summary>
+  <div class="solution">
+    <p>O(n²) - loop inside loop, both up to n.</p>
+  </div>
+</details>
+
+<h3>2. Optimize</h3>
+<p>
+  The code below runs in O(n²). How can you optimize it to O(n)?
+</p>
+
+<pre><code>boolean hasDuplicate(int[] nums) {
+    for (int i = 0; i &lt; nums.length; i++) {
+        for (int j = i + 1; j &lt; nums.length; j++) {
+            if (nums[i] == nums[j]) return true;
+        }
+    }
+    return false;
+}</code></pre>
+
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>boolean hasDuplicate(int[] nums) {
+    Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+    for (int n : nums) {
+        if (seen.contains(n)) return true;
+        seen.add(n);
+    }
+    return false;
+}
+// O(n) - traverse once, HashSet is O(1)</code></pre>
+  </div>
+</details>
+
+<h3>3. (Challenge) Three sum</h3>
+<p>
+  Given an array, find all triples (i, j, k) whose sum is zero. Try to do better than O(n³).
+</p>
+</details>
+
+<p>
+  This closes <strong>Module 2 - Data Structures</strong> of Duck To Basics! We have covered everything from arrays, through lists, stacks, queues, maps, trees, heaps, to Big O.
+</p>
+
+<p>
+  Understanding Big O is what separates code that works from code that works <strong>well</strong>. Use this knowledge to choose the right structure for each problem. 🦆
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

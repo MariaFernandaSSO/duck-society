@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strings: mais do que texto - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">Strings: mais do que texto</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <p>
+          Se você já programou, já usou strings. Toda linguagem tem. Mas pouca gente para pra pensar: <strong>o que é uma String, afinal?</strong>
+        </p>
+
+        <h2>String é um array de caracteres</h2>
+        <p>
+          Internamente, uma String é um <strong>array de caracteres</strong> (<code>char[]</code>) com métodos práticos pra manipular esse array.
+        </p>
+
+        <pre><code>String nome = "duck";
+// Internamente: ['d', 'u', 'c', 'k']
+//                 0    1    2    3</code></pre>
+
+        <p>
+          Tudo que você aprendeu sobre arrays se aplica: cada caractere tem um índice, começa em 0, e você pode acessar posições individuais.
+        </p>
+
+        <h2>Acessando caracteres</h2>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>String nome = "Maria";
+System.out.println(nome.charAt(0)); // 'M'
+System.out.println(nome.charAt(2)); // 'r'
+System.out.println(nome.length());  // 5</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>nome := "Maria"
+fmt.Println(string(nome[0])) // "M"
+fmt.Println(string(nome[2])) // "r"
+fmt.Println(len(nome))       // 5</code></pre>
+
+        <p class="post-page-note">
+          Em Go, <code>nome[i]</code> retorna um <code>byte</code>, não um <code>string</code>. Por isso usamos <code>string(nome[i])</code> pra converter. E o <code>len()</code> conta <strong>bytes</strong>, não caracteres - isso faz diferença com acentos e emojis.
+        </p>
+
+        <h2>Imutabilidade</h2>
+        <p>
+          Em Java, strings são <strong>imutáveis</strong>. Uma vez criada, uma String nunca muda. Qualquer operação que parece "modificar" a string na verdade cria uma nova.
+        </p>
+
+        <pre><code>String s = "pato";
+s.toUpperCase();        // cria "PATO", mas s ainda é "pato"
+System.out.println(s);  // "pato"
+
+s = s.toUpperCase();    // agora s aponta pra "PATO"
+System.out.println(s);  // "PATO"</code></pre>
+
+        <p>
+          Em Go, strings também são imutáveis. Você não pode fazer <code>nome[0] = 'X'</code>. Precisa converter pra <code>[]rune</code> se quiser modificar.
+        </p>
+
+        <h2>Principais operações com strings</h2>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>String s = "Olá, Duck Society!";
+
+// Tamanho
+s.length();                        // 18
+
+// Parte da string
+s.substring(5, 9);                 // "Duck"
+
+// Maiúsculo / minúsculo
+s.toUpperCase();                   // "OLÁ, DUCK SOCIETY!"
+s.toLowerCase();                   // "olá, duck society!"
+
+// Verificar se contém
+s.contains("Duck");                // true
+s.startsWith("Olá");               // true
+s.endsWith("!");                   // true
+
+// Substituir
+s.replace("Duck", "Pato");         // "Olá, Pato Society!"
+
+// Dividir
+String[] partes = s.split(", ");   // ["Olá", "Duck Society!"]
+
+// Comparar (NUNCA use == com strings!)
+s.equals("Olá, Duck Society!");    // true</code></pre>
+
+        <p><strong>Go (pacote <code>strings</code>):</strong></p>
+        <pre><code>s := "Olá, Duck Society!"
+pacote := strings
+
+// Tamanho
+len(s)                             // 18 (em bytes)
+
+// Parte da string
+s[5:9]                             // "Duck"
+
+// Maiúsculo / minúsculo
+strings.ToUpper(s)                 // "OLÁ, DUCK SOCIETY!"
+strings.ToLower(s)                 // "olá, duck society!"
+
+// Verificar se contém
+strings.Contains(s, "Duck")        // true
+strings.HasPrefix(s, "Olá")        // true
+strings.HasSuffix(s, "!")          // true
+
+// Substituir
+strings.Replace(s, "Duck", "Pato", 1) // "Olá, Pato Society!"
+
+// Dividir
+strings.Split(s, ", ")             // ["Olá", "Duck Society!"]</code></pre>
+
+        <h2>Percorrendo caracteres</h2>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>String palavra = "algoritmo";
+for (int i = 0; i < palavra.length(); i++) {
+    System.out.println(palavra.charAt(i));
+}
+
+// Ou com for-each (requer converter pra char[])
+for (char c : palavra.toCharArray()) {
+    System.out.println(c);
+}</code></pre>
+
+        <p><strong>Go (com <code>range</code> - percorre caracteres Unicode corretamente):</strong></p>
+        <pre><code>palavra := "algoritmo"
+for i, c := range palavra {
+    fmt.Printf("Índice %d: %c\n", i, c)
+}
+
+// Se quiser só o caractere, sem o índice:
+for _, c := range palavra {
+    fmt.Printf("%c ", c)
+}</code></pre>
+
+        <h2>String vs StringBuilder (Java)</h2>
+        <p>
+          Como strings são imutáveis, <strong>concatenar muitas strings</strong> em um loop é ineficiente - cada <code>+</code> cria um novo objeto.
+        </p>
+
+        <pre><code>// INEFICIENTE: cria várias strings intermediárias
+String resultado = "";
+for (int i = 0; i < 1000; i++) {
+    resultado += i + ", ";
+}
+
+// EFICIENTE: StringBuilder modifica um buffer só
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i < 1000; i++) {
+    sb.append(i).append(", ");
+}
+String resultado = sb.toString();</code></pre>
+
+        <p>
+          Em Go, use <code>strings.Builder</code> que faz a mesma coisa.
+        </p>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Contar vogais</h3>
+        <p>
+          Escreva um programa que receba uma string e conte quantas <strong>vogais</strong> (a, e, i, o, u) ela tem. Considere maiúsculas e minúsculas.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>String texto = "Duck Society";
+int vogais = 0;
+texto = texto.toLowerCase();
+
+for (int i = 0; i < texto.length(); i++) {
+    char c = texto.charAt(i);
+    if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+        vogais++;
+    }
+}
+
+System.out.println("Vogais: " + vogais); // 4</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Palíndromo (com strings)</h3>
+        <p>
+          Relembrando o exercício do módulo 1: verifique se uma string é um <strong>palíndromo</strong> (lê-se igual de trás pra frente). Use os métodos de string que vimos.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>public static boolean ehPalindromo(String s) {
+    s = s.toLowerCase().replace(" ", "");
+    int esq = 0, dir = s.length() - 1;
+
+    while (esq < dir) {
+        if (s.charAt(esq) != s.charAt(dir)) {
+            return false;
+        }
+        esq++;
+        dir--;
+    }
+    return true;
+}
+
+System.out.println(ehPalindromo("arara"));        // true
+System.out.println(ehPalindromo("A torre da derrota")); // true (ignora espaços)</code></pre>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Cifra de César</h3>
+        <p>
+          Implemente uma <strong>cifra de César</strong>: desloque cada letra de uma string em N posições no alfabeto. Ex: com deslocamento 3, "abc" vira "def". Preserve maiúsculas e minúsculas, e ignore caracteres que não são letras.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>public static String cifrar(String texto, int deslocamento) {
+    StringBuilder sb = new StringBuilder();
+
+    for (int i = 0; i < texto.length(); i++) {
+        char c = texto.charAt(i);
+
+        if (c >= 'a' && c <= 'z') {
+            c = (char) ((c - 'a' + deslocamento) % 26 + 'a');
+        } else if (c >= 'A' && c <= 'Z') {
+            c = (char) ((c - 'A' + deslocamento) % 26 + 'A');
+        }
+
+        sb.append(c);
+    }
+    return sb.toString();
+}
+
+System.out.println(cifrar("abc", 3));   // "def"
+System.out.println(cifrar("xyz", 3));   // "abc"
+System.out.println(cifrar("Duck!", 5)); // "Izhp!"</code></pre>
+          </div>
+        </details>
+
+        </details>
+
+        <p>
+          No <a href="linkedlist.html">próximo post</a>, vamos ver a LinkedList - uma estrutura que resolve a limitação do tamanho fixo dos arrays e é a base para pilhas, filas e outras estruturas. 🦆
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+  If you have ever programmed, you have used strings. Every language has them. But few people stop to think: <strong>what is a String, really?</strong>
+</p>
+
+<h2>String is an array of characters</h2>
+<p>
+  Internally, a String is a <strong>character array</strong> (<code>char[]</code>) with convenient methods to manipulate that array.
+</p>
+
+<pre><code>String name = "duck";
+// Internally: ['d', 'u', 'c', 'k']
+//                 0    1    2    3</code></pre>
+
+<p>
+  Everything you learned about arrays applies: each character has an index, starts at 0, and you can access individual positions.
+</p>
+
+<h2>Accessing characters</h2>
+
+<p><strong>Java:</strong></p>
+<pre><code>String name = "Maria";
+System.out.println(name.charAt(0)); // 'M'
+System.out.println(name.charAt(2)); // 'r'
+System.out.println(name.length());  // 5</code></pre>
+
+<p><strong>Go:</strong></p>
+<pre><code>name := "Maria"
+fmt.Println(string(name[0])) // "M"
+fmt.Println(string(name[2])) // "r"
+fmt.Println(len(name))       // 5</code></pre>
+
+<p class="post-page-note">
+  In Go, <code>name[i]</code> returns a <code>byte</code>, not a <code>string</code>. That is why we use <code>string(name[i])</code> to convert it. And <code>len()</code> counts <strong>bytes</strong>, not characters - this makes a difference with accents and emojis.
+</p>
+
+<h2>Immutability</h2>
+<p>
+  In Java, strings are <strong>immutable</strong>. Once created, a String never changes. Any operation that seems to "modify" the string actually creates a new one.
+</p>
+
+<pre><code>String s = "duck";
+s.toUpperCase();        // creates "DUCK", but s is still "duck"
+System.out.println(s);  // "duck"
+
+s = s.toUpperCase();    // now s points to "DUCK"
+System.out.println(s);  // "DUCK"</code></pre>
+
+<p>
+  In Go, strings are also immutable. You cannot do <code>name[0] = 'X'</code>. You need to convert to <code>[]rune</code> if you want to modify it.
+</p>
+
+<h2>Main string operations</h2>
+
+<p><strong>Java:</strong></p>
+<pre><code>String s = "Hello, Duck Society!";
+
+// Length
+s.length();                        // 22
+
+// Substring
+s.substring(7, 11);                // "Duck"
+
+// Case
+s.toUpperCase();                   // "HELLO, DUCK SOCIETY!"
+s.toLowerCase();                   // "hello, duck society!"
+
+// Check content
+s.contains("Duck");                // true
+s.startsWith("Hello");             // true
+s.endsWith("!");                   // true
+
+// Replace
+s.replace("Duck", "Goose");        // "Hello, Goose Society!"
+
+// Split
+String[] parts = s.split(", ");    // ["Hello", "Duck Society!"]
+
+// Compare (NEVER use == with strings!)
+s.equals("Hello, Duck Society!");  // true</code></pre>
+
+<p><strong>Go (package <code>strings</code>):</strong></p>
+<pre><code>s := "Hello, Duck Society!"
+pkg := strings
+
+// Length
+len(s)                             // 22 (in bytes)
+
+// Substring
+s[7:11]                            // "Duck"
+
+// Case
+strings.ToUpper(s)                 // "HELLO, DUCK SOCIETY!"
+strings.ToLower(s)                 // "hello, duck society!"
+
+// Check content
+strings.Contains(s, "Duck")        // true
+strings.HasPrefix(s, "Hello")      // true
+strings.HasSuffix(s, "!")          // true
+
+// Replace
+strings.Replace(s, "Duck", "Goose", 1) // "Hello, Goose Society!"
+
+// Split
+strings.Split(s, ", ")             // ["Hello", "Duck Society!"]</code></pre>
+
+<h2>Traversing characters</h2>
+
+<p><strong>Java:</strong></p>
+<pre><code>String word = "algorithm";
+for (int i = 0; i &lt; word.length(); i++) {
+    System.out.println(word.charAt(i));
+}
+
+// Or with for-each (requires converting to char[])
+for (char c : word.toCharArray()) {
+    System.out.println(c);
+}</code></pre>
+
+<p><strong>Go (with <code>range</code> - traverses Unicode correctly):</strong></p>
+<pre><code>word := "algorithm"
+for i, c := range word {
+    fmt.Printf("Index %d: %c
+", i, c)
+}
+
+// If you just want the character, without the index:
+for _, c := range word {
+    fmt.Printf("%c ", c)
+}</code></pre>
+
+<h2>String vs StringBuilder (Java)</h2>
+<p>
+  Since strings are immutable, <strong>concatenating many strings</strong> in a loop is inefficient - each <code>+</code> creates a new object.
+</p>
+
+<pre><code>// INEFFICIENT: creates many intermediate strings
+String result = "";
+for (int i = 0; i &lt; 1000; i++) {
+    result += i + ", ";
+}
+
+// EFFICIENT: StringBuilder modifies a single buffer
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i &lt; 1000; i++) {
+    sb.append(i).append(", ");
+}
+String result = sb.toString();</code></pre>
+
+<p>
+  In Go, use <code>strings.Builder</code> which does the same thing.
+</p>
+
+<details class="exercises-block">
+<summary><strong>Exercises</strong></summary>
+
+<h3>1. Count vowels</h3>
+<p>
+  Write a program that receives a string and counts how many <strong>vowels</strong> (a, e, i, o, u) it has. Consider uppercase and lowercase.
+</p>
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>String text = "Duck Society";
+int vowels = 0;
+text = text.toLowerCase();
+
+for (int i = 0; i &lt; text.length(); i++) {
+    char c = text.charAt(i);
+    if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+        vowels++;
+    }
+}
+
+System.out.println("Vowels: " + vowels); // 4</code></pre>
+  </div>
+</details>
+
+<h3>2. Palindrome (with strings)</h3>
+<p>
+  Remembering the exercise from module 1: check if a string is a <strong>palindrome</strong> (reads the same backwards). Use the string methods we have seen.
+</p>
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>public static boolean isPalindrome(String s) {
+    s = s.toLowerCase().replace(" ", "");
+    int left = 0, right = s.length() - 1;
+
+    while (left &lt; right) {
+        if (s.charAt(left) != s.charAt(right)) {
+            return false;
+        }
+        left++;
+        right--;
+    }
+    return true;
+}
+
+System.out.println(isPalindrome("racecar"));        // true
+System.out.println(isPalindrome("A man a plan a canal")); // true (ignores spaces)</code></pre>
+  </div>
+</details>
+
+<h3>3. (Challenge) Caesar cipher</h3>
+<p>
+  Implement a <strong>Caesar cipher</strong>: shift each letter of a string by N positions in the alphabet. Ex: with shift 3, "abc" becomes "def". Preserve uppercase and lowercase, and ignore non-letter characters.
+</p>
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>public static String cipher(String text, int shift) {
+    StringBuilder sb = new StringBuilder();
+
+    for (int i = 0; i &lt; text.length(); i++) {
+        char c = text.charAt(i);
+
+        if (c &gt;= 'a' &amp;&amp; c &lt;= 'z') {
+            c = (char) ((c - 'a' + shift) % 26 + 'a');
+        } else if (c &gt;= 'A' &amp;&amp; c &lt;= 'Z') {
+            c = (char) ((c - 'A' + shift) % 26 + 'A');
+        }
+
+        sb.append(c);
+    }
+    return sb.toString();
+}
+
+System.out.println(cipher("abc", 3));   // "def"
+System.out.println(cipher("xyz", 3));   // "abc"
+System.out.println(cipher("Duck!", 5)); // "Izhp!"</code></pre>
+  </div>
+</details>
+
+</details>
+
+<p>
+  In the <a href="linkedlist.html">next post</a>, we will look at LinkedList - a structure that solves the fixed-size limitation of arrays and is the foundation for stacks, queues, and other structures. 🦆
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -96,5 +96,104 @@ const postsData = [
     module: 1,
     excerpt: "Chegou a hora de usar tudo que vimos nos posts anteriores para construir algo concreto do início ao fim.",
     excerptEn: "Time to use everything we've seen in previous posts to build something concrete from start to finish."
+  },
+  {
+    slug: "o-que-e-uma-estrutura-de-dados",
+    title: "O que é uma estrutura de dados (e por que você já usa sem saber)",
+    titleEn: "What is a data structure (and why you already use one without knowing)",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "Assim como algoritmos, você lida com estruturas de dados no dia a dia — listas, pilhas, filas e hash maps estão em tudo.",
+    excerptEn: "Just like algorithms, you deal with data structures in everyday life — lists, stacks, queues and hash maps are everywhere."
+  },
+  {
+    slug: "arrays",
+    title: "Arrays: o começo de tudo",
+    titleEn: "Arrays: where it all begins",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "A estrutura de dados mais fundamental: o que são, como declarar, percorrer e evitar erros de índice.",
+    excerptEn: "The most fundamental data structure: what they are, how to declare, traverse and avoid index errors."
+  },
+  {
+    slug: "strings",
+    title: "Strings: mais do que texto",
+    titleEn: "Strings: more than just text",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "Uma String é um array de caracteres com métodos poderosos. Imutabilidade, operações principais e StringBuilder.",
+    excerptEn: "A String is an array of characters with powerful methods. Immutability, key operations and StringBuilder."
+  },
+  {
+    slug: "linkedlist",
+    title: "LinkedList: quando faz sentido usar (e quando não faz)",
+    titleEn: "LinkedList: when it makes sense (and when it doesn't)",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "Diferente do array, a LinkedList não armazena tudo lado a lado na memória. Cada elemento aponta para o próximo — e isso muda tudo.",
+    excerptEn: "Unlike an array, a LinkedList doesn't store everything side by side in memory. Each element points to the next — and that changes everything."
+  },
+  {
+    slug: "stack-e-queue",
+    title: "Stack e Queue: a base de muita coisa que você já usa",
+    titleEn: "Stack and Queue: the foundation of many things you already use",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "Pilhas e filas são estruturas simples que aparecem em lugares que você nem imagina — do navegador ao sistema operacional.",
+    excerptEn: "Stacks and queues are simple structures that show up in places you wouldn't imagine — from the browser to the operating system."
+  },
+  {
+    slug: "hashmap",
+    title: "HashMap por dentro: como funciona de verdade",
+    titleEn: "HashMap under the hood: how it really works",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "A estrutura de dados mais usada do Java. Mas o que acontece quando você chama put() e get() por baixo dos panos?",
+    excerptEn: "The most used data structure in Java. But what actually happens when you call put() and get() under the hood?"
+  },
+  {
+    slug: "arvores",
+    title: "Árvores: o que são e onde aparecem sem você perceber",
+    titleEn: "Trees: what they are and where they show up without you noticing",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "Árvores estão em tudo: no sistema de arquivos, no DOM do navegador, em bancos de dados. Entenda a estrutura que organiza o mundo digital.",
+    excerptEn: "Trees are everywhere: in the file system, in the browser DOM, in databases. Understand the structure that organizes the digital world."
+  },
+  {
+    slug: "heap-e-filas-de-prioridade",
+    title: "Heap e filas de prioridade: quando a ordem importa",
+    titleEn: "Heap and priority queues: when order matters",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "Nem sempre o primeiro a chegar deve ser o primeiro a sair. Heaps resolvem problemas onde prioridade é mais importante que ordem de chegada.",
+    excerptEn: "First in, first out doesn't always apply. Heaps solve problems where priority matters more than arrival order."
+  },
+  {
+    slug: "big-o-na-pratica",
+    title: "Big O na prática: como isso afeta seu código",
+    titleEn: "Big O in practice: how it affects your code",
+    date: "28 jul 2026",
+    dateFilter: "2026-07-28",
+    tag: "Duck To Basics",
+    module: 2,
+    excerpt: "Você já ouviu falar de O(n), O(log n) e O(n²), mas o que isso significa no dia a dia? Um guia prático de complexidade.",
+    excerptEn: "You've heard of O(n), O(log n) and O(n²), but what do they mean in daily coding? A practical guide to complexity."
   }
 ]

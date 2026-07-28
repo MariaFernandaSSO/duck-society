@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O que é uma estrutura de dados - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">O que é uma estrutura de dados (e por que você já usa sem saber)</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <p>
+          No módulo 1, vimos que algoritmo é uma <strong>sequência de passos</strong> pra resolver um problema. Mas um algoritmo precisa manipular <strong>informação</strong> - e essa informação precisa estar organizada de algum jeito dentro do computador.
+        </p>
+        <p>
+          É aí que entram as <strong>estruturas de dados</strong>.
+        </p>
+
+        <h2>O que é uma estrutura de dados?</h2>
+        <p>
+          Estrutura de dados é o <strong>jeito como a informação é organizada, armazenada e manipulada</strong> na memória do computador. Cada estrutura tem regras próprias de como os dados entram, saem e se relacionam.
+        </p>
+        <p>
+          A estrutura certa faz seu algoritmo rodar rápido. A errada faz ele travar.
+        </p>
+
+        <h2>Você já usa estruturas de dados sem saber</h2>
+        <p>
+          Assim como algoritmos, você lida com estruturas de dados no dia a dia:
+        </p>
+
+        <h3>1. Lista de compras</h3>
+        <p>
+          Uma lista ordenada onde você adiciona itens, risca os que já comprou e percorre do início ao fim. Isso é uma <strong>lista/array</strong>.
+        </p>
+
+        <h3>2. Pilha de pratos</h3>
+        <p>
+          Você empilha pratos lavados e tira sempre o de cima. O último que colocou é o primeiro que sai. Isso é uma <strong>pilha (stack)</strong> - LIFO (Last In, First Out - último a entrar, primeiro a sair).
+        </p>
+
+        <h3>3. Fila do banco</h3>
+        <p>
+          Quem chega primeiro é atendido primeiro. Isso é uma <strong>fila (queue)</strong> - FIFO (First In, First Out - primeiro a entrar, primeiro a sair).
+        </p>
+
+        <h3>4. Agenda de contatos</h3>
+        <p>
+          Você busca "Maria" pelo nome e encontra o telefone dela instantaneamente. Isso é uma <strong>tabela hash (hash map)</strong>.
+        </p>
+
+        <h2>Classificação das estruturas</h2>
+        <p>
+          As estruturas de dados se dividem em dois grandes grupos:
+        </p>
+        <ul>
+          <li><strong>Lineares:</strong> os elementos estão em sequência, um após o outro. Ex: arrays, listas ligadas, pilhas, filas.</li>
+          <li><strong>Não lineares:</strong> os elementos têm relações mais complexas. Ex: árvores, grafos. <em>(Hash maps são um caso especial - a gente chega lá.)</em></li>
+        </ul>
+        <p>
+          Neste módulo vamos focar nas estruturas lineares mais importantes, começando pelos <strong>arrays</strong>.
+        </p>
+
+        <h2>Estrutura de dados vs Tipo de dado</h2>
+        <p>
+          Não confunda os dois:
+        </p>
+        <ul>
+          <li><strong>Tipo de dado:</strong> define <em>o que</em> um valor pode ser (int, String, boolean). É uma classificação.</li>
+          <li><strong>Estrutura de dados:</strong> define <em>como</em> os valores se organizam (array, pilha, lista). É um container.</li>
+        </ul>
+        <p>
+          Um <code>int</code> é um tipo. Um array de <code>int</code> já é uma estrutura de dados - você tem vários ints organizados em sequência.
+        </p>
+
+        <p>
+          Nos próximos posts vamos destrinchar cada uma dessas estruturas - começando pelo <strong>array</strong>, a mais simples e a base de quase tudo. 🦆
+        </p>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Identificando estruturas no dia a dia</h3>
+        <p>
+          Pense em três situações do seu cotidiano que se comportam como: <strong>lista</strong>, <strong>pilha</strong> e <strong>fila</strong>. Descreva cada uma em uma frase.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <ul>
+              <li><strong>Lista:</strong> playlist de músicas - você adiciona, remove e percorre na ordem que quiser.</li>
+              <li><strong>Pilha:</strong> histórico do navegador - o botão "voltar" leva pra página anterior (a última que você visitou).</li>
+              <li><strong>Fila:</strong> servidor de impressão - o primeiro documento enviado é o primeiro a ser impresso.</li>
+            </ul>
+          </div>
+        </details>
+
+        <h3>2. Tipo vs Estrutura</h3>
+        <p>
+          Explique com suas palavras: qual a diferença entre um <code>int</code> e um array de <code>int</code>?
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <p><code>int</code> é um tipo de dado - guarda um único número inteiro. Um array de <code>int</code> é uma estrutura de dados - guarda <strong>vários</strong> números inteiros organizados em sequência, cada um num índice.</p>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Escolha a estrutura</h3>
+        <p>
+          Você precisa implementar o sistema de "voltar" de um navegador. Qual estrutura de dados usaria? E o sistema de "senha de atendimento" de um banco? Justifique.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <p><strong>Navegador (voltar):</strong> pilha (stack). Cada página visitada é empilhada. Ao clicar "voltar", desempilha a página atual e mostra a anterior - LIFO.</p>
+            <p><strong>Banco (senha):</strong> fila (queue). Clientes são atendidos na ordem de chegada - FIFO.</p>
+          </div>
+        </details>
+
+        </details>
+
+        <p>
+          No <a href="arrays.html">próximo post</a>, vamos começar com a estrutura de dados mais fundamental de todas: o <strong>array</strong>.
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+  In Module 1, we learned that an algorithm is a <strong>sequence of steps</strong> to solve a problem. But an algorithm needs to manipulate <strong>information</strong> - and that information needs to be organized inside the computer.
+</p>
+<p>
+  That's where <strong>data structures</strong> come in.
+</p>
+
+<h2>What is a data structure?</h2>
+<p>
+  A data structure is the <strong>way information is organized, stored, and manipulated</strong> in computer memory. Each structure has its own rules for how data enters, exits, and relates to other data.
+</p>
+<p>
+  The right structure makes your algorithm run fast. The wrong one makes it crash.
+</p>
+
+<h2>You already use data structures without knowing</h2>
+<p>
+  Just like algorithms, you deal with data structures in everyday life:
+</p>
+
+<h3>1. Shopping list</h3>
+<p>
+  An ordered list where you add items, cross off what you bought, and go from start to end. That is a <strong>list/array</strong>.
+</p>
+
+<h3>2. Dish stack</h3>
+<p>
+  You stack clean dishes and always take from the top. The last one you put is the first one out. That is a <strong>stack</strong> - LIFO (Last In, First Out).
+</p>
+
+<h3>3. Bank queue</h3>
+<p>
+  First come, first served. That is a <strong>queue</strong> - FIFO (First In, First Out).
+</p>
+
+<h3>4. Contact list</h3>
+<p>
+  You search for "Maria" by name and find her phone number instantly. That is a <strong>hash map</strong>.
+</p>
+
+<h2>Classifying data structures</h2>
+<p>
+  Data structures fall into two big groups:
+</p>
+<ul>
+  <li><strong>Linear:</strong> elements are in sequence, one after another. Ex: arrays, linked lists, stacks, queues.</li>
+  <li><strong>Non-linear:</strong> elements have more complex relationships. Ex: trees, graphs. <em>(Hash maps are a special case - we will get there.)</em></li>
+</ul>
+<p>
+  In this module we will focus on the most important linear structures, starting with <strong>arrays</strong>.
+</p>
+
+<h2>Data structure vs Data type</h2>
+<p>
+  Do not confuse the two:
+</p>
+<ul>
+  <li><strong>Data type:</strong> defines <em>what</em> a value can be (int, String, boolean). It is a classification.</li>
+  <li><strong>Data structure:</strong> defines <em>how</em> values are organized (array, stack, list). It is a container.</li>
+</ul>
+<p>
+  An <code>int</code> is a type. An array of <code>int</code> is a data structure - you have multiple ints organized in sequence.
+</p>
+
+<p>
+  In the next posts we will break down each of these structures - starting with the <strong>array</strong>, the simplest and the foundation of almost everything. 🦆
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>

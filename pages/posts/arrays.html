@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arrays: o começo de tudo - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">Arrays: o começo de tudo</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <p>
+          No post anterior, vimos o que são estruturas de dados. Agora vamos à primeira delas - e provavelmente a que você já usa mais sem perceber.
+        </p>
+        <p>
+          De todas as estruturas de dados, o <strong>array</strong> é a mais simples e a mais fundamental. Se você entender bem arrays, tudo que vier depois (listas, pilhas, filas, matrizes) fica mais fácil.
+        </p>
+
+        <h2>O que é um array?</h2>
+        <p>
+          Um array é uma <strong>coleção de elementos do mesmo tipo</strong>, armazenados em posições consecutivas de memória. Cada posição tem um <strong>índice</strong> (número) que começa em 0.
+        </p>
+
+        <pre><code>// Visualmente:
+//   [10] [20] [30] [40] [50]
+//     0    1    2    3    4
+
+int[] numeros = {10, 20, 30, 40, 50};
+System.out.println(numeros[0]); // 10
+System.out.println(numeros[2]); // 30
+System.out.println(numeros[4]); // 50</code></pre>
+
+        <h2>Por que arrays existem?</h2>
+        <p>
+          Sem arrays, você precisaria de uma variável pra cada valor:
+        </p>
+
+        <pre><code>int nota1 = 8;
+int nota2 = 7;
+int nota3 = 9;
+int nota4 = 6;
+int nota5 = 10;
+// E se fossem 500 notas?</code></pre>
+
+        <p>
+          Com array, você agrupa tudo numa variável só e acessa pelo índice:
+        </p>
+
+        <pre><code>int[] notas = {8, 7, 9, 6, 10};
+System.out.println(notas[0]); // 8
+System.out.println(notas.length); // 5</code></pre>
+
+        <h2>Declarando e inicializando</h2>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>// Jeito 1: declarar e já inicializar
+int[] idades = {18, 22, 25, 30};
+
+// Jeito 2: declarar o tamanho e preencher depois
+int[] salarios = new int[4];
+salarios[0] = 2500;
+salarios[1] = 3200;
+salarios[2] = 4100;
+salarios[3] = 3800;
+
+// Jeito 3: com new e valores
+int[] dados = new int[]{1, 2, 3, 4, 5};</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>// Jeito 1
+idades := [4]int{18, 22, 25, 30}
+
+// Jeito 2: declarar e preencher depois
+var salarios [4]int
+salarios[0] = 2500
+salarios[1] = 3200
+salarios[2] = 4100
+salarios[3] = 3800
+
+// Jeito 3: com elipsis (tamanho automático)
+dados := [...]int{1, 2, 3, 4, 5}</code></pre>
+        <p class="post-page-note">
+          <strong>Nota:</strong> em Go, arrays têm tamanho fixo - assim como em Java. Se você precisa de um tamanho dinâmico, o Go usa <strong>slices</strong>, que veremos num post à parte. É comum confundir os dois, então fica a observação. 🦆
+        </p>
+
+        <h2>Acessando e modificando</h2>
+        <p>
+          Use o índice entre colchetes. O primeiro elemento está no índice <strong>0</strong>, o último em <strong>length - 1</strong>.
+        </p>
+
+        <pre><code>int[] numeros = {10, 20, 30, 40, 50};
+
+numeros[2] = 99; // agora: {10, 20, 99, 40, 50}
+
+System.out.println(numeros[0]);        // 10
+System.out.println(numeros[numeros.length - 1]); // 50 (último)</code></pre>
+
+        <h2>Percorrendo um array</h2>
+        <p>
+          O loop <code>for</code> é o melhor amigo do array:
+        </p>
+
+        <p><strong>Java:</strong></p>
+        <pre><code>int[] notas = {8, 7, 9, 6, 10};
+
+// for tradicional (com índice)
+for (int i = 0; i < notas.length; i++) {
+    System.out.println("Nota " + i + ": " + notas[i]);
+}
+
+// for-each (mais limpo, sem índice)
+int soma = 0;
+for (int n : notas) {
+    soma += n;
+}
+System.out.println("Média: " + (soma / notas.length));</code></pre>
+
+        <p><strong>Go:</strong></p>
+        <pre><code>notas := [5]int{8, 7, 9, 6, 10}
+
+// for com range
+for i, n := range notas {
+    fmt.Printf("Nota %d: %d\n", i, n)
+}
+
+// sem índice
+soma := 0
+for _, n := range notas {
+    soma += n
+}
+fmt.Println("Média:", soma/len(notas))</code></pre>
+
+        <h2>Cuidado: índice inválido!</h2>
+        <p>
+          Se você tentar acessar uma posição que não existe (<code>notas[10]</code> num array de 5 elementos), o Java lança uma exceção <code>ArrayIndexOutOfBoundsException</code>. Em Go, o programa entra em <strong>pânico (panic)</strong>.
+        </p>
+        <p>
+          Sempre verifique se o índice está entre 0 e <code>length - 1</code>.
+        </p>
+
+        <h2>Arrays multidimensionais</h2>
+        <p>
+          Um array pode ter mais de uma dimensão. O caso mais comum é a <strong>matriz</strong> (tabela com linhas e colunas).
+        </p>
+
+        <pre><code>// Matriz 3x3 em Java
+int[][] matriz = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+System.out.println(matriz[0][1]); // 2 (linha 0, coluna 1)
+System.out.println(matriz[2][2]); // 9 (linha 2, coluna 2)
+
+// Percorrendo uma matriz
+for (int i = 0; i < matriz.length; i++) {
+    for (int j = 0; j < matriz[i].length; j++) {
+        System.out.print(matriz[i][j] + " ");
+    }
+    System.out.println();
+}</code></pre>
+
+        <pre><code>// Matriz 3x3 em Go
+matriz := [3][3]int{
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9},
+}
+
+fmt.Println(matriz[0][1]) // 2
+
+for i := 0; i < len(matriz); i++ {
+    for j := 0; j < len(matriz[i]); j++ {
+        fmt.Print(matriz[i][j], " ")
+    }
+    fmt.Println()
+}</code></pre>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Maior e menor</h3>
+        <p>
+          Dado o array <code>{12, 7, 25, 3, 19, 8}</code>, escreva um programa que encontre e exiba o <strong>maior</strong> e o <strong>menor</strong> valor.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int[] nums = {12, 7, 25, 3, 19, 8};
+int maior = nums[0];
+int menor = nums[0];
+
+for (int n : nums) {
+    if (n > maior) maior = n;
+    if (n < menor) menor = n;
+}
+
+System.out.println("Maior: " + maior);
+System.out.println("Menor: " + menor);</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Inverter array</h3>
+        <p>
+          Dado um array de 5 elementos, inverta a ordem dos valores (o primeiro vira o último e vice-versa) sem usar um segundo array.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int[] arr = {1, 2, 3, 4, 5};
+int esq = 0, dir = arr.length - 1;
+
+while (esq < dir) {
+    int temp = arr[esq];
+    arr[esq] = arr[dir];
+    arr[dir] = temp;
+    esq++;
+    dir--;
+}
+
+System.out.println(Arrays.toString(arr)); // [5, 4, 3, 2, 1]</code></pre>
+          </div>
+        </details>
+
+        <h3>3. (Desafio) Matriz identidade</h3>
+        <p>
+          Crie uma matriz 5x5 que seja uma <strong>matriz identidade</strong>: todos os elementos são 0, exceto a diagonal principal (linha = coluna) que vale 1.
+        </p>
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int[][] identidade = new int[5][5];
+
+for (int i = 0; i < 5; i++) {
+    identidade[i][i] = 1;
+}
+
+// Exibindo
+for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+        System.out.print(identidade[i][j] + " ");
+    }
+    System.out.println();
+}</code></pre>
+          </div>
+        </details>
+
+        </details>
+
+        <p>
+          Array é simples, mas tem um limite: o tamanho é fixo. E se você precisar de uma lista que cresce sozinha? É aí que entra o próximo post. 🦆
+        </p>
+
+        <p>
+          No <a href="strings.html">próximo post</a>, vamos ver que <strong>strings</strong> também são uma estrutura de dados - um array de caracteres.
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+  In the previous post, we saw what data structures are. Now let us dive into the first one - and probably the one you already use the most without noticing.
+</p>
+<p>
+  Of all data structures, the <strong>array</strong> is the simplest and most fundamental. If you understand arrays well, everything that comes next (lists, stacks, queues, matrices) gets easier.
+</p>
+
+<h2>What is an array?</h2>
+<p>
+  An array is a <strong>collection of elements of the same type</strong>, stored in consecutive memory positions. Each position has an <strong>index</strong> (number) that starts at 0.
+</p>
+
+<pre><code>// Visually:
+//   [10] [20] [30] [40] [50]
+//     0    1    2    3    4
+
+int[] numbers = {10, 20, 30, 40, 50};
+System.out.println(numbers[0]); // 10
+System.out.println(numbers[2]); // 30
+System.out.println(numbers[4]); // 50</code></pre>
+
+<h2>Why arrays exist</h2>
+<p>
+  Without arrays, you would need a variable for each value:
+</p>
+
+<pre><code>int grade1 = 8;
+int grade2 = 7;
+int grade3 = 9;
+int grade4 = 6;
+int grade5 = 10;
+// What if there were 500 grades?</code></pre>
+
+<p>
+  With an array, you group everything into a single variable and access by index:
+</p>
+
+<pre><code>int[] grades = {8, 7, 9, 6, 10};
+System.out.println(grades[0]); // 8
+System.out.println(grades.length); // 5</code></pre>
+
+<h2>Declaring and initializing</h2>
+
+<p><strong>Java:</strong></p>
+<pre><code>// Way 1: declare and initialize right away
+int[] ages = {18, 22, 25, 30};
+
+// Way 2: declare the size and fill later
+int[] salaries = new int[4];
+salaries[0] = 2500;
+salaries[1] = 3200;
+salaries[2] = 4100;
+salaries[3] = 3800;
+
+// Way 3: with new and values
+int[] data = new int[]{1, 2, 3, 4, 5};</code></pre>
+
+<p><strong>Go:</strong></p>
+<pre><code>// Way 1
+ages := [4]int{18, 22, 25, 30}
+
+// Way 2: declare and fill later
+var salaries [4]int
+salaries[0] = 2500
+salaries[1] = 3200
+salaries[2] = 4100
+salaries[3] = 3800
+
+// Way 3: with ellipsis (automatic size)
+data := [...]int{1, 2, 3, 4, 5}</code></pre>
+<p class="post-page-note">
+  <strong>Note:</strong> in Go, arrays have fixed size - just like in Java. If you need a dynamic size, Go uses <strong>slices</strong>, which we will cover in a separate post. It is common to confuse them, so there is the heads up. 🦆
+</p>
+
+<h2>Accessing and modifying</h2>
+<p>
+  Use the index inside brackets. The first element is at index <strong>0</strong>, the last at <strong>length - 1</strong>.
+</p>
+
+<pre><code>int[] numbers = {10, 20, 30, 40, 50};
+
+numbers[2] = 99; // now: {10, 20, 99, 40, 50}
+
+System.out.println(numbers[0]);                 // 10
+System.out.println(numbers[numbers.length - 1]); // 50 (last)</code></pre>
+
+<h2>Traversing an array</h2>
+<p>
+  The <code>for</code> loop is the array best friend:
+</p>
+
+<p><strong>Java:</strong></p>
+<pre><code>int[] grades = {8, 7, 9, 6, 10};
+
+// traditional for (with index)
+for (int i = 0; i &lt; grades.length; i++) {
+    System.out.println("Grade " + i + ": " + grades[i]);
+}
+
+// for-each (cleaner, no index)
+int sum = 0;
+for (int n : grades) {
+    sum += n;
+}
+System.out.println("Average: " + (sum / grades.length));</code></pre>
+
+<p><strong>Go:</strong></p>
+<pre><code>grades := [5]int{8, 7, 9, 6, 10}
+
+// for with range
+for i, n := range grades {
+    fmt.Printf("Grade %d: %d
+", i, n)
+}
+
+// without index
+sum := 0
+for _, n := range grades {
+    sum += n
+}
+fmt.Println("Average:", sum/len(grades))</code></pre>
+
+<h2>Warning: invalid index!</h2>
+<p>
+  If you try to access a position that does not exist (<code>grades[10]</code> in a 5-element array), Java throws an <code>ArrayIndexOutOfBoundsException</code>. In Go, the program <strong>panics</strong>.
+</p>
+<p>
+  Always check that the index is between 0 and <code>length - 1</code>.
+</p>
+
+<h2>Multidimensional arrays</h2>
+<p>
+  An array can have more than one dimension. The most common case is a <strong>matrix</strong> (table with rows and columns).
+</p>
+
+<pre><code>// 3x3 matrix in Java
+int[][] matrix = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+System.out.println(matrix[0][1]); // 2 (row 0, column 1)
+System.out.println(matrix[2][2]); // 9 (row 2, column 2)
+
+// Traversing a matrix
+for (int i = 0; i &lt; matrix.length; i++) {
+    for (int j = 0; j &lt; matrix[i].length; j++) {
+        System.out.print(matrix[i][j] + " ");
+    }
+    System.out.println();
+}</code></pre>
+
+<pre><code>// 3x3 matrix in Go
+matrix := [3][3]int{
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9},
+}
+
+fmt.Println(matrix[0][1]) // 2
+
+for i := 0; i &lt; len(matrix); i++ {
+    for j := 0; j &lt; len(matrix[i]); j++ {
+        fmt.Print(matrix[i][j], " ")
+    }
+    fmt.Println()
+}</code></pre>
+
+<details class="exercises-block">
+<summary><strong>Exercises</strong></summary>
+
+<h3>1. Max and min</h3>
+<p>
+  Given the array <code>{12, 7, 25, 3, 19, 8}</code>, write a program that finds and prints the <strong>largest</strong> and <strong>smallest</strong> value.
+</p>
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>int[] nums = {12, 7, 25, 3, 19, 8};
+int max = nums[0];
+int min = nums[0];
+
+for (int n : nums) {
+    if (n > max) max = n;
+    if (n &lt; min) min = n;
+}
+
+System.out.println("Max: " + max);
+System.out.println("Min: " + min);</code></pre>
+  </div>
+</details>
+
+<h3>2. Reverse an array</h3>
+<p>
+  Given a 5-element array, reverse the order of values (first becomes last and vice versa) without using a second array.
+</p>
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>int[] arr = {1, 2, 3, 4, 5};
+int left = 0, right = arr.length - 1;
+
+while (left &lt; right) {
+    int temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+    left++;
+    right--;
+}
+
+System.out.println(Arrays.toString(arr)); // [5, 4, 3, 2, 1]</code></pre>
+  </div>
+</details>
+
+<h3>3. (Challenge) Identity matrix</h3>
+<p>
+  Create a 5x5 matrix that is an <strong>identity matrix</strong>: all elements are 0, except the main diagonal (row = column) which is 1.
+</p>
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>int[][] identity = new int[5][5];
+
+for (int i = 0; i &lt; 5; i++) {
+    identity[i][i] = 1;
+}
+
+// Displaying
+for (int i = 0; i &lt; 5; i++) {
+    for (int j = 0; j &lt; 5; j++) {
+        System.out.print(identity[i][j] + " ");
+    }
+    System.out.println();
+}</code></pre>
+  </div>
+</details>
+
+</details>
+
+<p>
+  Arrays are simple, but they have a limitation: fixed size. What if you need a list that grows on its own? That is where the next post comes in. 🦆
+</p>
+
+<p>
+  In the <a href="strings.html">next post</a>, we will see that <strong>strings</strong> are also a data structure - an array of characters.
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
