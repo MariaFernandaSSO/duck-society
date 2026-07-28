@@ -93,7 +93,48 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
   margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: var(--card-border);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.8rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.page-btn:hover {
+  color: var(--text);
+  border-color: var(--text);
+}
+
+.page-btn.active {
+  color: var(--text);
+  border-color: var(--text);
+  background: var(--bg);
+}
+
+.page-btn.ellipsis {
+  border: none;
+  cursor: default;
+  color: var(--text-muted);
 }
 
 .post-card {
@@ -195,5 +236,15 @@
 
   .post-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    gap: 0.3rem;
+  }
+
+  .page-btn {
+    font-size: 1rem;
+    padding: 0.3rem 0.6rem;
+    min-width: 2.2rem;
   }
 }

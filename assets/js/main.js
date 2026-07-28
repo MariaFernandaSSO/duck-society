@@ -295,17 +295,35 @@ function initHomePosts() {
     return b.dateFilter.localeCompare(a.dateFilter)
   })
 
-  var recent = sorted.slice(0, 3)
+  var moduleNames = { 1: 'Lógica de Programação', 2: 'Estruturas de Dados' }
+  var items = []
+  var seenModule = {}
 
-  recent.forEach(function(post) {
-    var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
-    var item = document.createElement('div')
-    item.className = 'post-item'
-    item.innerHTML =
-      '<span class="post-date">' + post.date + '</span>' +
-      '<a href="pages/posts/' + post.slug + '.html" class="post-link">' + pTitle + '</a>'
-    list.appendChild(item)
-  })
+  for (var i = 0; i < sorted.length && items.length < 3; i++) {
+    var post = sorted[i]
+    if (post.tag === 'Duck To Basics' && post.module) {
+      if (!seenModule[post.module]) {
+        seenModule[post.module] = true
+        var item = document.createElement('div')
+        item.className = 'post-item'
+        item.innerHTML =
+          '<span class="post-date">' + post.date + '</span>' +
+          '<a href="pages/duck-to-basics.html?module=' + post.module + '" class="post-link">Duck To Basics - Módulo ' + post.module + ' - ' + (moduleNames[post.module] || '') + '</a>'
+        list.appendChild(item)
+        items.push(item)
+      }
+    } else {
+      var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
+      var pLink = post.link ? ('pages/' + post.link) : ('pages/posts/' + post.slug + '.html')
+      var item = document.createElement('div')
+      item.className = 'post-item'
+      item.innerHTML =
+        '<span class="post-date">' + post.date + '</span>' +
+        '<a href="' + pLink + '" class="post-link">' + pTitle + '</a>'
+      list.appendChild(item)
+      items.push(item)
+    }
+  }
 }
 
 function initDuckQuack() {
@@ -381,6 +399,82 @@ function initDuckQuack() {
   })
 }
 
+var POSTS_PER_PAGE = 6
+var currentPage = 1
+var allFilteredCards = []
+
+function renderPagination() {
+  var pagination = document.getElementById('pagination')
+  if (!pagination) return
+
+  var totalPages = Math.max(1, Math.ceil(allFilteredCards.length / POSTS_PER_PAGE))
+  currentPage = Math.min(currentPage, totalPages)
+
+  pagination.innerHTML = ''
+
+  if (allFilteredCards.length <= POSTS_PER_PAGE) return
+
+  var prevBtn = document.createElement('button')
+  prevBtn.className = 'page-btn'
+  prevBtn.textContent = '\u2190'
+  prevBtn.disabled = currentPage === 1
+  prevBtn.style.opacity = currentPage === 1 ? '0.4' : '1'
+  prevBtn.addEventListener('click', function() {
+    if (currentPage > 1) { currentPage--; applyPage() }
+  })
+  pagination.appendChild(prevBtn)
+
+  var pages = []
+  if (totalPages <= 7) {
+    for (var i = 1; i <= totalPages; i++) pages.push(i)
+  } else {
+    pages.push(1)
+    if (currentPage > 3) pages.push('...')
+    var start = Math.max(2, currentPage - 1)
+    var end = Math.min(totalPages - 1, currentPage + 1)
+    for (var i = start; i <= end; i++) pages.push(i)
+    if (currentPage < totalPages - 2) pages.push('...')
+    pages.push(totalPages)
+  }
+
+  pages.forEach(function(p) {
+    if (p === '...') {
+      var span = document.createElement('span')
+      span.className = 'page-btn ellipsis'
+      span.textContent = '...'
+      pagination.appendChild(span)
+    } else {
+      var btn = document.createElement('button')
+      btn.className = 'page-btn'
+      btn.textContent = p
+      if (p === currentPage) btn.classList.add('active')
+      btn.addEventListener('click', function() { currentPage = p; applyPage() })
+      pagination.appendChild(btn)
+    }
+  })
+
+  var nextBtn = document.createElement('button')
+  nextBtn.className = 'page-btn'
+  nextBtn.textContent = '\u2192'
+  nextBtn.disabled = currentPage === totalPages
+  nextBtn.style.opacity = currentPage === totalPages ? '0.4' : '1'
+  nextBtn.addEventListener('click', function() {
+    if (currentPage < totalPages) { currentPage++; applyPage() }
+  })
+  pagination.appendChild(nextBtn)
+}
+
+function applyPage() {
+  var start = (currentPage - 1) * POSTS_PER_PAGE
+  var end = start + POSTS_PER_PAGE
+  var pageCards = allFilteredCards.slice(start, end)
+
+  allFilteredCards.forEach(function(c) { c.style.display = 'none' })
+  pageCards.forEach(function(c) { c.style.display = 'flex' })
+
+  renderPagination()
+}
+
 function initBlogFilters() {
   var grid = document.getElementById('postGrid')
   if (!grid || typeof postsData === 'undefined') return
@@ -396,9 +490,10 @@ function initBlogFilters() {
 
   if (controls) controls.style.display = ''
   grid.innerHTML = ''
+  currentPage = 1
 
   var lang = document.documentElement.lang || 'pt'
-  var filtered = postsData.filter(function(p) { return lang === 'pt' || p.titleEn })
+  var filtered = postsData.filter(function(p) { return (lang === 'pt' || p.titleEn) && p.tag !== 'Duck To Basics' })
 
   var cards = []
   var tags = []
@@ -418,14 +513,15 @@ function initBlogFilters() {
     var lang = document.documentElement.lang || 'pt'
     var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
     var pExcerpt = post.excerptEn && lang === 'en' ? post.excerptEn : post.excerpt
+    var pLink = post.link || ('posts/' + post.slug + '.html')
 
     card.innerHTML =
       '<div class="post-tag">' + (post.tag || '') + '</div>' +
-      '<h3 class="post-card-title"><a href="posts/' + post.slug + '.html">' + pTitle + '</a></h3>' +
+      '<h3 class="post-card-title"><a href="' + pLink + '">' + pTitle + '</a></h3>' +
       '<p class="post-card-excerpt">' + pExcerpt + '</p>' +
       '<div class="post-card-meta">' +
         '<span class="post-date">' + post.date + '</span>' +
-        '<a href="posts/' + post.slug + '.html" class="read-more" data-i18n="read-more">ler \u2192</a>' +
+        '<a href="' + pLink + '" class="read-more" data-i18n="read-more">ler \u2192</a>' +
       '</div>'
 
     grid.appendChild(card)
@@ -448,7 +544,12 @@ function initBlogFilters() {
 
   tags.sort()
 
-  dates.sort().reverse()
+  var monthSet = {}
+  dates.forEach(function(d) {
+    var month = d.substring(0, 7)
+    monthSet[month] = true
+  })
+  dates = Object.keys(monthSet).sort().reverse()
 
   var lang = document.documentElement.lang || 'pt'
 
@@ -494,21 +595,25 @@ function initBlogFilters() {
     var activeBtn = document.querySelector('.sort-btn.active')
     var sortOrder = activeBtn ? activeBtn.getAttribute('data-sort') : 'newest'
 
-    var filtered = cards.filter(function(c) {
+    allFilteredCards = cards.filter(function(c) {
       var tagMatch = selectedTag === 'all' || c.getAttribute('data-tag') === selectedTag
-      var dateMatch = selectedDate === 'all' || c.getAttribute('data-date') === selectedDate
+      var cardDate = c.getAttribute('data-date')
+      var dateMatch = selectedDate === 'all' || (cardDate && cardDate.indexOf(selectedDate) === 0)
       return tagMatch && dateMatch
     })
 
-    filtered.sort(function(a, b) {
+    allFilteredCards.sort(function(a, b) {
       var dA = a.getAttribute('data-date'), dB = b.getAttribute('data-date')
       return sortOrder === 'newest' ? dB.localeCompare(dA) : dA.localeCompare(dB)
     })
 
-    filtered.forEach(function(c) { grid.appendChild(c); c.style.display = 'flex' })
+    allFilteredCards.forEach(function(c) { grid.appendChild(c) })
     cards.forEach(function(c) {
-      if (filtered.indexOf(c) === -1) c.style.display = 'none'
+      if (allFilteredCards.indexOf(c) === -1) c.style.display = 'none'
     })
+
+    currentPage = 1
+    applyPage()
   }
 
   if (tagFilter) tagFilter.addEventListener('change', filterAndSort)
@@ -525,6 +630,117 @@ function initBlogFilters() {
   filterAndSort()
 }
 
+function initSeriesPage() {
+  var list = document.getElementById('seriesList')
+  if (!list || typeof postsData === 'undefined') return
+
+  var lang = document.documentElement.lang || 'pt'
+  var series = postsData.filter(function(p) { return p.tag === 'Duck To Basics' })
+  if (series.length === 0) { document.getElementById('seriesListEmpty').style.display = 'block'; return }
+
+  series.sort(function(a, b) { return a.dateFilter.localeCompare(b.dateFilter) })
+
+  var modules = []
+  var seen = {}
+  series.forEach(function(p) {
+    if (p.module && !seen[p.module]) { seen[p.module] = true; modules.push(p.module) }
+  })
+  modules.sort()
+
+  var filterSelect = document.getElementById('moduleFilter')
+
+  var moduleLabel = document.getElementById('seriesModuleLabel')
+  var moduleNames = { 1: 'Lógica de Programação', 2: 'Estruturas de Dados' }
+
+  function renderSeries() {
+    list.innerHTML = ''
+    var val = filterSelect ? filterSelect.value : 'all'
+    var filtered = val === 'all' ? series : series.filter(function(p) { return p.module === parseInt(val, 10) })
+
+    if (moduleLabel) {
+      if (val === 'all') {
+        moduleLabel.textContent = 'Todos os módulos'
+      } else {
+        var mNum = parseInt(val, 10)
+        moduleLabel.textContent = 'Módulo ' + mNum + ' — ' + (moduleNames[mNum] || '')
+      }
+    }
+
+    if (val === 'all') {
+      modules.forEach(function(m) {
+        var modPosts = series.filter(function(p) { return p.module === m })
+        if (modPosts.length === 0) return
+
+        var sep = document.createElement('div')
+        sep.className = 'series-module-separator'
+        sep.textContent = 'Módulo ' + m + ' — ' + (moduleNames[m] || '')
+        list.appendChild(sep)
+
+        modPosts.forEach(function(post, i) {
+          appendLesson(post, i + 1)
+        })
+      })
+    } else {
+      filtered.forEach(function(post, i) {
+        appendLesson(post, i + 1)
+      })
+    }
+  }
+
+  function appendLesson(post, num) {
+    var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
+
+    var lesson = document.createElement('a')
+    lesson.className = 'series-lesson'
+    lesson.href = 'posts/' + post.slug + '.html'
+
+    var numEl = document.createElement('div')
+    numEl.className = 'series-lesson-num'
+    numEl.textContent = num.toString().padStart(2, '0')
+
+    var info = document.createElement('div')
+    info.className = 'series-lesson-info'
+
+    var title = document.createElement('div')
+    title.className = 'series-lesson-title'
+    title.textContent = pTitle
+
+    var date = document.createElement('div')
+    date.className = 'series-lesson-date'
+    date.textContent = post.date
+
+    info.appendChild(title)
+    info.appendChild(date)
+    lesson.appendChild(numEl)
+    lesson.appendChild(info)
+    list.appendChild(lesson)
+  }
+
+  if (filterSelect && modules.length >= 1) {
+    var allOpt = document.createElement('option')
+    allOpt.value = 'all'
+    allOpt.textContent = 'Todos os módulos'
+    filterSelect.appendChild(allOpt)
+
+    modules.forEach(function(m) {
+      var opt = document.createElement('option')
+      opt.value = m
+      opt.textContent = moduleNames[m] ? ('Módulo ' + m + ' — ' + moduleNames[m]) : 'Módulo ' + m
+      filterSelect.appendChild(opt)
+    })
+
+    filterSelect.addEventListener('change', renderSeries)
+
+    var urlParams = new URLSearchParams(window.location.search)
+    var moduleParam = urlParams.get('module')
+    if (moduleParam && seen[parseInt(moduleParam, 10)]) {
+      filterSelect.value = moduleParam
+    }
+  }
+
+  renderSeries()
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   try { injectNavbar() } catch(e) {}
   try { injectFavicon() } catch(e) {}
@@ -532,4 +748,5 @@ document.addEventListener('DOMContentLoaded', function() {
   try { initBlogFilters() } catch(e) {}
   try { initHomePosts() } catch(e) {}
   try { initDuckQuack() } catch(e) {}
+  try { initSeriesPage() } catch(e) {}
 })

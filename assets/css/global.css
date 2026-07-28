@@ -44,7 +44,7 @@
 html {
   font-size: 20px;
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow: hidden auto;
 }
 
 body {
@@ -57,8 +57,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 0 max(0.75rem, calc(50vw - 25rem));
+  padding: 0 max(1.5rem, calc(50vw - 28rem));
   overflow-wrap: break-word;
+  width: 100%;
   animation: fadeIn 0.4s ease;
 }
 
@@ -86,9 +87,9 @@ ul {
   border-bottom: 1px solid var(--nav-border);
   margin-bottom: 1rem;
   width: 100vw;
-  margin-left: calc(-1 * max(0.75rem, calc(50vw - 25rem)));
-  padding-left: max(0.75rem, calc(50vw - 25rem));
-  padding-right: max(0.75rem, calc(50vw - 25rem));
+  margin-left: calc(-1 * max(1.5rem, calc(50vw - 28rem)));
+  padding-left: max(1.5rem, calc(50vw - 28rem));
+  padding-right: max(1.5rem, calc(50vw - 28rem));
   position: sticky;
   top: 0;
   z-index: 100;
@@ -293,9 +294,9 @@ html.font-alt body {
 }
 
 .post-page {
-  max-width: 720px;
+  max-width: 44rem;
   margin: 0 auto 4rem;
-  padding: 0 1.5rem;
+  padding: 0;
 }
 
 .post-page-header {
@@ -352,6 +353,136 @@ html.font-alt body {
 .post-page-content a {
   text-decoration: underline;
   color: var(--accent);
+}
+
+.post-page-content pre {
+  background: var(--bg-card);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.2rem;
+  max-width: 100%;
+  font-size: 1rem;
+}
+
+.post-page-content code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 1em;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.post-page-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  white-space: pre;
+  word-break: normal;
+}
+
+.post-page-content .post-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: var(--radius);
+}
+
+.post-page-content details.exercises-block {
+  border: 2px solid var(--accent);
+  margin: 2rem 0;
+  padding: 0;
+  background: var(--bg);
+}
+
+.post-page-content details.exercises-block {
+  border: 2px solid var(--accent);
+  margin: 2rem 0;
+  padding: 0;
+}
+
+.post-page-content details.exercises-block summary {
+  padding: 1rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--bg-card);
+}
+
+.post-page-content details.exercises-block[open] {
+  padding: 0 1.5rem 1rem;
+}
+
+.post-page-content details.exercises-block[open] summary {
+  border-bottom: 2px solid var(--accent);
+  margin: 0 -1.5rem 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--bg);
+}
+
+.post-page-content .solution-toggle {
+  background: var(--bg-card);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+}
+
+.post-page-content .solution-toggle summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.post-page-content .solution-toggle[open] summary {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--nav-border);
+}
+
+.post-page-content .solution-toggle .solution {
+  font-weight: normal;
+  line-height: 1.6;
+}
+
+.post-page-note {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.post-page-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.post-page-content th,
+.post-page-content td {
+  border: 1px solid var(--nav-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.post-page-content th {
+  background: var(--bg-card);
+  font-weight: 700;
+}
+
+.post-page-content td {
+  background: var(--bg);
 }
 
 @media (max-width: 1024px) {
@@ -420,6 +551,23 @@ html.font-alt body {
 }
 
 @media (max-width: 700px) {
+  .post-page {
+    max-width: 100%;
+  }
+
+  .post-page-title {
+    font-size: 1.8rem;
+  }
+
+  .post-page-content {
+    font-size: 1.1rem;
+  }
+
+  .post-page-content pre {
+    font-size: 0.85rem;
+    padding: 0.75rem;
+  }
+
   .hamburger {
     display: flex;
   }

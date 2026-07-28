@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Árvores: o que são e onde aparecem - The Duck Society</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main>
+    <a href="../duck-to-basics.html" class="back-link">&larr; blog</a>
+    <article class="post-page">
+      <div class="post-page-header">
+        <p class="post-page-date">28 jul 2026</p>
+        <p class="post-page-tag">Duck To Basics</p>
+      </div>
+      <h1 class="post-page-title">Árvores: o que são e onde aparecem sem você perceber</h1>
+
+      <div class="post-page-content" data-post-lang="pt">
+
+        <p>
+          Vimos listas, pilhas, filas e mapas - estruturas lineares. Agora é hora de subir um nível: <strong>árvores</strong> são estruturas hierárquicas que organizam o mundo digital.
+        </p>
+
+        <h2>O que é uma árvore?</h2>
+
+        <p>
+          Uma árvore é uma estrutura de dados composta por <strong>nós</strong> conectados por <strong>arestas</strong>. Cada nó tem um nó <strong>pai</strong> (exceto a raiz) e zero ou mais nós <strong>filhos</strong>.
+        </p>
+
+        <pre><code>// Estrutura visual:
+//         (raiz)
+//        /   |   \
+//    filho filho filho
+//      / \
+//  neto neto
+
+class No {
+    int valor;
+    No[] filhos; // ou List&lt;No&gt; filhos
+}</code></pre>
+
+        <h2>Árvore Binária</h2>
+
+        <p>
+          O tipo mais comum de árvore: cada nó tem <strong>no máximo dois filhos</strong> - esquerda e direita.
+        </p>
+
+        <pre><code>class NoBinario {
+    int valor;
+    NoBinario esquerda;
+    NoBinario direita;
+
+    NoBinario(int valor) { this.valor = valor; }
+}
+
+// Visual:
+//     10
+//    /  \
+//   5    15
+//  / \     \
+// 3   7     20</code></pre>
+
+        <h2>Árvore Binária de Busca (BST)</h2>
+
+        <p>
+          Uma BST é uma árvore binária com uma regra extra: o filho da esquerda é <strong>menor</strong> que o pai, e o filho da direita é <strong>maior</strong>. Isso permite busca eficiente.
+        </p>
+
+        <pre><code>class BST {
+    NoBinario raiz;
+
+    void inserir(int valor) {
+        raiz = inserirRec(raiz, valor);
+    }
+
+    private NoBinario inserirRec(NoBinario no, int valor) {
+        if (no == null) return new NoBinario(valor);
+        if (valor &lt; no.valor)
+            no.esquerda = inserirRec(no.esquerda, valor);
+        else if (valor &gt; no.valor)
+            no.direita = inserirRec(no.direita, valor);
+        return no;
+    }
+
+    boolean buscar(int valor) {
+        return buscarRec(raiz, valor);
+    }
+
+    private boolean buscarRec(NoBinario no, int valor) {
+        if (no == null) return false;
+        if (valor == no.valor) return true;
+        return valor &lt; no.valor
+            ? buscarRec(no.esquerda, valor)
+            : buscarRec(no.direita, valor);
+    }
+}
+
+// Busca em BST é O(log n) na média - muito mais rápido que lista O(n)</code></pre>
+
+        <h2>Percorrendo uma árvore</h2>
+
+        <p><strong>In-order (esquerda → raiz → direita):</strong> retorna os elementos em ordem crescente numa BST.</p>
+
+        <pre><code>void emOrdem(NoBinario no) {
+    if (no == null) return;
+    emOrdem(no.esquerda);
+    System.out.print(no.valor + " ");
+    emOrdem(no.direita);
+}
+
+// Na árvore acima: 3 5 7 10 15 20</code></pre>
+
+        <p><strong>Pre-order (raiz → esquerda → direita):</strong> útil para copiar a árvore.</p>
+
+        <p><strong>Post-order (esquerda → direita → raiz):</strong> útil para deletar a árvore.</p>
+
+        <h2>Onde árvores aparecem</h2>
+
+        <ul>
+          <li><strong>Sistema de arquivos:</strong> pastas e arquivos formam uma árvore.</li>
+          <li><strong>DOM do navegador:</strong> a estrutura HTML é uma árvore de elementos.</li>
+          <li><strong>Bancos de dados:</strong> índices B-Tree são usados no MySQL, PostgreSQL, SQLite.</li>
+          <li><strong>Compiladores:</strong> a AST (Abstract Syntax Tree) representa o código fonte.</li>
+          <li><strong>Redes:</strong> roteamento usa árvores para decisões de caminho.</li>
+          <li><strong>Algoritmos de compressão:</strong> Huffman coding usa árvore binária.</li>
+        </ul>
+
+        <h2>Árvores balanceadas</h2>
+
+        <p>
+          Uma BST pode degenerar numa lista se os dados forem inseridos em ordem. Para evitar isso, existem árvores que se <strong>autobalanceiam</strong>:
+        </p>
+
+        <ul>
+          <li><strong>AVL:</strong> mantém a diferença de altura entre subárvores ≤ 1</li>
+          <li><strong>Rubro-Negra (Red-Black):</strong> usada no TreeMap e TreeSet do Java</li>
+          <li><strong>B-Tree:</strong> usada em bancos de dados (nós podem ter muitos filhos)</li>
+        </ul>
+
+        <details class="exercises-block">
+        <summary><strong>Exercícios</strong></summary>
+
+        <h3>1. Máximo e mínimo</h3>
+        <p>
+          Dada uma BST, implemente métodos para encontrar o menor e o maior valor.
+        </p>
+
+        <details class="solution-toggle">
+          <summary>Mostrar sugestão</summary>
+          <div class="solution">
+            <pre><code>int menor(NoBinario no) {
+    while (no.esquerda != null) no = no.esquerda;
+    return no.valor;
+}
+
+int maior(NoBinario no) {
+    while (no.direita != null) no = no.direita;
+    return no.valor;
+}</code></pre>
+          </div>
+        </details>
+
+        <h3>2. Altura da árvore</h3>
+        <p>
+          Implemente um método que calcule a altura (profundidade máxima) de uma árvore binária.
+        </p>
+
+        <h3>3. (Desafio) Validar BST</h3>
+        <p>
+          Dada uma árvore binária, verifique se ela é uma BST válida (todo nó esquerdo é menor, todo nó direito é maior).
+        </p>
+        </details>
+
+        <p>
+          Árvores são a porta de entrada para estruturas não-lineares. Elas estão em todo lugar - e quanto mais você entende delas, mais percebe o mundo digital organizado hierarquicamente.
+        </p>
+
+        <p>
+          No <a href="heap-e-filas-de-prioridade.html">próximo post</a>, vamos ver um tipo especial de árvore: o Heap. 🦆
+        </p>
+
+      </div>
+
+      <div class="post-page-content" data-post-lang="en" hidden>
+        <p>
+  We have seen lists, stacks, queues, and maps - linear structures. Now it is time to level up: <strong>trees</strong> are hierarchical structures that organize the digital world.
+</p>
+
+<h2>What is a tree?</h2>
+
+<p>
+  A tree is a data structure made of <strong>nodes</strong> connected by <strong>edges</strong>. Each node has a <strong>parent</strong> (except the root) and zero or more <strong>children</strong>.
+</p>
+
+<pre><code>// Visual structure:
+//         (root)
+//        /   |   //    child child child
+//      / //  grandchild grandchild
+
+class Node {
+    int value;
+    Node[] children; // or List&lt;Node&gt; children
+}</code></pre>
+
+<h2>Binary Tree</h2>
+
+<p>
+  The most common type of tree: each node has <strong>at most two children</strong> - left and right.
+</p>
+
+<pre><code>class BinaryNode {
+    int value;
+    BinaryNode left;
+    BinaryNode right;
+
+    BinaryNode(int value) { this.value = value; }
+}
+
+// Visual:
+//     10
+//    /  //   5    15
+//  / \     // 3   7     20</code></pre>
+
+<h2>Binary Search Tree (BST)</h2>
+
+<p>
+  A BST is a binary tree with an extra rule: the left child is <strong>smaller</strong> than the parent, and the right child is <strong>greater</strong>. This enables efficient searching.
+</p>
+
+<pre><code>class BST {
+    BinaryNode root;
+
+    void insert(int value) {
+        root = insertRec(root, value);
+    }
+
+    private BinaryNode insertRec(BinaryNode node, int value) {
+        if (node == null) return new BinaryNode(value);
+        if (value &lt; node.value)
+            node.left = insertRec(node.left, value);
+        else if (value &gt; node.value)
+            node.right = insertRec(node.right, value);
+        return node;
+    }
+
+    boolean search(int value) {
+        return searchRec(root, value);
+    }
+
+    private boolean searchRec(BinaryNode node, int value) {
+        if (node == null) return false;
+        if (value == node.value) return true;
+        return value &lt; node.value
+            ? searchRec(node.left, value)
+            : searchRec(node.right, value);
+    }
+}
+
+// BST search is O(log n) on average - much faster than O(n) for a list</code></pre>
+
+<h2>Traversing a tree</h2>
+
+<p><strong>In-order (left -> root -> right):</strong> returns elements in ascending order in a BST.</p>
+
+<pre><code>void inOrder(BinaryNode node) {
+    if (node == null) return;
+    inOrder(node.left);
+    System.out.print(node.value + " ");
+    inOrder(node.right);
+}
+
+// On the tree above: 3 5 7 10 15 20</code></pre>
+
+<p><strong>Pre-order (root -> left -> right):</strong> useful for copying the tree.</p>
+
+<p><strong>Post-order (left -> right -> root):</strong> useful for deleting the tree.</p>
+
+<h2>Where trees appear</h2>
+
+<ul>
+  <li><strong>File system:</strong> folders and files form a tree.</li>
+  <li><strong>Browser DOM:</strong> the HTML structure is a tree of elements.</li>
+  <li><strong>Databases:</strong> B-Tree indexes are used in MySQL, PostgreSQL, SQLite.</li>
+  <li><strong>Compilers:</strong> the AST (Abstract Syntax Tree) represents source code.</li>
+  <li><strong>Networks:</strong> routing uses trees for path decisions.</li>
+  <li><strong>Compression algorithms:</strong> Huffman coding uses a binary tree.</li>
+</ul>
+
+<h2>Balanced trees</h2>
+
+<p>
+  A BST can degenerate into a list if data is inserted in order. To prevent this, there are <strong>self-balancing</strong> trees:
+</p>
+
+<ul>
+  <li><strong>AVL:</strong> maintains height difference between subtrees &lt;= 1</li>
+  <li><strong>Red-Black:</strong> used in Java TreeMap and TreeSet</li>
+  <li><strong>B-Tree:</strong> used in databases (nodes can have many children)</li>
+</ul>
+
+<details class="exercises-block">
+<summary><strong>Exercises</strong></summary>
+
+<h3>1. Min and max</h3>
+<p>
+  Given a BST, implement methods to find the smallest and largest value.
+</p>
+
+<details class="solution-toggle">
+  <summary>Show solution</summary>
+  <div class="solution">
+    <pre><code>int min(BinaryNode node) {
+    while (node.left != null) node = node.left;
+    return node.value;
+}
+
+int max(BinaryNode node) {
+    while (node.right != null) node = node.right;
+    return node.value;
+}</code></pre>
+  </div>
+</details>
+
+<h3>2. Tree height</h3>
+<p>
+  Implement a method that calculates the height (maximum depth) of a binary tree.
+</p>
+
+<h3>3. (Challenge) Validate BST</h3>
+<p>
+  Given a binary tree, check if it is a valid BST (every left node is smaller, every right node is greater).
+</p>
+</details>
+
+<p>
+  Trees are the gateway to non-linear structures. They are everywhere - and the more you understand them, the more you see the digital world organized hierarchically.
+</p>
+
+<p>
+  In the <a href="heap-e-filas-de-prioridade.html">next post</a>, we will look at a special type of tree: the Heap. 🦆
+</p>
+      </div>
+    </article></article></article>
+  </main>
+
+  <footer class="footer">
+    <p>&copy;2026 &nbsp; maria fernanda</p>
+  </footer>
+
+  <script src="../../assets/js/posts.js"></script>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
