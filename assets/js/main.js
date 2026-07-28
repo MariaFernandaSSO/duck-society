@@ -288,26 +288,42 @@ function initHomePosts() {
   var lang = document.documentElement.lang || 'pt'
 
   var filtered = postsData.filter(function(p) {
-    return (lang === 'pt' || p.titleEn) && p.tag !== 'Duck To Basics'
+    return lang === 'pt' || p.titleEn
   })
 
   var sorted = filtered.slice().sort(function(a, b) {
     return b.dateFilter.localeCompare(a.dateFilter)
   })
 
-  var recent = sorted.slice(0, 3)
+  var moduleNames = { 1: 'Lógica de Programação', 2: 'Estruturas de Dados' }
+  var items = []
+  var seenModule = {}
 
-  recent.forEach(function(post) {
-    var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
-    var pLink = post.link ? ('pages/' + post.link) : ('pages/posts/' + post.slug + '.html')
-    var tagLabel = post.tag === 'Duck To Basics' ? '<span class="post-series">Série — Duck To Basics</span>' : ''
-    var item = document.createElement('div')
-    item.className = 'post-item'
-    item.innerHTML =
-      '<span class="post-date">' + post.date + '</span>' +
-      '<a href="' + pLink + '" class="post-link">' + pTitle + '</a>' + tagLabel
-    list.appendChild(item)
-  })
+  for (var i = 0; i < sorted.length && items.length < 3; i++) {
+    var post = sorted[i]
+    if (post.tag === 'Duck To Basics' && post.module) {
+      if (!seenModule[post.module]) {
+        seenModule[post.module] = true
+        var item = document.createElement('div')
+        item.className = 'post-item'
+        item.innerHTML =
+          '<span class="post-date">' + post.date + '</span>' +
+          '<a href="pages/duck-to-basics.html?module=' + post.module + '" class="post-link">Duck To Basics - Módulo ' + post.module + ' - ' + (moduleNames[post.module] || '') + '</a>'
+        list.appendChild(item)
+        items.push(item)
+      }
+    } else {
+      var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
+      var pLink = post.link ? ('pages/' + post.link) : ('pages/posts/' + post.slug + '.html')
+      var item = document.createElement('div')
+      item.className = 'post-item'
+      item.innerHTML =
+        '<span class="post-date">' + post.date + '</span>' +
+        '<a href="' + pLink + '" class="post-link">' + pTitle + '</a>'
+      list.appendChild(item)
+      items.push(item)
+    }
+  }
 }
 
 function initDuckQuack() {
@@ -633,38 +649,71 @@ function initSeriesPage() {
 
   var filterSelect = document.getElementById('moduleFilter')
 
+  var moduleLabel = document.getElementById('seriesModuleLabel')
+  var moduleNames = { 1: 'Lógica de Programação', 2: 'Estruturas de Dados' }
+
   function renderSeries() {
     list.innerHTML = ''
     var val = filterSelect ? filterSelect.value : 'all'
     var filtered = val === 'all' ? series : series.filter(function(p) { return p.module === parseInt(val, 10) })
-    filtered.forEach(function(post, i) {
-      var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
 
-      var lesson = document.createElement('a')
-      lesson.className = 'series-lesson'
-      lesson.href = 'posts/' + post.slug + '.html'
+    if (moduleLabel) {
+      if (val === 'all') {
+        moduleLabel.textContent = 'Todos os módulos'
+      } else {
+        var mNum = parseInt(val, 10)
+        moduleLabel.textContent = 'Módulo ' + mNum + ' — ' + (moduleNames[mNum] || '')
+      }
+    }
 
-      var num = document.createElement('div')
-      num.className = 'series-lesson-num'
-      num.textContent = (i + 1).toString().padStart(2, '0')
+    if (val === 'all') {
+      modules.forEach(function(m) {
+        var modPosts = series.filter(function(p) { return p.module === m })
+        if (modPosts.length === 0) return
 
-      var info = document.createElement('div')
-      info.className = 'series-lesson-info'
+        var sep = document.createElement('div')
+        sep.className = 'series-module-separator'
+        sep.textContent = 'Módulo ' + m + ' — ' + (moduleNames[m] || '')
+        list.appendChild(sep)
 
-      var title = document.createElement('div')
-      title.className = 'series-lesson-title'
-      title.textContent = pTitle
+        modPosts.forEach(function(post, i) {
+          appendLesson(post, i + 1)
+        })
+      })
+    } else {
+      filtered.forEach(function(post, i) {
+        appendLesson(post, i + 1)
+      })
+    }
+  }
 
-      var date = document.createElement('div')
-      date.className = 'series-lesson-date'
-      date.textContent = post.date
+  function appendLesson(post, num) {
+    var pTitle = post.titleEn && lang === 'en' ? post.titleEn : post.title
 
-      info.appendChild(title)
-      info.appendChild(date)
-      lesson.appendChild(num)
-      lesson.appendChild(info)
-      list.appendChild(lesson)
-    })
+    var lesson = document.createElement('a')
+    lesson.className = 'series-lesson'
+    lesson.href = 'posts/' + post.slug + '.html'
+
+    var numEl = document.createElement('div')
+    numEl.className = 'series-lesson-num'
+    numEl.textContent = num.toString().padStart(2, '0')
+
+    var info = document.createElement('div')
+    info.className = 'series-lesson-info'
+
+    var title = document.createElement('div')
+    title.className = 'series-lesson-title'
+    title.textContent = pTitle
+
+    var date = document.createElement('div')
+    date.className = 'series-lesson-date'
+    date.textContent = post.date
+
+    info.appendChild(title)
+    info.appendChild(date)
+    lesson.appendChild(numEl)
+    lesson.appendChild(info)
+    list.appendChild(lesson)
   }
 
   if (filterSelect && modules.length >= 1) {
@@ -673,7 +722,6 @@ function initSeriesPage() {
     allOpt.textContent = 'Todos os módulos'
     filterSelect.appendChild(allOpt)
 
-    var moduleNames = { 1: 'Lógica de Programação' }
     modules.forEach(function(m) {
       var opt = document.createElement('option')
       opt.value = m
@@ -682,6 +730,12 @@ function initSeriesPage() {
     })
 
     filterSelect.addEventListener('change', renderSeries)
+
+    var urlParams = new URLSearchParams(window.location.search)
+    var moduleParam = urlParams.get('module')
+    if (moduleParam && seen[parseInt(moduleParam, 10)]) {
+      filterSelect.value = moduleParam
+    }
   }
 
   renderSeries()
